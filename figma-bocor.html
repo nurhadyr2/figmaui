@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AquaTrack — Deteksi Kebocoran · Figma Screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#0d1117;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding:48px 48px 80px;
+  min-height:100vh;
+}
+.canvas{display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;}
+.frame-wrapper{flex-shrink:0;}
+.frame-name{font-size:11px;color:#4b5563;text-align:center;margin-bottom:10px;letter-spacing:.4px;font-weight:500;}
+
+/* PHONE */
+.phone{width:402px;height:874px;background:#F8FAFC;overflow:hidden;display:flex;flex-direction:column;position:relative;font-family:'Plus Jakarta Sans',sans-serif;}
+
+/* STATUS BAR */
+.status-bar{height:54px;min-height:54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 10px;background:#F8FAFC;color:#0F172A;}
+.sb-time{font-size:15px;font-weight:600;letter-spacing:-.2px;}
+.sb-icons{display:flex;align-items:center;gap:6px;}
+
+/* PAGE */
+.page{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 20px 24px;background:#F8FAFC;scrollbar-width:none;}
+.page::-webkit-scrollbar{display:none;}
+
+/* TYPOGRAPHY */
+.page-title{font-size:22px;font-weight:700;color:#0F172A;margin:16px 0 4px;letter-spacing:-.3px;}
+.page-sub{font-size:14px;color:#64748B;margin-bottom:20px;line-height:1.45;}
+.sec-label{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em;margin:20px 0 10px;}
+
+/* CARD */
+.card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;margin-bottom:10px;}
+.card-row{display:flex;align-items:center;gap:13px;padding:14px 16px;}
+.card-row+.card-row{border-top:1px solid #F1F5F9;}
+.ci{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ci-blue{background:#DBEAFE;} .ci-sky{background:#E0F2FE;} .ci-green{background:#DCFCE7;}
+.ci-amber{background:#FEF3C7;} .ci-red{background:#FEE2E2;} .ci-slate{background:#F1F5F9;}
+.ct{flex:1;min-width:0;}
+.ct-title{font-size:15px;font-weight:600;color:#0F172A;line-height:1.3;}
+.ct-sub{font-size:13px;color:#64748B;margin-top:3px;line-height:1.35;}
+
+/* STATUS BANNER */
+.s-banner{padding:28px 20px 24px;margin:0 -20px;text-align:center;color:#fff;}
+.s-icon{font-size:54px;margin-bottom:10px;}
+.s-title{font-size:23px;font-weight:800;margin-bottom:4px;}
+.s-sub{font-size:14px;opacity:.85;}
+.bg-safe{background:linear-gradient(150deg,#66BB6A,#2E7D32);}
+.bg-warn{background:linear-gradient(150deg,#FFA726,#E65100);}
+.bg-danger{background:linear-gradient(150deg,#EF4444,#B91C1C);}
+.bg-primary{background:linear-gradient(150deg,#0288D1,#01579B);}
+
+/* SENSOR ROW */
+.sensor-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;margin-bottom:8px;}
+.s-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.dot-ok{background:#66BB6A;} .dot-warn{background:#FFA726;} .dot-err{background:#EF4444;}
+.s-name{font-size:14px;font-weight:600;color:#0F172A;}
+.s-val{font-size:12px;color:#64748B;margin-top:2px;}
+.s-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;}
+.badge-ok{background:#DCFCE7;color:#16A34A;} .badge-warn{background:#FEF3C7;color:#D97706;} .badge-err{background:#FEE2E2;color:#DC2626;}
+
+/* STAT GRID */
+.stat-g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.stat-g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.stat-box{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:12px 8px;text-align:center;}
+.stat-v{font-size:20px;font-weight:800;line-height:1.1;}
+.stat-l{font-size:11px;color:#64748B;margin-top:4px;line-height:1.3;}
+
+/* SEVERITY */
+.sev-label{font-size:30px;font-weight:800;padding:18px 0;text-align:center;border-radius:16px;margin-bottom:14px;letter-spacing:1px;}
+.sev-low{background:#DCFCE7;color:#16A34A;border:2px solid #86EFAC;}
+.sev-mid{background:#FEF3C7;color:#D97706;border:2px solid #FCD34D;}
+.sev-high{background:#FEE2E2;color:#DC2626;border:2px solid #FCA5A5;}
+.sev-track{height:12px;background:#E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:6px;}
+.sev-fill{height:100%;border-radius:6px;}
+
+/* CHECKLIST */
+.chk-item{display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:14px;margin-bottom:8px;}
+.chk-dot{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;margin-top:1px;}
+.chk-body{flex:1;}
+.chk-title{font-size:14px;font-weight:600;color:#0F172A;}
+.chk-sub{font-size:12px;color:#64748B;margin-top:3px;line-height:1.4;}
+
+/* FLOOR PLAN */
+.fp-wrap{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;margin-bottom:12px;}
+@keyframes leak-pulse{0%{transform:scale(1);opacity:.9}60%{transform:scale(2.4);opacity:0}100%{transform:scale(1);opacity:0}}
+.pulse-ring{transform-origin:center;animation:leak-pulse 1.6s ease-out infinite;}
+
+/* STEP TUTORIAL */
+.step-dots{display:flex;gap:8px;justify-content:center;padding:18px 0;}
+.s-dot-step{width:8px;height:8px;border-radius:50%;background:#E2E8F0;}
+.s-dot-step.done{background:#66BB6A;}
+.s-dot-step.active{background:#0288D1;width:24px;border-radius:4px;}
+.step-illus{text-align:center;padding:20px 0;}
+.step-illus-icon{font-size:80px;display:block;margin-bottom:12px;}
+.step-instructions{display:flex;flex-direction:column;gap:10px;}
+.step-row{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#EFF6FF;border-radius:12px;}
+.step-num{width:22px;height:22px;border-radius:50%;background:#0288D1;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-text{font-size:13px;color:#1E3A5F;line-height:1.5;font-weight:500;}
+
+/* PLUMBER CARD */
+.plumber-card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:16px;margin-bottom:10px;}
+.plumber-top{display:flex;gap:14px;align-items:center;margin-bottom:10px;}
+.plumber-av{width:52px;height:52px;border-radius:14px;background:#DBEAFE;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.plumber-name{font-size:16px;font-weight:700;color:#0F172A;}
+.plumber-sp{font-size:12px;color:#64748B;margin-top:2px;}
+.stars{color:#F59E0B;font-size:13px;}
+.avail{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:#DCFCE7;color:#16A34A;}
+.plumber-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{font-size:12px;padding:4px 10px;background:#F1F5F9;border-radius:20px;color:#475569;font-weight:500;}
+
+/* TIMELINE */
+.tl-wrap{display:flex;flex-direction:column;}
+.tl-item{display:flex;gap:14px;margin-bottom:4px;}
+.tl-left{display:flex;flex-direction:column;align-items:center;width:16px;flex-shrink:0;}
+.tl-dot-sq{width:14px;height:14px;border-radius:4px;flex-shrink:0;}
+.tl-bar{flex:1;width:2px;background:#E2E8F0;margin-top:4px;min-height:20px;}
+.tl-right{flex:1;padding-bottom:14px;}
+.tl-time{font-size:11px;color:#94A3B8;margin-bottom:2px;}
+.tl-desc{font-size:14px;font-weight:600;color:#0F172A;}
+.tl-note{font-size:12px;color:#64748B;margin-top:2px;line-height:1.4;}
+
+/* INFO BOX */
+.info-box{border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.info-safe{background:#F0FDF4;border:1px solid #BBF7D0;}
+.info-warn{background:#FFFBEB;border:1px solid #FDE68A;}
+.info-danger{background:#FEF2F2;border:1px solid #FECACA;}
+.info-blue{background:#EFF6FF;border:1px solid #BFDBFE;}
+.info-t{font-size:13px;font-weight:700;margin-bottom:4px;}
+.info-b{font-size:13px;line-height:1.55;}
+
+/* BUTTONS */
+.btn{display:block;width:100%;padding:15px;border-radius:14px;font-size:15px;font-weight:700;text-align:center;cursor:pointer;border:none;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:8px;}
+.btn-primary{background:#0288D1;color:#fff;}
+.btn-dark{background:#01579B;color:#fff;}
+.btn-danger{background:#EF4444;color:#fff;}
+.btn-success{background:#66BB6A;color:#fff;}
+.btn-outline{background:#fff;color:#0F172A;border:1.5px solid #E2E8F0;}
+.btn-ghost{background:transparent;color:#94A3B8;font-size:14px;}
+
+/* EMERGENCY */
+.emrg-bg{background:linear-gradient(170deg,#1a0a0a,#2d0606);}
+.emrg-btn{width:160px;height:160px;border-radius:80px;background:radial-gradient(circle at 40% 35%,#EF5350,#B71C1C);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 0 12px rgba(239,68,68,.25),0 0 0 28px rgba(239,68,68,.1),0 0 40px rgba(239,68,68,.4);cursor:pointer;margin:0 auto;}
+.emrg-icon{font-size:52px;}
+.emrg-lbl{font-size:14px;font-weight:800;color:#fff;text-align:center;line-height:1.3;margin-top:6px;}
+
+/* TAB BAR */
+.tab-bar{height:56px;min-height:56px;background:#fff;border-top:1px solid #E2E8F0;display:flex;align-items:center;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;height:100%;}
+.tab-icon{font-size:22px;line-height:1.1;}
+.tab-label{font-size:10px;color:#94A3B8;font-weight:400;}
+.tab.active .tab-label{color:#0288D1;font-weight:700;}
+
+/* NAV */
+.nav-h{display:flex;justify-content:space-between;align-items:center;margin:10px 0 4px;}
+.nav-title{font-size:20px;font-weight:700;color:#0F172A;}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:15px;color:#0288D1;font-weight:600;cursor:pointer;}
+.nav-icon{width:36px;height:36px;border-radius:12px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:18px;}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<!-- ══════════════════════════════════════════════════════
+     1 · STATUS KESELURUHAN AMAN · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">1 · Status Keseluruhan Aman · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar">
+      <span class="sb-time">9:41</span>
+      <div class="sb-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="7.5" cy="10" r="1.2" fill="currentColor" stroke="none"/><path d="M4 7a5 5 0 017 0" stroke-width="1.4"/><path d="M1 4a9.5 9.5 0 0113 0" stroke-width="1.4"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="page">
+      <div class="s-banner bg-safe">
+        <div class="s-icon">🛡️</div>
+        <div class="s-title">Semua Aman</div>
+        <div class="s-sub">Tidak ada kebocoran terdeteksi · 9:41</div>
+      </div>
+      <div class="sec-label">Sensor Aktif</div>
+      <div class="sensor-row"><div class="s-dot dot-ok"></div><div style="flex:1"><div class="s-name">Kamar Mandi Utama</div><div class="s-val">Debit normal · 0.0 L/mnt</div></div><span class="s-badge badge-ok">Aman</span></div>
+      <div class="sensor-row"><div class="s-dot dot-ok"></div><div style="flex:1"><div class="s-name">Dapur</div><div class="s-val">Debit normal · 0.0 L/mnt</div></div><span class="s-badge badge-ok">Aman</span></div>
+      <div class="sensor-row"><div class="s-dot dot-ok"></div><div style="flex:1"><div class="s-name">Taman / Irigasi</div><div class="s-val">Debit normal · 0.0 L/mnt</div></div><span class="s-badge badge-ok">Aman</span></div>
+      <div class="sensor-row"><div class="s-dot dot-ok"></div><div style="flex:1"><div class="s-name">Kamar Mandi Kedua</div><div class="s-val">Debit normal · 0.0 L/mnt</div></div><span class="s-badge badge-ok">Aman</span></div>
+      <div class="sec-label">Ringkasan Minggu Ini</div>
+      <div class="card">
+        <div class="stat-g3" style="padding:16px;margin:0;">
+          <div style="text-align:center;"><div style="font-size:26px;font-weight:800;color:#16A34A;">0</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Kebocoran</div></div>
+          <div style="text-align:center;"><div style="font-size:26px;font-weight:800;color:#0288D1;">7</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Hari Aman</div></div>
+          <div style="text-align:center;"><div style="font-size:26px;font-weight:800;color:#0F172A;">4</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Sensor OK</div></div>
+        </div>
+      </div>
+      <div class="info-box info-safe">
+        <div class="info-t" style="color:#166534;">✅ Sistem berjalan normal</div>
+        <div class="info-b" style="color:#166534;">Semua sensor online dan memantau. Pengecekan berikutnya otomatis pukul <b>10:00</b>.</div>
+      </div>
+      <div style="height:4px;"></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     2 · STATUS WASPADA · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">2 · Status Waspada · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:#FFF7ED;color:#92400E;">
+      <span class="sb-time">14:22</span>
+      <div class="sb-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="7.5" cy="10" r="1.2" fill="currentColor" stroke="none"/><path d="M4 7a5 5 0 017 0" stroke-width="1.4"/><path d="M1 4a9.5 9.5 0 0113 0" stroke-width="1.4"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="14" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="page" style="background:#FFF7ED;">
+      <div class="s-banner bg-warn">
+        <div class="s-icon">⚠️</div>
+        <div class="s-title">Pola Tidak Normal</div>
+        <div class="s-sub">Kamar Mandi Utama · 3 menit lalu</div>
+      </div>
+      <div class="sec-label">Status Sensor</div>
+      <div class="sensor-row"><div class="s-dot dot-warn"></div><div style="flex:1"><div class="s-name">Kamar Mandi Utama</div><div class="s-val">Debit anomali · 3.8 L/mnt saat idle</div></div><span class="s-badge badge-warn">Waspada</span></div>
+      <div class="sensor-row"><div class="s-dot dot-ok"></div><div style="flex:1"><div class="s-name">Dapur</div><div class="s-val">Debit normal · 0.0 L/mnt</div></div><span class="s-badge badge-ok">Aman</span></div>
+      <div class="sensor-row"><div class="s-dot dot-ok"></div><div style="flex:1"><div class="s-name">Taman / Irigasi</div><div class="s-val">Debit normal · 0.0 L/mnt</div></div><span class="s-badge badge-ok">Aman</span></div>
+      <div class="sensor-row"><div class="s-dot dot-ok"></div><div style="flex:1"><div class="s-name">Kamar Mandi Kedua</div><div class="s-val">Debit normal · 0.0 L/mnt</div></div><span class="s-badge badge-ok">Aman</span></div>
+      <div class="info-box info-warn" style="margin-top:12px;">
+        <div class="info-t" style="color:#92400E;">⚠️ Apa yang terjadi?</div>
+        <div class="info-b" style="color:#78350F;">Sensor mendeteksi aliran air 3.8 L/mnt pada saat semua kran tertutup. Ini bisa menandakan awal kebocoran. Pantau 15 menit ke depan.</div>
+      </div>
+      <button class="btn btn-dark">🔍 Cek Sekarang</button>
+      <button class="btn btn-outline">⏳ Pantau Otomatis</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     3 · STATUS BAHAYA · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">3 · Status Bahaya · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:linear-gradient(135deg,#EF4444,#B91C1C);color:#fff;">
+      <span class="sb-time" style="color:#fff;">19:47</span>
+      <div class="sb-icons" style="color:#fff;">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="7.5" cy="10" r="1.2" fill="currentColor" stroke="none"/><path d="M4 7a5 5 0 017 0" stroke-width="1.4"/><path d="M1 4a9.5 9.5 0 0113 0" stroke-width="1.4"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="white" stroke-opacity=".6"/><rect x="2" y="2" width="10" height="8" rx="2" fill="white"/><path d="M23 4v4a2 2 0 000-4z" fill="white" fill-opacity=".5"/></svg>
+      </div>
+    </div>
+    <div class="page" style="background:#FEF2F2;">
+      <div class="s-banner bg-danger">
+        <div class="s-icon">🚨</div>
+        <div class="s-title">Kebocoran Terdeteksi!</div>
+        <div class="s-sub">Kamar Mandi Utama · Sejak 19:45</div>
+      </div>
+      <div class="stat-g3" style="margin-top:14px;">
+        <div class="stat-box"><div class="stat-v" style="color:#DC2626;">12.4</div><div class="stat-l">L/menit bocor</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#D97706;">28</div><div class="stat-l">Menit aktif</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#DC2626;">347L</div><div class="stat-l">Est. terbuang</div></div>
+      </div>
+      <div class="info-box info-danger">
+        <div class="info-t" style="color:#991B1B;">🚨 Tindakan Segera Diperlukan</div>
+        <div class="info-b" style="color:#7F1D1D;">Debit air 12.4 L/mnt terdeteksi saat semua kran tertutup. Kebocoran signifikan pada jalur pipa kamar mandi utama.</div>
+      </div>
+      <button class="btn btn-dark" style="background:#01579B;">🗺️ Lihat Lokasi di Peta</button>
+      <button class="btn btn-danger">🛑 Matikan Air Darurat</button>
+      <button class="btn btn-outline">🔧 Hubungi Tukang Ledeng</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     4 · PETA RUMAH 1 TITIK BOCOR · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">4 · Peta Rumah 1 Titik Bocor · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">19:47</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h">
+        <div class="nav-title">Peta Kebocoran</div>
+        <div class="nav-icon">🔔</div>
+      </div>
+      <p style="font-size:13px;color:#64748B;margin-bottom:14px;">1 titik bocor terdeteksi · Diperbarui 19:47</p>
+      <div class="fp-wrap">
+        <div style="font-size:12px;font-weight:600;color:#64748B;margin-bottom:10px;">Denah Lantai 1</div>
+        <svg width="100%" viewBox="0 0 362 215" xmlns="http://www.w3.org/2000/svg">
+          <!-- room fills -->
+          <rect x="1" y="1" width="119" height="100" fill="#DBEAFE" stroke="#94A3B8" stroke-width="1"/>
+          <rect x="121" y="1" width="120" height="100" fill="#FEF9C3" stroke="#94A3B8" stroke-width="1"/>
+          <rect x="242" y="1" width="119" height="100" fill="#DCFCE7" stroke="#94A3B8" stroke-width="1"/>
+          <rect x="1" y="102" width="180" height="112" fill="#FFF7ED" stroke="#94A3B8" stroke-width="1"/>
+          <rect x="182" y="102" width="179" height="112" fill="#EDE9FE" stroke="#94A3B8" stroke-width="1"/>
+          <!-- labels -->
+          <text x="60" y="52" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🚿 KM Utama</text>
+          <text x="181" y="52" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🍳 Dapur</text>
+          <text x="301" y="52" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🛁 KM Kedua</text>
+          <text x="91" y="160" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🛋️ Ruang Tamu</text>
+          <text x="271" y="160" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🛏️ Ruang Tidur</text>
+          <!-- leak marker at KM Utama -->
+          <circle cx="60" cy="65" r="18" fill="rgba(239,68,68,0.2)" class="pulse-ring"/>
+          <circle cx="60" cy="65" r="9" fill="#EF4444"/>
+          <circle cx="60" cy="65" r="4" fill="#fff"/>
+        </svg>
+        <!-- legend -->
+        <div style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:#64748B;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#EF4444;flex-shrink:0;"></div>
+          Titik kebocoran aktif
+        </div>
+      </div>
+      <!-- location card -->
+      <div class="card">
+        <div class="card-row">
+          <div class="ci ci-red">💧</div>
+          <div class="ct">
+            <div class="ct-title" style="color:#DC2626;">Kamar Mandi Utama</div>
+            <div class="ct-sub">Bocor aktif · 12.4 L/mnt · Sejak 19:45</div>
+          </div>
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M1 1l6 5.5L1 12" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <button class="btn btn-danger">Lihat Detail Kebocoran</button>
+      <button class="btn btn-outline">🛑 Matikan Air Darurat</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     5 · PETA RUMAH MULTIPLE TITIK BOCOR · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">5 · Peta Rumah Multiple Titik Bocor · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:#FEF2F2;"><span class="sb-time" style="color:#991B1B;">19:52</span><div class="sb-icons" style="color:#991B1B;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="9" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page" style="background:#FEF2F2;">
+      <div class="nav-h">
+        <div class="nav-title" style="color:#991B1B;">🚨 Peta Kebocoran</div>
+        <div class="nav-icon">🔔</div>
+      </div>
+      <p style="font-size:13px;color:#DC2626;font-weight:600;margin-bottom:14px;">3 titik bocor terdeteksi · Darurat</p>
+      <div class="fp-wrap" style="border-color:#FECACA;">
+        <div style="font-size:12px;font-weight:600;color:#64748B;margin-bottom:10px;">Denah Lantai 1</div>
+        <svg width="100%" viewBox="0 0 362 215" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="119" height="100" fill="#DBEAFE" stroke="#94A3B8" stroke-width="1"/>
+          <rect x="121" y="1" width="120" height="100" fill="#FEF9C3" stroke="#94A3B8" stroke-width="1"/>
+          <rect x="242" y="1" width="119" height="100" fill="#DCFCE7" stroke="#94A3B8" stroke-width="1"/>
+          <rect x="1" y="102" width="180" height="112" fill="#FFF7ED" stroke="#94A3B8" stroke-width="1"/>
+          <rect x="182" y="102" width="179" height="112" fill="#EDE9FE" stroke="#94A3B8" stroke-width="1"/>
+          <text x="60" y="52" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🚿 KM Utama</text>
+          <text x="181" y="52" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🍳 Dapur</text>
+          <text x="301" y="52" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🛁 KM Kedua</text>
+          <text x="91" y="155" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🛋️ Ruang Tamu</text>
+          <text x="271" y="155" text-anchor="middle" font-size="10" fill="#475569" font-weight="600">🛏️ Ruang Tidur</text>
+          <!-- marker 1: KM Utama -->
+          <circle cx="60" cy="65" r="11" fill="#EF4444"/><text x="60" y="69" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">1</text>
+          <!-- marker 2: Dapur -->
+          <circle cx="181" cy="65" r="11" fill="#F97316"/><text x="181" y="69" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">2</text>
+          <!-- marker 3: Ruang Tamu (pipe under) -->
+          <circle cx="91" cy="155" r="11" fill="#EF4444"/><text x="91" y="159" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">3</text>
+        </svg>
+      </div>
+      <!-- location list -->
+      <div class="card">
+        <div class="card-row">
+          <div style="width:22px;height:22px;border-radius:6px;background:#EF4444;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">1</div>
+          <div class="ct"><div class="ct-title" style="font-size:14px;color:#DC2626;">Kamar Mandi Utama</div><div class="ct-sub">12.4 L/mnt · Parah · 19:45</div></div>
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M1 1l6 5.5L1 12" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="card-row">
+          <div style="width:22px;height:22px;border-radius:6px;background:#F97316;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">2</div>
+          <div class="ct"><div class="ct-title" style="font-size:14px;color:#C2410C;">Dapur</div><div class="ct-sub">2.1 L/mnt · Sedang · 19:48</div></div>
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M1 1l6 5.5L1 12" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="card-row">
+          <div style="width:22px;height:22px;border-radius:6px;background:#EF4444;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">3</div>
+          <div class="ct"><div class="ct-title" style="font-size:14px;color:#DC2626;">Ruang Tamu (pipa bawah)</div><div class="ct-sub">0.8 L/mnt · Ringan · 19:51</div></div>
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M1 1l6 5.5L1 12" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <button class="btn btn-danger">🛑 Matikan Air Darurat</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     6 · DETAIL LOKASI BOCOR DI KAMAR MANDI · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">6 · Detail Lokasi Bocor di Kamar Mandi · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">19:49</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-back" style="margin:10px 0 4px;">← Peta Kebocoran</div>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:14px;">🚿 Kamar Mandi Utama</div>
+      <!-- room header -->
+      <div style="background:linear-gradient(135deg,#EF4444,#B91C1C);border-radius:16px;padding:20px 18px;margin-bottom:12px;color:#fff;text-align:center;">
+        <div style="font-size:42px;margin-bottom:8px;">💧</div>
+        <div style="font-size:18px;font-weight:800;margin-bottom:2px;">Kebocoran Aktif</div>
+        <div style="font-size:13px;opacity:.85;">Terdeteksi sejak 19:45 · 4 menit lalu</div>
+      </div>
+      <!-- stats -->
+      <div class="stat-g3">
+        <div class="stat-box"><div class="stat-v" style="color:#DC2626;">12.4</div><div class="stat-l">L/mnt bocor</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#D97706;">2.1</div><div class="stat-l">bar tekanan</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#DC2626;">49L</div><div class="stat-l">Sudah terbuang</div></div>
+      </div>
+      <!-- timeline -->
+      <div class="sec-label">Kronologi</div>
+      <div class="tl-wrap">
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#EF4444;"></div><div class="tl-bar"></div></div><div class="tl-right"><div class="tl-time">19:45</div><div class="tl-desc">Anomali debit terdeteksi</div><div class="tl-note">Aliran 12.4 L/mnt saat idle</div></div></div>
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#F97316;"></div><div class="tl-bar"></div></div><div class="tl-right"><div class="tl-time">19:46</div><div class="tl-desc">Notifikasi dikirim</div><div class="tl-note">Push notification ke HP pemilik</div></div></div>
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#0288D1;"></div></div><div class="tl-right"><div class="tl-time">19:49</div><div class="tl-desc">Detail dibuka</div><div class="tl-note">Menunggu tindakan pengguna</div></div></div>
+      </div>
+      <button class="btn btn-danger">🛑 Matikan Air Darurat</button>
+      <button class="btn btn-primary">🔧 Cari Tukang Terdekat</button>
+      <button class="btn btn-ghost">Lihat Saran Tindakan</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     7 · DETAIL LOKASI BOCOR DI DAPUR · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">7 · Detail Lokasi Bocor di Dapur · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">19:51</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-back" style="margin:10px 0 4px;">← Peta Kebocoran</div>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:14px;">🍳 Dapur</div>
+      <div style="background:linear-gradient(135deg,#F97316,#C2410C);border-radius:16px;padding:20px 18px;margin-bottom:12px;color:#fff;text-align:center;">
+        <div style="font-size:42px;margin-bottom:8px;">🚰</div>
+        <div style="font-size:18px;font-weight:800;margin-bottom:2px;">Kebocoran Terdeteksi</div>
+        <div style="font-size:13px;opacity:.85;">Area sink / di bawah wastafel dapur</div>
+      </div>
+      <div class="stat-g3">
+        <div class="stat-box"><div class="stat-v" style="color:#C2410C;">2.1</div><div class="stat-l">L/mnt bocor</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#0F172A;">2.6</div><div class="stat-l">bar tekanan</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#C2410C;">6L</div><div class="stat-l">Sudah terbuang</div></div>
+      </div>
+      <div class="info-box info-warn">
+        <div class="info-t" style="color:#92400E;">📍 Dugaan Sumber Bocor</div>
+        <div class="info-b" style="color:#78350F;">Kemungkinan sambungan fleksibel di bawah sink dapur atau gasket kran longgar. Keparahan: <b>Sedang</b>.</div>
+      </div>
+      <div class="sec-label">Kronologi</div>
+      <div class="tl-wrap">
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#F97316;"></div><div class="tl-bar"></div></div><div class="tl-right"><div class="tl-time">19:48</div><div class="tl-desc">Anomali debit terdeteksi</div><div class="tl-note">2.1 L/mnt saat semua kran tertutup</div></div></div>
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#0288D1;"></div></div><div class="tl-right"><div class="tl-time">19:51</div><div class="tl-desc">Notifikasi dikirim</div><div class="tl-note">Menunggu tindakan pengguna</div></div></div>
+      </div>
+      <button class="btn btn-dark">🔧 Cari Tukang Terdekat</button>
+      <button class="btn btn-outline">📋 Saran Tindakan Mandiri</button>
+      <button class="btn btn-ghost">Matikan Air Darurat</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     8 · DETAIL LOKASI BOCOR DI TAMAN · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">8 · Detail Lokasi Bocor di Taman · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">06:30</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-back" style="margin:10px 0 4px;">← Peta Kebocoran</div>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:14px;">🌿 Taman / Irigasi</div>
+      <div style="background:linear-gradient(135deg,#66BB6A,#2E7D32);border-radius:16px;padding:20px 18px;margin-bottom:12px;color:#fff;text-align:center;">
+        <div style="font-size:42px;margin-bottom:8px;">🌱</div>
+        <div style="font-size:18px;font-weight:800;margin-bottom:2px;">Kebocoran Irigasi</div>
+        <div style="font-size:13px;opacity:.85;">Jalur pipa taman belakang</div>
+      </div>
+      <div class="stat-g3">
+        <div class="stat-box"><div class="stat-v" style="color:#16A34A;">0.8</div><div class="stat-l">L/mnt bocor</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#0F172A;">1.8</div><div class="stat-l">bar tekanan</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#16A34A;">Ringan</div><div class="stat-l">Keparahan</div></div>
+      </div>
+      <div class="info-box info-safe">
+        <div class="info-t" style="color:#166534;">🌿 Info Lokasi</div>
+        <div class="info-b" style="color:#166534;">Kemungkinan sambungan sprinkler yang longgar atau pipa irigasi bawah tanah retak. Tidak perlu tindakan darurat, tapi perlu diperbaiki.</div>
+      </div>
+      <div class="info-box info-blue">
+        <div class="info-t" style="color:#1D4ED8;">💡 Tips</div>
+        <div class="info-b" style="color:#1E3A5F;">Matikan timer irigasi otomatis untuk sementara agar tidak memperburuk kebocoran sambil menunggu perbaikan.</div>
+      </div>
+      <button class="btn btn-dark">🔧 Cari Tukang Terdekat</button>
+      <button class="btn btn-outline">📋 Saran Tindakan Ringan</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     9 · TINGKAT KEPARAHAN RINGAN · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">9 · Tingkat Keparahan Ringan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">06:32</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-back" style="margin:10px 0 4px;">← Detail Kebocoran</div>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:16px;">Tingkat Keparahan</div>
+      <!-- big severity badge -->
+      <div class="sev-label sev-low">🟢 RINGAN</div>
+      <!-- severity bar -->
+      <div style="font-size:12px;color:#64748B;margin-bottom:6px;font-weight:600;">Indikator Keparahan</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <div class="sev-track" style="flex:1;"><div class="sev-fill" style="background:#66BB6A;width:22%;"></div></div>
+        <div style="font-size:13px;font-weight:700;color:#16A34A;width:32px;">22%</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#94A3B8;margin-bottom:18px;">
+        <span>Ringan</span><span>Sedang</span><span>Parah</span>
+      </div>
+      <!-- stats -->
+      <div class="stat-g2">
+        <div class="stat-box"><div class="stat-v" style="color:#16A34A;">0.5–3</div><div class="stat-l">L/mnt estimasi bocor</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#0288D1;">Rp 3–8rb</div><div class="stat-l">Kerugian per hari</div></div>
+      </div>
+      <div class="info-box info-safe">
+        <div class="info-t" style="color:#166534;">✅ Tidak Perlu Panik</div>
+        <div class="info-b" style="color:#166534;">Kebocoran kecil yang masih bisa ditangani sendiri. Disarankan diperbaiki dalam <b>1–3 hari</b> ke depan sebelum memburuk.</div>
+      </div>
+      <div class="info-box info-blue">
+        <div class="info-t" style="color:#1D4ED8;">📊 Perbandingan</div>
+        <div class="info-b" style="color:#1E3A5F;">Seperti kran menetes — kecil tapi jika dibiarkan seminggu bisa membuang <b>50–300 liter</b> air sia-sia.</div>
+      </div>
+      <button class="btn btn-success">📋 Lihat Saran Tindakan</button>
+      <button class="btn btn-outline">🔧 Hubungi Tukang</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     10 · TINGKAT KEPARAHAN SEDANG · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">10 · Tingkat Keparahan Sedang · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:#FFFBEB;"><span class="sb-time" style="color:#92400E;">19:50</span><div class="sb-icons" style="color:#92400E;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="13" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page" style="background:#FFFBEB;">
+      <div class="nav-back" style="margin:10px 0 4px;color:#D97706;">← Detail Kebocoran</div>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:16px;">Tingkat Keparahan</div>
+      <div class="sev-label sev-mid">🟡 SEDANG</div>
+      <div style="font-size:12px;color:#64748B;margin-bottom:6px;font-weight:600;">Indikator Keparahan</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <div class="sev-track" style="flex:1;"><div class="sev-fill" style="background:#FFA726;width:58%;"></div></div>
+        <div style="font-size:13px;font-weight:700;color:#D97706;width:32px;">58%</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#94A3B8;margin-bottom:18px;">
+        <span>Ringan</span><span>Sedang</span><span>Parah</span>
+      </div>
+      <div class="stat-g2">
+        <div class="stat-box"><div class="stat-v" style="color:#D97706;">3–20</div><div class="stat-l">L/mnt estimasi bocor</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#D97706;">Rp 20–80rb</div><div class="stat-l">Kerugian per hari</div></div>
+      </div>
+      <div class="info-box info-warn">
+        <div class="info-t" style="color:#92400E;">⚠️ Perlu Perhatian Segera</div>
+        <div class="info-b" style="color:#78350F;">Kebocoran ini bisa merusak struktur dinding atau lantai jika dibiarkan lebih dari <b>24 jam</b>. Segera cari tukang atau perbaiki hari ini.</div>
+      </div>
+      <div class="stat-g2">
+        <div class="stat-box"><div class="stat-v" style="font-size:14px;color:#0F172A;">Dapur</div><div class="stat-l">Lokasi bocor</div></div>
+        <div class="stat-box"><div class="stat-v" style="font-size:14px;color:#D97706;">3 mnt lalu</div><div class="stat-l">Terdeteksi</div></div>
+      </div>
+      <button class="btn btn-dark">📋 Saran Tindakan</button>
+      <button class="btn btn-outline">🔧 Cari Tukang Sekarang</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     11 · TINGKAT KEPARAHAN PARAH · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">11 · Tingkat Keparahan Parah · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:#FEF2F2;"><span class="sb-time" style="color:#991B1B;">19:47</span><div class="sb-icons" style="color:#991B1B;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="8" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page" style="background:#FEF2F2;">
+      <div class="nav-back" style="margin:10px 0 4px;color:#DC2626;">← Detail Kebocoran</div>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:16px;">Tingkat Keparahan</div>
+      <div class="sev-label sev-high">🔴 PARAH</div>
+      <div style="font-size:12px;color:#64748B;margin-bottom:6px;font-weight:600;">Indikator Keparahan</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <div class="sev-track" style="flex:1;"><div class="sev-fill" style="background:#EF4444;width:90%;"></div></div>
+        <div style="font-size:13px;font-weight:700;color:#DC2626;width:32px;">90%</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#94A3B8;margin-bottom:18px;">
+        <span>Ringan</span><span>Sedang</span><span>Parah</span>
+      </div>
+      <div class="stat-g2">
+        <div class="stat-box"><div class="stat-v" style="color:#DC2626;">12.4</div><div class="stat-l">L/mnt bocor</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#DC2626;">>Rp 500rb</div><div class="stat-l">Kerugian per hari</div></div>
+      </div>
+      <div class="info-box info-danger">
+        <div class="info-t" style="color:#991B1B;">🚨 DARURAT — Tindakan Segera!</div>
+        <div class="info-b" style="color:#7F1D1D;">Kebocoran besar dapat menyebabkan kerusakan struktural serius, korsleting listrik, dan banjir dalam rumah. <b>Matikan air utama sekarang.</b></div>
+      </div>
+      <button class="btn btn-danger">🛑 Matikan Air Utama Sekarang</button>
+      <button class="btn btn-dark">📞 Hubungi Tukang Darurat</button>
+      <button class="btn btn-outline">📋 Saran Tindakan Darurat</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     12 · SARAN TINDAKAN BOCOR RINGAN · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">12 · Saran Tindakan Bocor Ringan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">06:35</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-back" style="margin:10px 0 2px;">← Keparahan Ringan</div>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:2px;">Langkah Penanganan</div>
+      <p style="font-size:13px;color:#66BB6A;font-weight:600;margin-bottom:16px;">🟢 Bocor Ringan — Bisa Ditangani Sendiri</p>
+      <div class="chk-item">
+        <div class="chk-dot" style="background:#DCFCE7;">🔍</div>
+        <div class="chk-body"><div class="chk-title">Cari Sumber Kebocoran</div><div class="chk-sub">Periksa area sekitar sink, toilet, dan sambungan pipa yang terlihat. Cari tanda basah atau noda air.</div></div>
+      </div>
+      <div class="chk-item">
+        <div class="chk-dot" style="background:#DCFCE7;">🔧</div>
+        <div class="chk-body"><div class="chk-title">Kencangkan Sambungan</div><div class="chk-sub">Gunakan kunci pas untuk mengencangkan fitting dan sambungan yang terasa longgar. Jangan terlalu keras.</div></div>
+      </div>
+      <div class="chk-item">
+        <div class="chk-dot" style="background:#DCFCE7;">🩹</div>
+        <div class="chk-body"><div class="chk-title">Pasang Sealant Sementara</div><div class="chk-sub">Gunakan teflon tape atau plumber's putty sebagai solusi sementara sambil menunggu perbaikan.</div></div>
+      </div>
+      <div class="chk-item">
+        <div class="chk-dot" style="background:#DCFCE7;">👁️</div>
+        <div class="chk-body"><div class="chk-title">Pantau 24 Jam</div><div class="chk-sub">Perhatikan apakah debit bocor berkurang atau meningkat. AquaTrack akan kirim notifikasi otomatis.</div></div>
+      </div>
+      <div class="chk-item">
+        <div class="chk-dot" style="background:#DCFCE7;">📝</div>
+        <div class="chk-body"><div class="chk-title">Catat di Riwayat</div><div class="chk-sub">Tandai tindakan yang sudah dilakukan agar mudah dilaporkan ke tukang jika diperlukan.</div></div>
+      </div>
+      <div style="height:8px;"></div>
+      <button class="btn btn-success">✅ Sudah Ditangani</button>
+      <button class="btn btn-outline">🔧 Butuh Bantuan Tukang</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     13 · SARAN TINDAKAN BOCOR PARAH · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">13 · Saran Tindakan Bocor Parah · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:#FEF2F2;"><span class="sb-time" style="color:#991B1B;">19:48</span><div class="sb-icons" style="color:#991B1B;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="8" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page" style="background:#FEF2F2;">
+      <div class="nav-back" style="margin:10px 0 2px;color:#DC2626;">← Keparahan Parah</div>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:2px;">Tindakan Darurat</div>
+      <p style="font-size:13px;color:#DC2626;font-weight:600;margin-bottom:16px;">🔴 Bocor Parah — Ikuti Langkah Ini Sekarang</p>
+      <div class="chk-item" style="border-color:#FECACA;background:#FFF5F5;">
+        <div class="chk-dot" style="background:#FEE2E2;">🛑</div>
+        <div class="chk-body"><div class="chk-title" style="color:#DC2626;">Matikan Kran Utama SEKARANG</div><div class="chk-sub">Putar katup utama searah jarum jam hingga tertutup penuh. Biasanya di luar rumah dekat meteran.</div></div>
+      </div>
+      <div class="chk-item" style="border-color:#FECACA;background:#FFF5F5;">
+        <div class="chk-dot" style="background:#FEE2E2;">⚡</div>
+        <div class="chk-body"><div class="chk-title" style="color:#DC2626;">Matikan Listrik Area Basah</div><div class="chk-sub">Matikan breaker untuk ruangan yang terkena air untuk mencegah bahaya korsleting.</div></div>
+      </div>
+      <div class="chk-item" style="border-color:#FECACA;background:#FFF5F5;">
+        <div class="chk-dot" style="background:#FEE2E2;">🚶</div>
+        <div class="chk-body"><div class="chk-title" style="color:#DC2626;">Evakuasi Area yang Tergenang</div><div class="chk-sub">Jauhkan barang berharga, dokumen, dan elektronik dari area yang terkena air.</div></div>
+      </div>
+      <div class="chk-item" style="border-color:#FECACA;background:#FFF5F5;">
+        <div class="chk-dot" style="background:#FEE2E2;">📸</div>
+        <div class="chk-body"><div class="chk-title" style="color:#DC2626;">Dokumentasikan Kerusakan</div><div class="chk-sub">Foto/video kerusakan untuk klaim asuransi dan laporan ke tukang ledeng.</div></div>
+      </div>
+      <div style="height:10px;"></div>
+      <button class="btn btn-danger">📞 Hubungi Tukang Darurat (24 jam)</button>
+      <button class="btn btn-dark">🛑 Matikan Air via Aplikasi</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     14 · TUTORIAL CEK BOCOR STEP 1 · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">14 · Tutorial Cek Bocor Step 1 · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">10:00</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 0;">
+        <div style="font-size:14px;color:#94A3B8;">Lewati</div>
+        <div style="font-size:14px;font-weight:600;color:#0288D1;">Tutorial Deteksi Bocor</div>
+        <div style="width:40px;"></div>
+      </div>
+      <!-- progress dots -->
+      <div class="step-dots">
+        <div class="s-dot-step active"></div>
+        <div class="s-dot-step"></div>
+        <div class="s-dot-step"></div>
+      </div>
+      <!-- illustration -->
+      <div class="step-illus">
+        <svg width="160" height="140" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Meter/Dial illustration -->
+          <circle cx="80" cy="80" r="56" fill="#EFF6FF" stroke="#0288D1" stroke-width="3"/>
+          <circle cx="80" cy="80" r="44" fill="#fff" stroke="#E2E8F0" stroke-width="1.5"/>
+          <!-- dial marks -->
+          <line x1="80" y1="40" x2="80" y2="50" stroke="#CBD5E1" stroke-width="2"/>
+          <line x1="111" y1="49" x2="106" y2="57" stroke="#CBD5E1" stroke-width="2"/>
+          <line x1="120" y1="80" x2="110" y2="80" stroke="#CBD5E1" stroke-width="2"/>
+          <line x1="49" y1="49" x2="54" y2="57" stroke="#CBD5E1" stroke-width="2"/>
+          <line x1="40" y1="80" x2="50" y2="80" stroke="#CBD5E1" stroke-width="2"/>
+          <!-- needle pointing slightly right (anomaly) -->
+          <line x1="80" y1="80" x2="102" y2="55" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="80" cy="80" r="5" fill="#0288D1"/>
+          <!-- "m³" text -->
+          <text x="80" y="106" text-anchor="middle" font-size="12" fill="#64748B" font-weight="600">m³</text>
+          <!-- kran icons on sides -->
+          <text x="18" y="20" font-size="28">🚰</text>
+          <text x="114" y="20" font-size="28">🚿</text>
+        </svg>
+        <div style="font-size:24px;font-weight:800;color:#0F172A;margin-bottom:6px;">Tutup Semua Kran</div>
+        <div style="font-size:14px;color:#64748B;line-height:1.55;">Langkah pertama: pastikan seluruh kran dan keran air dalam rumah tertutup sempurna.</div>
+      </div>
+      <!-- steps -->
+      <div class="step-instructions">
+        <div class="step-row"><div class="step-num">1</div><div class="step-text">Tutup semua kran di kamar mandi, dapur, dan toilet.</div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-text">Matikan mesin cuci dan alat lain yang menggunakan air.</div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-text">Tunggu 5 menit, lalu amati meteran air di luar rumah.</div></div>
+      </div>
+      <div style="height:16px;"></div>
+      <button class="btn btn-primary">Lanjut ke Langkah 2 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     15 · TUTORIAL CEK BOCOR STEP 2 · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">15 · Tutorial Cek Bocor Step 2 · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">10:05</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 0;">
+        <div class="nav-back" style="font-size:14px;">← Kembali</div>
+        <div style="font-size:14px;font-weight:600;color:#0288D1;">Tutorial Deteksi Bocor</div>
+        <div style="width:40px;"></div>
+      </div>
+      <div class="step-dots">
+        <div class="s-dot-step done"></div>
+        <div class="s-dot-step active"></div>
+        <div class="s-dot-step"></div>
+      </div>
+      <div class="step-illus">
+        <svg width="160" height="140" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- House outline -->
+          <path d="M30 70 L80 24 L130 70 L130 120 L30 120 Z" fill="#EFF6FF" stroke="#0288D1" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Rooms dividers -->
+          <line x1="80" y1="70" x2="80" y2="120" stroke="#BFDBFE" stroke-width="1.5"/>
+          <line x1="30" y1="95" x2="130" y2="95" stroke="#BFDBFE" stroke-width="1.5"/>
+          <!-- search icon in room 1 -->
+          <circle cx="55" cy="82" r="10" stroke="#66BB6A" stroke-width="2" fill="#DCFCE7"/>
+          <text x="55" y="86" text-anchor="middle" font-size="11">✓</text>
+          <!-- question mark in room 2 -->
+          <circle cx="105" cy="82" r="10" stroke="#FFA726" stroke-width="2" fill="#FEF3C7"/>
+          <text x="105" y="87" text-anchor="middle" font-size="12" fill="#D97706">?</text>
+          <!-- magnifier -->
+          <circle cx="105" cy="108" r="10" stroke="#94A3B8" stroke-width="1.5" fill="none"/>
+          <line x1="112" y1="115" x2="120" y2="123" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div style="font-size:24px;font-weight:800;color:#0F172A;margin-bottom:6px;">Isolasi Area per Ruangan</div>
+        <div style="font-size:14px;color:#64748B;line-height:1.55;">Periksa setiap ruangan satu per satu untuk mempersempit lokasi kebocoran.</div>
+      </div>
+      <div class="step-instructions">
+        <div class="step-row"><div class="step-num">1</div><div class="step-text">Buka kran satu ruangan, amati meteran. Jika bergerak → bocor di situ.</div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-text">Periksa toilet dengan pewarna di tangki — jika warna masuk mangkok, ada bocor.</div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-text">Raba jalur pipa yang terlihat — cari tanda lembab, jamur, atau noda air.</div></div>
+      </div>
+      <div style="height:16px;"></div>
+      <button class="btn btn-primary">Lanjut ke Langkah 3 →</button>
+      <button class="btn btn-ghost">← Kembali ke Langkah 1</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     16 · TUTORIAL CEK BOCOR STEP 3 · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">16 · Tutorial Cek Bocor Step 3 · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">10:12</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 0;">
+        <div class="nav-back" style="font-size:14px;">← Kembali</div>
+        <div style="font-size:14px;font-weight:600;color:#0288D1;">Tutorial Deteksi Bocor</div>
+        <div style="width:40px;"></div>
+      </div>
+      <div class="step-dots">
+        <div class="s-dot-step done"></div>
+        <div class="s-dot-step done"></div>
+        <div class="s-dot-step active"></div>
+      </div>
+      <div class="step-illus">
+        <svg width="160" height="140" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- phone/document illustration -->
+          <rect x="50" y="18" width="60" height="100" rx="10" fill="#EFF6FF" stroke="#0288D1" stroke-width="2.5"/>
+          <rect x="58" y="30" width="44" height="6" rx="3" fill="#BFDBFE"/>
+          <rect x="58" y="42" width="30" height="6" rx="3" fill="#BFDBFE"/>
+          <rect x="58" y="54" width="44" height="6" rx="3" fill="#BFDBFE"/>
+          <!-- camera icon -->
+          <rect x="58" y="68" width="44" height="32" rx="6" fill="#DCFCE7" stroke="#66BB6A" stroke-width="1.5"/>
+          <circle cx="80" cy="84" r="8" fill="#66BB6A"/>
+          <circle cx="80" cy="84" r="4" fill="#fff"/>
+          <!-- checkmark -->
+          <circle cx="118" cy="28" r="14" fill="#DCFCE7" stroke="#66BB6A" stroke-width="2"/>
+          <path d="M112 28l4 4 8-8" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div style="font-size:24px;font-weight:800;color:#0F172A;margin-bottom:6px;">Catat &amp; Laporkan</div>
+        <div style="font-size:14px;color:#64748B;line-height:1.55;">Dokumentasikan temuan dan tandai lokasi bocor di aplikasi agar bisa dipantau.</div>
+      </div>
+      <div class="step-instructions">
+        <div class="step-row"><div class="step-num">1</div><div class="step-text">Foto atau video area yang dicurigai bocor sebagai bukti dokumentasi.</div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-text">Tandai titik bocor di peta denah AquaTrack dan beri catatan keterangan.</div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-text">Aktifkan pemantauan otomatis agar sensor terus mengawasi debit air.</div></div>
+      </div>
+      <div style="height:16px;"></div>
+      <button class="btn btn-success">✅ Selesai Tutorial</button>
+      <button class="btn btn-primary">📡 Aktifkan Pemantauan Otomatis</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     17 · DAFTAR TUKANG LEDENG TERDEKAT · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">17 · Daftar Tukang Ledeng Terdekat · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">19:52</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h">
+        <div class="nav-title">Tukang Terdekat</div>
+        <div class="nav-icon">🔍</div>
+      </div>
+      <!-- search -->
+      <div style="background:#F1F5F9;border-radius:12px;display:flex;align-items:center;gap:8px;padding:12px 14px;margin-bottom:12px;">
+        <span style="font-size:16px;">🔍</span>
+        <span style="font-size:14px;color:#94A3B8;">Cari tukang ledeng...</span>
+      </div>
+      <!-- filters -->
+      <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px;">
+        <div style="font-size:12px;font-weight:700;padding:6px 14px;background:#01579B;color:#fff;border-radius:20px;white-space:nowrap;">Terdekat</div>
+        <div style="font-size:12px;font-weight:700;padding:6px 14px;background:#F1F5F9;color:#64748B;border-radius:20px;white-space:nowrap;">Rating ⭐</div>
+        <div style="font-size:12px;font-weight:700;padding:6px 14px;background:#F1F5F9;color:#64748B;border-radius:20px;white-space:nowrap;">Tersedia 24 jam</div>
+        <div style="font-size:12px;font-weight:700;padding:6px 14px;background:#F1F5F9;color:#64748B;border-radius:20px;white-space:nowrap;">Harga</div>
+      </div>
+      <!-- plumber list -->
+      <div class="plumber-card">
+        <div class="plumber-top">
+          <div class="plumber-av">👨‍🔧</div>
+          <div style="flex:1;"><div class="plumber-name">Budi Santoso</div><div class="plumber-sp">Spesialis pipa & kebocoran</div><div class="stars">★★★★★ <span style="color:#64748B;font-size:12px;">4.9 (128 ulasan)</span></div></div>
+          <span class="avail">Tersedia</span>
+        </div>
+        <div class="plumber-chips"><span class="chip">📍 1.2 km</span><span class="chip">⏱ Tiba ~15 mnt</span><span class="chip">💰 Rp 75-150rb</span></div>
+      </div>
+      <div class="plumber-card">
+        <div class="plumber-top">
+          <div class="plumber-av">👨‍🔧</div>
+          <div style="flex:1;"><div class="plumber-name">Ahmad Fauzi</div><div class="plumber-sp">Tukang ledeng & instalasi</div><div class="stars">★★★★☆ <span style="color:#64748B;font-size:12px;">4.7 (85 ulasan)</span></div></div>
+          <span class="avail">Tersedia</span>
+        </div>
+        <div class="plumber-chips"><span class="chip">📍 2.0 km</span><span class="chip">⏱ Tiba ~25 mnt</span><span class="chip">💰 Rp 60-120rb</span></div>
+      </div>
+      <div class="plumber-card" style="opacity:.7;">
+        <div class="plumber-top">
+          <div class="plumber-av">👩‍🔧</div>
+          <div style="flex:1;"><div class="plumber-name">Siti Rahma Plumbing</div><div class="plumber-sp">Kebocoran & renovasi kamar mandi</div><div class="stars">★★★★★ <span style="color:#64748B;font-size:12px;">4.8 (210 ulasan)</span></div></div>
+          <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:#F1F5F9;color:#64748B;">Sibuk</span>
+        </div>
+        <div class="plumber-chips"><span class="chip">📍 3.1 km</span><span class="chip">⏱ Tiba ~45 mnt</span><span class="chip">💰 Rp 80-200rb</span></div>
+      </div>
+      <div class="plumber-card">
+        <div class="plumber-top">
+          <div class="plumber-av">👨‍🔧</div>
+          <div style="flex:1;"><div class="plumber-name">Jaya Teknik Ledeng</div><div class="plumber-sp">Darurat 24 jam · Pipa & pompa</div><div class="stars">★★★★☆ <span style="color:#64748B;font-size:12px;">4.6 (53 ulasan)</span></div></div>
+          <span class="avail">Tersedia</span>
+        </div>
+        <div class="plumber-chips"><span class="chip">📍 4.5 km</span><span class="chip">⏱ Tiba ~40 mnt</span><span class="chip">💰 Rp 90-180rb</span><span style="font-size:12px;padding:4px 10px;background:#FEF3C7;border-radius:20px;color:#D97706;font-weight:500;">24 jam</span></div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab active"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     18 · DETAIL PROFIL TUKANG LEDENG · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">18 · Detail Profil Tukang Ledeng · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:linear-gradient(135deg,#0288D1,#01579B);color:#fff;">
+      <span class="sb-time" style="color:#fff;">19:53</span>
+      <div class="sb-icons" style="color:#fff;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="white" stroke-opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="2" fill="white"/><path d="M23 4v4a2 2 0 000-4z" fill="white" fill-opacity=".5"/></svg></div>
+    </div>
+    <div class="page" style="padding:0;background:#F8FAFC;">
+      <!-- profile header -->
+      <div style="background:linear-gradient(150deg,#0288D1,#01579B);padding:24px 20px 28px;text-align:center;color:#fff;position:relative;">
+        <div style="position:absolute;top:14px;left:18px;font-size:14px;font-weight:600;cursor:pointer;">← Kembali</div>
+        <div style="width:80px;height:80px;border-radius:24px;background:rgba(255,255,255,.25);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:42px;border:3px solid rgba(255,255,255,.4);">👨‍🔧</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:3px;">Budi Santoso</div>
+        <div style="font-size:14px;opacity:.85;margin-bottom:8px;">Spesialis Pipa & Kebocoran · 8 thn pengalaman</div>
+        <div style="font-size:16px;color:#FCD34D;">★★★★★ <span style="font-size:13px;opacity:.85;">4.9 (128 ulasan)</span></div>
+      </div>
+      <div style="padding:0 20px 24px;">
+        <!-- quick stats -->
+        <div class="stat-g3" style="margin-top:16px;">
+          <div class="stat-box"><div class="stat-v" style="color:#0288D1;font-size:22px;">312</div><div class="stat-l">Pekerjaan Selesai</div></div>
+          <div class="stat-box"><div class="stat-v" style="color:#66BB6A;font-size:22px;">98%</div><div class="stat-l">Tingkat Sukses</div></div>
+          <div class="stat-box"><div class="stat-v" style="font-size:16px;color:#0F172A;">1.2 km</div><div class="stat-l">Dari lokasi Anda</div></div>
+        </div>
+        <!-- availability -->
+        <div class="info-box info-safe">
+          <div class="info-t" style="color:#166534;">✅ Tersedia Sekarang</div>
+          <div class="info-b" style="color:#166534;">Bisa tiba dalam <b>~15 menit</b>. Melayani area Jakarta Selatan & Barat.</div>
+        </div>
+        <!-- services -->
+        <div class="sec-label">Layanan</div>
+        <div class="card">
+          <div class="card-row"><div class="ci ci-blue">💧</div><div class="ct"><div class="ct-title">Perbaikan Kebocoran Pipa</div><div class="ct-sub">Rp 75.000 – 150.000</div></div></div>
+          <div class="card-row"><div class="ci ci-sky">🚰</div><div class="ct"><div class="ct-title">Penggantian Kran & Faucet</div><div class="ct-sub">Rp 50.000 – 100.000</div></div></div>
+          <div class="card-row"><div class="ci ci-green">🔧</div><div class="ct"><div class="ct-title">Instalasi Pipa Baru</div><div class="ct-sub">Rp 200.000 – 500.000</div></div></div>
+          <div class="card-row"><div class="ci ci-amber">🚽</div><div class="ct"><div class="ct-title">Perbaikan Toilet & Septik</div><div class="ct-sub">Rp 100.000 – 250.000</div></div></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:4px;">📅 Pesan Sekarang</button>
+        <button class="btn btn-outline">💬 Chat dengan Tukang</button>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab active"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     19 · BOOKING TUKANG LEDENG · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">19 · Booking Tukang Ledeng · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">19:54</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-back" style="margin:10px 0 4px;">← Profil Tukang</div>
+      <div class="nav-title" style="margin-bottom:14px;">Buat Pesanan</div>
+      <!-- tukang summary -->
+      <div style="display:flex;gap:12px;align-items:center;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:14px;padding:14px;margin-bottom:18px;">
+        <div style="font-size:36px;">👨‍🔧</div>
+        <div><div style="font-size:15px;font-weight:700;color:#0F172A;">Budi Santoso</div><div style="font-size:12px;color:#64748B;">Spesialis Pipa · ★ 4.9</div><div style="font-size:13px;color:#0288D1;font-weight:600;margin-top:2px;">Est. tiba ~15 menit</div></div>
+      </div>
+      <!-- date selection -->
+      <div class="sec-label" style="margin-top:0;">Pilih Tanggal</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px;">
+        <div style="text-align:center;padding:10px 14px;background:#01579B;color:#fff;border-radius:12px;min-width:56px;flex-shrink:0;"><div style="font-size:10px;opacity:.8;">Rab</div><div style="font-size:18px;font-weight:800;">27</div></div>
+        <div style="text-align:center;padding:10px 14px;background:#F1F5F9;border-radius:12px;min-width:56px;flex-shrink:0;"><div style="font-size:10px;color:#94A3B8;">Kam</div><div style="font-size:18px;font-weight:700;color:#0F172A;">28</div></div>
+        <div style="text-align:center;padding:10px 14px;background:#F1F5F9;border-radius:12px;min-width:56px;flex-shrink:0;"><div style="font-size:10px;color:#94A3B8;">Jum</div><div style="font-size:18px;font-weight:700;color:#0F172A;">29</div></div>
+        <div style="text-align:center;padding:10px 14px;background:#F1F5F9;border-radius:12px;min-width:56px;flex-shrink:0;"><div style="font-size:10px;color:#94A3B8;">Sab</div><div style="font-size:18px;font-weight:700;color:#0F172A;">30</div></div>
+      </div>
+      <!-- time slots -->
+      <div class="sec-label">Pilih Waktu</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+        <div style="text-align:center;padding:10px;background:#01579B;color:#fff;border-radius:10px;font-size:13px;font-weight:600;">Segera</div>
+        <div style="text-align:center;padding:10px;background:#F1F5F9;color:#0F172A;border-radius:10px;font-size:13px;font-weight:600;">08:00</div>
+        <div style="text-align:center;padding:10px;background:#F1F5F9;color:#0F172A;border-radius:10px;font-size:13px;font-weight:600;">10:00</div>
+        <div style="text-align:center;padding:10px;background:#F1F5F9;color:#0F172A;border-radius:10px;font-size:13px;font-weight:600;">13:00</div>
+        <div style="text-align:center;padding:10px;background:#F1F5F9;color:#0F172A;border-radius:10px;font-size:13px;font-weight:600;">15:00</div>
+        <div style="text-align:center;padding:10px;background:#F1F5F9;color:#64748B;border-radius:10px;font-size:13px;">17:00</div>
+      </div>
+      <!-- note -->
+      <div class="sec-label">Catatan (opsional)</div>
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:14px;margin-bottom:18px;min-height:80px;">
+        <div style="font-size:14px;color:#64748B;line-height:1.5;">Kebocoran di bawah wastafel kamar mandi utama, sudah berjalan ±30 menit...</div>
+      </div>
+      <button class="btn btn-primary">✅ Konfirmasi Pemesanan</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab active"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     20 · TOMBOL MATIKAN AIR DARURAT · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">20 · Tombol Matikan Air Darurat · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:#1a0808;color:#FCA5A5;">
+      <span class="sb-time" style="color:#FCA5A5;">19:49</span>
+      <div class="sb-icons" style="color:#FCA5A5;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="7" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div>
+    </div>
+    <div class="page" style="background:#1a0808;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;">
+      <div style="color:#FCA5A5;font-size:14px;font-weight:600;margin:16px 0 0;text-align:center;">⚠️ MODE DARURAT</div>
+      <div style="color:#fff;font-size:22px;font-weight:800;margin:12px 0 6px;text-align:center;letter-spacing:-.3px;">Matikan Air Utama</div>
+      <div style="color:#FDA4AF;font-size:13px;text-align:center;line-height:1.6;margin-bottom:32px;max-width:280px;">Tekan tombol di bawah untuk menutup katup air utama secara otomatis via sensor AquaTrack.</div>
+      <!-- BIG EMERGENCY BUTTON -->
+      <div class="emrg-btn">
+        <div class="emrg-icon">🛑</div>
+        <div class="emrg-lbl">MATIKAN<br>AIR</div>
+      </div>
+      <!-- warnings -->
+      <div style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:14px;padding:16px;margin:32px 0 16px;width:100%;">
+        <div style="font-size:13px;font-weight:700;color:#FCA5A5;margin-bottom:8px;">Efek menutup katup utama:</div>
+        <div style="font-size:13px;color:#FDA4AF;line-height:1.7;">• Semua air rumah akan berhenti mengalir<br>• AC, water heater, toilet tidak berfungsi<br>• Proses penutupan membutuhkan ~5 detik</div>
+      </div>
+      <div style="font-size:14px;color:#64748B;cursor:pointer;font-weight:500;">Tidak, batalkan →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     21 · KONFIRMASI MATIKAN AIR · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">21 · Konfirmasi Matikan Air · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">19:49</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page" style="display:flex;flex-direction:column;align-items:center;padding-top:60px;">
+      <!-- modal card -->
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:24px;padding:28px 24px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08);">
+        <div style="width:80px;height:80px;border-radius:24px;background:#FEE2E2;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:40px;">🚫</div>
+        <div style="font-size:22px;font-weight:800;color:#0F172A;margin-bottom:8px;">Matikan Air Rumah?</div>
+        <div style="font-size:14px;color:#64748B;line-height:1.6;margin-bottom:24px;">Seluruh aliran air ke rumah akan dihentikan. Pastikan Anda siap sebelum melanjutkan.</div>
+        <!-- consequences list -->
+        <div style="background:#FFF5F5;border-radius:12px;padding:14px;margin-bottom:24px;text-align:left;">
+          <div style="font-size:12px;font-weight:700;color:#991B1B;margin-bottom:8px;">Yang akan terhenti:</div>
+          <div style="font-size:13px;color:#7F1D1D;line-height:1.8;">🚿 Kamar mandi &amp; toilet<br>🍳 Dapur &amp; wastafel<br>🌿 Irigasi taman<br>♨️ Water heater</div>
+        </div>
+        <button class="btn btn-danger" style="margin-bottom:10px;">Ya, Matikan Air Sekarang</button>
+        <button class="btn btn-outline">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     22 · AIR BERHASIL DIMATIKAN · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">22 · Air Berhasil Dimatikan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:linear-gradient(135deg,#66BB6A,#2E7D32);color:#fff;">
+      <span class="sb-time" style="color:#fff;">19:50</span>
+      <div class="sb-icons" style="color:#fff;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="white" stroke-opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="2" fill="white"/><path d="M23 4v4a2 2 0 000-4z" fill="white" fill-opacity=".5"/></svg></div>
+    </div>
+    <div class="page" style="background:#F0FDF4;display:flex;flex-direction:column;align-items:center;padding-top:40px;">
+      <!-- success -->
+      <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#66BB6A,#16A34A);margin-bottom:18px;display:flex;align-items:center;justify-content:center;font-size:50px;box-shadow:0 0 0 16px rgba(102,187,106,.2);">✅</div>
+      <div style="font-size:24px;font-weight:800;color:#14532D;margin-bottom:6px;text-align:center;">Air Berhasil Dimatikan</div>
+      <div style="font-size:14px;color:#166534;margin-bottom:28px;text-align:center;line-height:1.5;">Katup utama tertutup · Kebocoran dihentikan<br>Sensor masih memantau tekanan pipa</div>
+      <!-- timer -->
+      <div style="background:#fff;border:1px solid #BBF7D0;border-radius:18px;padding:20px 28px;margin-bottom:20px;text-align:center;width:100%;">
+        <div style="font-size:11px;font-weight:700;color:#16A34A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Air sudah mati selama</div>
+        <div style="font-size:44px;font-weight:800;color:#14532D;font-variant-numeric:tabular-nums;">00:05</div>
+        <div style="font-size:12px;color:#64748B;margin-top:4px;">menit : detik</div>
+      </div>
+      <!-- stats -->
+      <div class="stat-g2" style="width:100%;margin-bottom:16px;">
+        <div class="stat-box"><div class="stat-v" style="color:#16A34A;font-size:18px;">0.0</div><div class="stat-l">L/mnt saat ini</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:#DC2626;font-size:18px;">49L</div><div class="stat-l">Air terbuang tadi</div></div>
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-bottom:8px;">💧 Nyalakan Kembali</button>
+      <button class="btn btn-dark" style="width:100%;margin-bottom:0;">🔧 Hubungi Tukang Ledeng</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     23 · RIWAYAT SEMUA KEBOCORAN · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">23 · Riwayat Semua Kebocoran · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">10:00</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h">
+        <div class="nav-title">Riwayat Kebocoran</div>
+        <div class="nav-icon">📥</div>
+      </div>
+      <!-- filters -->
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <div style="font-size:12px;font-weight:700;padding:6px 14px;background:#01579B;color:#fff;border-radius:20px;">Semua</div>
+        <div style="font-size:12px;font-weight:700;padding:6px 14px;background:#F1F5F9;color:#64748B;border-radius:20px;">Bulan Ini</div>
+        <div style="font-size:12px;font-weight:700;padding:6px 14px;background:#F1F5F9;color:#64748B;border-radius:20px;">Ditangani</div>
+        <div style="font-size:12px;font-weight:700;padding:6px 14px;background:#F1F5F9;color:#64748B;border-radius:20px;">Aktif</div>
+      </div>
+      <!-- history items -->
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-row">
+          <div class="ci ci-red">💧</div>
+          <div class="ct">
+            <div class="ct-title" style="font-size:14px;">Kamar Mandi Utama</div>
+            <div class="ct-sub">27 Mei 2026 · 19:45 – 20:12</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><span style="font-size:11px;font-weight:700;padding:2px 8px;background:#FEE2E2;color:#DC2626;border-radius:20px;">Parah</span><span style="font-size:11px;font-weight:600;padding:2px 8px;background:#DCFCE7;color:#16A34A;border-radius:20px;">✓ Ditangani</span></div>
+          </div>
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M1 1l6 5.5L1 12" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-row">
+          <div class="ci ci-amber">💧</div>
+          <div class="ct">
+            <div class="ct-title" style="font-size:14px;">Dapur</div>
+            <div class="ct-sub">15 Mei 2026 · 08:20 – 09:05</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><span style="font-size:11px;font-weight:700;padding:2px 8px;background:#FEF3C7;color:#D97706;border-radius:20px;">Sedang</span><span style="font-size:11px;font-weight:600;padding:2px 8px;background:#DCFCE7;color:#16A34A;border-radius:20px;">✓ Ditangani</span></div>
+          </div>
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M1 1l6 5.5L1 12" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-row">
+          <div class="ci ci-green">💧</div>
+          <div class="ct">
+            <div class="ct-title" style="font-size:14px;">Taman / Irigasi</div>
+            <div class="ct-sub">3 Mei 2026 · 06:10 – 06:40</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><span style="font-size:11px;font-weight:700;padding:2px 8px;background:#DCFCE7;color:#16A34A;border-radius:20px;">Ringan</span><span style="font-size:11px;font-weight:600;padding:2px 8px;background:#DCFCE7;color:#16A34A;border-radius:20px;">✓ Ditangani</span></div>
+          </div>
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M1 1l6 5.5L1 12" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-row">
+          <div class="ci ci-red">💧</div>
+          <div class="ct">
+            <div class="ct-title" style="font-size:14px;">Kamar Mandi Kedua</div>
+            <div class="ct-sub">18 Apr 2026 · 22:15 – 23:00</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><span style="font-size:11px;font-weight:700;padding:2px 8px;background:#FEE2E2;color:#DC2626;border-radius:20px;">Parah</span><span style="font-size:11px;font-weight:600;padding:2px 8px;background:#DCFCE7;color:#16A34A;border-radius:20px;">✓ Ditangani</span></div>
+          </div>
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M1 1l6 5.5L1 12" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-row">
+          <div class="ci ci-green">💧</div>
+          <div class="ct">
+            <div class="ct-title" style="font-size:14px;">Taman / Irigasi</div>
+            <div class="ct-sub">2 Apr 2026 · 07:00 – 07:18</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:5px;"><span style="font-size:11px;font-weight:700;padding:2px 8px;background:#DCFCE7;color:#16A34A;border-radius:20px;">Ringan</span><span style="font-size:11px;font-weight:600;padding:2px 8px;background:#DCFCE7;color:#16A34A;border-radius:20px;">✓ Ditangani</span></div>
+          </div>
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M1 1l6 5.5L1 12" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:13px;color:#0288D1;font-weight:600;padding:8px 0;">Lihat lebih banyak ›</div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     24 · DETAIL KEJADIAN SATU KEBOCORAN · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">24 · Detail Kejadian Satu Kebocoran · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">10:02</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-back" style="margin:10px 0 4px;">← Riwayat Kebocoran</div>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:2px;">Detail Kejadian</div>
+      <p style="font-size:13px;color:#64748B;margin-bottom:14px;">27 Mei 2026 · Kamar Mandi Utama</p>
+      <!-- summary card -->
+      <div style="background:linear-gradient(135deg,#EF4444,#B91C1C);border-radius:16px;padding:18px;margin-bottom:14px;color:#fff;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-size:16px;font-weight:800;">🚿 Kamar Mandi Utama</div>
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;background:rgba(255,255,255,.25);border-radius:20px;">✓ Ditangani</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+          <div><div style="font-size:18px;font-weight:800;">27 mnt</div><div style="font-size:10px;opacity:.8;margin-top:2px;">Durasi</div></div>
+          <div><div style="font-size:18px;font-weight:800;">332L</div><div style="font-size:10px;opacity:.8;margin-top:2px;">Air terbuang</div></div>
+          <div><div style="font-size:18px;font-weight:800;">Rp 2.6rb</div><div style="font-size:10px;opacity:.8;margin-top:2px;">Kerugian</div></div>
+        </div>
+      </div>
+      <!-- timeline -->
+      <div class="sec-label" style="margin-top:0;">Kronologi Kejadian</div>
+      <div class="tl-wrap">
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#EF4444;"></div><div class="tl-bar"></div></div><div class="tl-right"><div class="tl-time">19:45</div><div class="tl-desc">Anomali terdeteksi sensor</div><div class="tl-note">Debit 12.4 L/mnt saat idle · Notifikasi dikirim</div></div></div>
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#F97316;"></div><div class="tl-bar"></div></div><div class="tl-right"><div class="tl-time">19:49</div><div class="tl-desc">Pengguna membuka aplikasi</div><div class="tl-note">Melihat peta kebocoran dan detail</div></div></div>
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#01579B;"></div><div class="tl-bar"></div></div><div class="tl-right"><div class="tl-time">19:50</div><div class="tl-desc">Air utama dimatikan via app</div><div class="tl-note">Katup tertutup dalam 5 detik</div></div></div>
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#0288D1;"></div><div class="tl-bar"></div></div><div class="tl-right"><div class="tl-time">19:54</div><div class="tl-desc">Tukang ledeng dipesan</div><div class="tl-note">Budi Santoso · Tiba 20:09</div></div></div>
+        <div class="tl-item"><div class="tl-left"><div class="tl-dot-sq" style="background:#66BB6A;"></div></div><div class="tl-right"><div class="tl-time">20:12</div><div class="tl-desc">Kebocoran berhasil diperbaiki</div><div class="tl-note">Sambungan fleksibel diganti · Air dinyalakan kembali</div></div></div>
+      </div>
+      <!-- notes -->
+      <div class="info-box info-blue" style="margin-top:4px;">
+        <div class="info-t" style="color:#1D4ED8;">📋 Catatan Perbaikan</div>
+        <div class="info-b" style="color:#1E3A5F;">Sambungan fleksibel di bawah wastafel retak. Diganti dengan fleksibel baru. Biaya servis: Rp 95.000.</div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📡</div><div class="tab-label">Deteksi</div></div>
+      <div class="tab"><div class="tab-icon">🔧</div><div class="tab-label">Servis</div></div>
+      <div class="tab"><div class="tab-icon">⚙️</div><div class="tab-label">Atur</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     25 · KONFIRMASI KEBOCORAN SUDAH DITANGANI · 402 × 874
+════════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+  <div class="frame-name">25 · Konfirmasi Kebocoran Sudah Ditangani · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:linear-gradient(135deg,#66BB6A,#2E7D32);color:#fff;">
+      <span class="sb-time" style="color:#fff;">20:15</span>
+      <div class="sb-icons" style="color:#fff;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="white" stroke-opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="2" fill="white"/><path d="M23 4v4a2 2 0 000-4z" fill="white" fill-opacity=".5"/></svg></div>
+    </div>
+    <div class="page" style="background:#F0FDF4;display:flex;flex-direction:column;align-items:center;padding-top:32px;">
+      <!-- hero -->
+      <div style="width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#66BB6A,#16A34A);display:flex;align-items:center;justify-content:center;font-size:56px;margin-bottom:20px;box-shadow:0 0 0 16px rgba(102,187,106,.2),0 0 0 32px rgba(102,187,106,.08);">✅</div>
+      <div style="font-size:26px;font-weight:800;color:#14532D;margin-bottom:6px;text-align:center;">Kebocoran Ditangani!</div>
+      <div style="font-size:14px;color:#166534;margin-bottom:28px;text-align:center;line-height:1.6;">Sistem kembali normal.<br>Sensor masih memantau untuk keamanan.</div>
+      <!-- summary -->
+      <div style="background:#fff;border:1px solid #BBF7D0;border-radius:20px;padding:20px;width:100%;margin-bottom:16px;">
+        <div style="font-size:12px;font-weight:700;color:#16A34A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;">Ringkasan Penanganan</div>
+        <div class="tl-wrap">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F0FDF4;"><div style="font-size:13px;color:#64748B;">Lokasi</div><div style="font-size:14px;font-weight:600;color:#0F172A;">Kamar Mandi Utama</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F0FDF4;"><div style="font-size:13px;color:#64748B;">Durasi kejadian</div><div style="font-size:14px;font-weight:600;color:#0F172A;">27 menit</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F0FDF4;"><div style="font-size:13px;color:#64748B;">Air terbuang</div><div style="font-size:14px;font-weight:600;color:#DC2626;">332 liter</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F0FDF4;"><div style="font-size:13px;color:#64748B;">Ditangani oleh</div><div style="font-size:14px;font-weight:600;color:#0F172A;">Budi Santoso</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;"><div style="font-size:13px;color:#64748B;">Biaya servis</div><div style="font-size:14px;font-weight:600;color:#0F172A;">Rp 95.000</div></div>
+        </div>
+      </div>
+      <!-- rating -->
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:16px;width:100%;margin-bottom:16px;text-align:center;">
+        <div style="font-size:14px;font-weight:600;color:#0F172A;margin-bottom:10px;">Beri nilai tukang ledeng</div>
+        <div style="font-size:36px;letter-spacing:6px;">★★★★★</div>
+      </div>
+      <button class="btn btn-success" style="width:100%;margin-bottom:8px;">Kembali ke Beranda</button>
+      <button class="btn btn-ghost" style="width:100%;">Lihat Detail Riwayat</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /canvas -->
+</body>
+</html>

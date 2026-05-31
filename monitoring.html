@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AquaTrack — Monitoring Prototype (25 Screens)</title>
+<style>
+  :root{
+    --bg:#0b1220;--panel:#0f172a;--ink:#e2e8f0;--muted:#94a3b8;
+    --blue:#0ea5e9;--blue2:#0284c7;--teal:#14b8a6;--aqua:#22d3ee;
+    --green:#10b981;--red:#ef4444;--amber:#f59e0b;
+    --card:#ffffff;--soft:#f1f5f9;--line:#e2e8f0;--text:#0f172a;
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,Roboto,sans-serif}
+  html,body{margin:0;background:radial-gradient(1200px 800px at 20% 0%,#1e293b,#0b1220 60%);color:var(--ink);min-height:100vh}
+
+  header.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(11,18,32,.75);border-bottom:1px solid #1e293b;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  header h1{margin:0;font-size:16px;letter-spacing:.3px}
+  header .pill{font-size:12px;color:var(--muted);padding:4px 10px;border:1px solid #1e293b;border-radius:999px}
+  header .spacer{flex:1}
+  header select,header button{background:#111827;color:var(--ink);border:1px solid #1e293b;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer}
+  header button.primary{background:linear-gradient(135deg,var(--blue),var(--teal));border:none;color:#fff;font-weight:600}
+
+  .workspace{padding:24px;display:grid;grid-template-columns:240px 1fr;gap:24px;align-items:start}
+  aside.sidebar{position:sticky;top:74px;background:var(--panel);border:1px solid #1e293b;border-radius:14px;padding:14px;max-height:calc(100vh - 100px);overflow:auto}
+  aside h3{margin:4px 0 10px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  aside .nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:#cbd5e1;margin-bottom:2px}
+  aside .nav-item:hover{background:#111827}
+  aside .nav-item.active{background:linear-gradient(135deg,rgba(14,165,233,.18),rgba(20,184,166,.18));color:#fff}
+  aside .num{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;font-size:11px;border-radius:6px;background:#1e293b;color:var(--muted)}
+
+  main.canvas{display:flex;flex-direction:column;gap:32px}
+  .frame-row{display:flex;gap:48px;align-items:flex-start;justify-content:center;flex-wrap:wrap}
+  .frame-label{font-size:12px;color:var(--muted);text-align:center;margin-bottom:8px}
+
+  .iphone{position:relative;width:390px;height:844px;border-radius:54px;background:#000;padding:14px;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 2px #1f2937,0 0 0 4px #0a0f1c}
+  .iphone.ip17{width:402px;height:874px;border-radius:58px;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 2px #334155,0 0 0 4px #0a0f1c}
+  .island{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px;z-index:5}
+  .ip17 .island{width:96px;height:30px;top:20px;border-radius:18px}
+  .screen{width:100%;height:100%;border-radius:42px;overflow:hidden;background:var(--card);color:var(--text);position:relative;display:flex;flex-direction:column}
+  .ip17 .screen{border-radius:46px}
+
+  .statusbar{height:54px;flex:0 0 54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;font-size:13px;font-weight:600}
+  .statusbar svg{width:16px;height:11px}
+  .statusbar .icons{display:flex;gap:5px;align-items:center}
+
+  .content{flex:1;overflow:auto;padding:8px 18px 0}
+  .content.dk{background:linear-gradient(170deg,#071528 0%,#0c2040 50%,#071a32);color:#fff}
+  .content.wh{background:#f8fafc;color:#0f172a}
+  .content.am{background:linear-gradient(160deg,#fef3c7,#fde68a 60%);color:#0f172a}
+
+  .home-indicator{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;width:134px;height:5px;border-radius:3px;background:rgba(15,23,42,.45)}
+
+  /* TAB BAR */
+  .tab-bar{flex:0 0 auto;display:flex;border-top:1px solid #e2e8f0;padding:6px 0 10px;background:#fff}
+  .tab-bar.tb-dk{background:#071528;border-top-color:#1e293b}
+  .tb{flex:1;text-align:center;cursor:pointer;padding:2px 0}
+  .tb-i{font-size:21px;line-height:1.2}
+  .tb-l{font-size:10px;color:#94a3b8;margin-top:1px}
+  .tb.on .tb-l{color:#0ea5e9;font-weight:600}
+  .tb-bar.tb-dk .tb-l{color:#334155}
+
+  /* BACK BUTTON */
+  .bk{position:absolute;top:60px;left:18px;width:34px;height:34px;border-radius:11px;background:rgba(15,23,42,.07);border:none;color:#0f172a;font-size:19px;cursor:pointer;z-index:6;display:flex;align-items:center;justify-content:center;line-height:1}
+  .bk.bk-w{background:rgba(255,255,255,.18);color:#fff}
+
+  /* CARDS */
+  .cw{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:10px}
+  .cb{background:#f0f9ff;border:1px solid #bae6fd;border-radius:14px;padding:14px;margin-bottom:10px}
+  .cg{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:14px;margin-bottom:10px}
+  .cr{background:#fef2f2;border:1px solid #fecaca;border-radius:14px;padding:14px;margin-bottom:10px}
+  .cgl{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px;margin-bottom:10px;color:#fff}
+
+  /* STATS ROW */
+  .sr{display:flex;gap:8px;margin:10px 0}
+  .sc{flex:1;background:#fff;border:1px solid #e2e8f0;border-radius:13px;padding:11px 8px;text-align:center}
+  .sc.sc-dk{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12)}
+  .sv{font-size:19px;font-weight:700;color:#0f172a;line-height:1.1}
+  .sv.w{color:#fff}
+  .su{font-size:10px;color:#94a3b8;margin-top:3px}
+  .su.w{color:rgba(255,255,255,.6)}
+
+  /* LIVE BADGE */
+  @keyframes dp{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.5}}
+  .ld{width:9px;height:9px;border-radius:50%;display:inline-block;animation:dp 1.5s ease-in-out infinite;vertical-align:middle;margin-right:4px}
+  .ld.grn{background:#10b981}
+  .ld.gry{background:#64748b;animation:none}
+  .lb{display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:600}
+  .lb.on{background:rgba(16,185,129,.2);color:#10b981;border:1px solid rgba(16,185,129,.3)}
+  .lb.off{background:rgba(100,116,139,.12);color:#94a3b8;border:1px solid rgba(100,116,139,.2)}
+
+  /* PROGRESS */
+  .pb{height:8px;border-radius:4px;overflow:hidden;background:rgba(255,255,255,.15);margin:6px 0}
+  .pb.pb-s{background:#e2e8f0}
+  .pf{height:100%;border-radius:4px;background:linear-gradient(90deg,#0ea5e9,#14b8a6)}
+
+  /* ROOM ROW */
+  .rr{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+  .rr.rr-s{border-bottom-color:#f0f4f8}
+  .ri{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  .ri.dk{background:rgba(255,255,255,.1)}
+  .ri.lt{background:#e0f2fe}
+
+  /* TIMELINE */
+  .tl{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f0f4f8}
+  .tl-dot{width:8px;height:8px;border-radius:50%;background:#0ea5e9;margin-top:4px;flex-shrink:0}
+  .tl-time{font-size:12px;color:#0ea5e9;font-weight:600;width:42px;flex-shrink:0;margin-top:1px}
+  .tl-bd{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#e0f2fe;color:#0284c7;flex-shrink:0;align-self:center}
+
+  /* FILTER CHIPS */
+  .fc{display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;border:1.5px solid #e2e8f0;font-size:13px;cursor:pointer;background:#fff;color:#0f172a;margin:4px}
+  .fc.fs{background:#0ea5e9;color:#fff;border-color:#0ea5e9}
+
+  /* TOGGLE */
+  .tg{width:46px;height:26px;border-radius:13px;background:#cbd5e1;position:relative;cursor:pointer;flex-shrink:0;transition:.2s}
+  .tg.on{background:#0ea5e9}
+  .tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+  .tg.on::after{left:23px}
+
+  /* ALERT */
+  .ah{background:linear-gradient(135deg,#ef4444,#b91c1c);padding:20px 18px 18px;color:#fff;text-align:center}
+
+  /* SECTION TITLE */
+  .st{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.8px;margin:14px 0 8px;font-weight:600}
+
+  /* BTN */
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:14px;font-weight:600;font-size:15px;cursor:pointer;border:none;margin-top:8px}
+  .bp{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff}
+  .bg{background:transparent;color:#0284c7;border:1.5px solid #bae6fd}
+  .bw{background:#fff;color:#0c4a6e;border:1px solid #e0f2fe}
+
+  @media(max-width:1100px){.workspace{grid-template-columns:1fr}aside.sidebar{position:static;max-height:none}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <h1>💧 AquaTrack — Monitoring Prototype</h1>
+  <span class="pill" id="screenPill">Screen 1 / 25</span>
+  <div class="spacer"></div>
+  <button id="prevBtn">← Prev</button>
+  <button id="nextBtn" class="primary">Next →</button>
+</header>
+
+<div class="workspace">
+  <aside class="sidebar">
+    <h3>Screens (25)</h3>
+    <div id="navList"></div>
+  </aside>
+  <main class="canvas">
+    <div class="frame-row">
+      <div>
+        <div class="frame-label">iPhone 16 — 390 × 844</div>
+        <div class="iphone ip16">
+          <div class="island"></div>
+          <div id="screen16" class="screen"></div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+      <div>
+        <div class="frame-label">iPhone 17 — 402 × 874</div>
+        <div class="iphone ip17">
+          <div class="island"></div>
+          <div id="screen17" class="screen"></div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const SCREENS = [
+  {key:'mon1',   name:'Monitoring — Air Mengalir'},
+  {key:'mon2',   name:'Monitoring — Air Berhenti'},
+  {key:'flowDetail', name:'Live Flow Meter Detail'},
+  {key:'roomBreak',  name:'Breakdown per Ruangan'},
+  {key:'roomBath1',  name:'Detail Kamar Mandi Utama'},
+  {key:'roomBath2',  name:'Detail Kamar Mandi Kedua'},
+  {key:'roomKitchen',name:'Detail Dapur'},
+  {key:'roomSink',   name:'Detail Wastafel Dapur'},
+  {key:'roomWash',   name:'Detail Mesin Cuci'},
+  {key:'roomGarden', name:'Detail Taman'},
+  {key:'roomToilet', name:'Detail Toilet'},
+  {key:'roomTap',    name:'Detail Keran Luar Rumah'},
+  {key:'chart24',    name:'Grafik Pemakaian 24 Jam'},
+  {key:'chartTap',   name:'Grafik — Tap Jam Tertentu'},
+  {key:'heatmap',    name:'Heat Map Jam Puncak'},
+  {key:'costRT',     name:'Estimasi Biaya Real-time'},
+  {key:'costDetail', name:'Detail Estimasi Biaya'},
+  {key:'histHour',   name:'Riwayat Pemakaian per Jam'},
+  {key:'histDay',    name:'Riwayat Pemakaian per Hari'},
+  {key:'filterRoom', name:'Filter per Ruangan'},
+  {key:'filterTime', name:'Filter per Waktu'},
+  {key:'compare',    name:'Bandingkan Antar Ruangan'},
+  {key:'notifSet',   name:'Set Notifikasi Berlebih'},
+  {key:'notifAlert', name:'Notifikasi Melebihi Batas'},
+  {key:'noActivity', name:'Tidak Ada Aktivitas Air'},
+];
+
+/* ─── helpers ─── */
+const SBL = `<div class="statusbar" style="color:#0f172a"><span>9:41</span><div class="icons"><span style="font-size:11px">●●●</span><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="3" width="3" height="6" rx="1"/><rect x="5" y="1" width="3" height="10" rx="1"/></svg><svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="3" y="3" width="14" height="6" rx="1" fill="currentColor"/></svg></div></div>`;
+const SBD = `<div class="statusbar" style="color:rgba(255,255,255,.9)"><span>9:41</span><div class="icons"><span style="font-size:11px">●●●</span><svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="3" width="3" height="6" rx="1"/><rect x="5" y="1" width="3" height="10" rx="1"/></svg><svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="20" height="10" rx="2.5"/><rect x="3" y="3" width="14" height="6" rx="1" fill="currentColor"/></svg></div></div>`;
+
+function TB(active, dark) {
+  const tabs = [
+    {i:'🏠',l:'Beranda',k:'home',g:'mon1'},
+    {i:'💧',l:'Monitor',k:'monitor',g:'mon1'},
+    {i:'📊',l:'Grafik',k:'chart',g:'chart24'},
+    {i:'💰',l:'Biaya',k:'cost',g:'costRT'},
+    {i:'⚙️',l:'Atur',k:'settings',g:'notifSet'},
+  ];
+  const bg = dark ? 'background:#071528;border-top-color:#1e293b;' : '';
+  return `<div class="tab-bar" style="${bg}">${tabs.map(t=>{
+    const on = t.k===active;
+    const lc = on ? '#0ea5e9' : (dark ? '#475569' : '#94a3b8');
+    return `<div class="tb${on?' on':''}" onclick="goTo('${t.g}')"><div class="tb-i">${t.i}</div><div class="tb-l" style="color:${lc}">${t.l}</div></div>`;
+  }).join('')}</div>`;
+}
+
+function bars(data, w, h, hlIdx) {
+  const mx = Math.max(...data, 1);
+  const n = data.length;
+  const bw = Math.floor(w/n)-1;
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block;overflow:visible">${data.map((v,i)=>{
+    const bh = Math.max(Math.round((v/mx)*h),v>0?3:1);
+    const x = i*(bw+1);
+    const y = h-bh;
+    const c = i===hlIdx ? '#f59e0b' : (v/mx>.65 ? '#0284c7' : v/mx>.3 ? '#0ea5e9' : '#bae6fd');
+    const op = v===0 ? 0.2 : 1;
+    return `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="2" fill="${c}" opacity="${op}"/>`;
+  }).join('')}</svg>`;
+}
+
+function sparkline(data, w, h, color) {
+  const mx = Math.max(...data, 1);
+  const step = w/(data.length-1);
+  const pts = data.map((v,i)=>`${(i*step).toFixed(1)},${(h-(v/mx)*h).toFixed(1)}`).join(' ');
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block"><polyline points="${pts}" fill="none" stroke="${color||'#0ea5e9'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+function minibar(pct, color) {
+  return `<div style="height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-top:4px"><div style="height:100%;width:${pct}%;background:${color||'#0ea5e9'};border-radius:3px"></div></div>`;
+}
+
+function donut(segments) {
+  // segments: [{pct, color}]
+  const r=55, cx=65, cy=65, C=2*Math.PI*r;
+  let offset=0;
+  const arcs = segments.map(s=>{
+    const len=C*(s.pct/100);
+    const rest=C-len;
+    const dashoffset=-(C*offset/100);
+    offset+=s.pct;
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="16" stroke-dasharray="${len.toFixed(1)} ${rest.toFixed(1)}" stroke-dashoffset="${dashoffset.toFixed(1)}" transform="rotate(-90 ${cx} ${cy})" stroke-linecap="butt"/>`;
+  }).join('');
+  return `<svg width="130" height="130" viewBox="0 0 130 130"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#e2e8f0" stroke-width="16"/>${arcs}</svg>`;
+}
+
+function heatmap() {
+  const rows = [
+    [0,0,0,0,0,1,8,7,3,2,2,1,5,4,2,2,1,1,7,8,4,2,1,0],
+    [0,0,0,0,0,2,9,8,4,3,2,2,6,5,3,2,2,1,8,7,5,2,1,0],
+    [0,0,0,0,0,1,8,7,3,2,1,1,5,4,3,2,1,2,7,8,4,1,0,0],
+    [0,0,0,0,0,2,7,7,4,2,2,1,4,4,3,2,1,1,8,7,4,2,1,0],
+    [0,0,0,0,0,2,9,8,5,3,2,2,6,5,4,3,2,2,8,9,5,3,1,0],
+    [0,0,0,0,1,2,5,6,8,8,6,4,4,3,5,6,7,7,6,5,3,2,1,0],
+    [0,0,0,0,1,1,4,6,9,8,5,4,3,3,5,6,8,6,5,3,2,1,0,0],
+  ];
+  const colors=['#f0f9ff','#e0f2fe','#bae6fd','#7dd3fc','#38bdf8','#0ea5e9','#0284c7','#1d4ed8','#1e3a8a','#0f172a'];
+  const cw=12,ch=14,gap=1;
+  const tw=24*(cw+gap), th=7*(ch+gap);
+  let rects='';
+  rows.forEach((row,ri)=>row.forEach((v,ci)=>{
+    rects+=`<rect x="${ci*(cw+gap)}" y="${ri*(ch+gap)}" width="${cw}" height="${ch}" rx="2" fill="${colors[Math.min(v,9)]}"/>`;
+  }));
+  return `<svg width="${tw}" height="${th}" viewBox="0 0 ${tw} ${th}" style="display:block">${rects}</svg>`;
+}
+
+const D24 = [0,0,0,0,0,2,48,35,22,18,12,5,32,28,18,12,10,0,0,0,0,0,0,0];
+
+function roomDetail(ico, name, today, avg, sessions, weekData, backKey) {
+  const wbars = bars(weekData, 310, 52);
+  const days = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+  const evts = sessions.map(s=>`
+    <div class="tl">
+      <div class="tl-dot"></div>
+      <div class="tl-time">${s.t}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#0f172a">${ico} ${name}</div><div style="font-size:11px;color:#64748b;margin-top:2px">${s.l}L · ${s.d}</div></div>
+      <div class="tl-bd">${s.l}L</div>
+    </div>`).join('');
+  return `
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:16px">
+      <button class="bk" onclick="goTo('${backKey||'roomBreak'}')">‹</button>
+      <div style="margin-top:52px;display:flex;align-items:center;gap:12px">
+        <div style="width:50px;height:50px;border-radius:14px;background:#e0f2fe;display:flex;align-items:center;justify-content:center;font-size:26px">${ico}</div>
+        <div>
+          <div style="font-size:19px;font-weight:700;color:#0f172a">${name}</div>
+          <div style="font-size:12px;color:#64748b;margin-top:3px">📅 Selasa, 26 Mei 2026</div>
+        </div>
+      </div>
+      <div class="sr" style="margin-top:14px">
+        <div class="sc"><div class="sv">${today}L</div><div class="su">Hari ini</div></div>
+        <div class="sc"><div class="sv">${avg}L</div><div class="su">Rata-rata</div></div>
+        <div class="sc"><div class="sv">${sessions.length}x</div><div class="su">Sesi</div></div>
+      </div>
+      <div class="st">Pemakaian 7 Hari Terakhir</div>
+      <div class="cw">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">${days.map(d=>`<div style="font-size:10px;color:#94a3b8;text-align:center;flex:1">${d}</div>`).join('')}</div>
+        ${wbars}
+        <div style="display:flex;justify-content:space-between;margin-top:5px">${weekData.map(v=>`<div style="font-size:10px;color:#0f172a;font-weight:600;text-align:center;flex:1">${v||'–'}</div>`).join('')}</div>
+      </div>
+      <div class="st">Riwayat Hari Ini</div>
+      ${evts}
+      <div style="height:20px"></div>
+    </div>`;
+}
+
+/* ─── screens ─── */
+function renderScreen(key) {
+  switch(key) {
+
+  /* ══ 1. MONITORING — AIR MENGALIR ══ */
+  case 'mon1': return `${SBD}
+    <div class="content dk" style="flex:1;overflow:auto;padding-bottom:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+        <div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55)">Selasa, 26 Mei 2026</div>
+          <div style="font-size:17px;font-weight:700;color:#fff;margin-top:2px">Selamat siang, Nurhady 👋</div>
+        </div>
+        <div style="width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer">🔔</div>
+      </div>
+
+      <!-- FLOW CIRCLE -->
+      <div style="text-align:center;margin:18px 0 10px">
+        <div style="position:relative;width:190px;height:190px;margin:0 auto">
+          <svg width="190" height="190" viewBox="0 0 190 190" style="position:absolute;inset:0">
+            <circle cx="95" cy="95" r="80" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="14"/>
+            <circle cx="95" cy="95" r="80" fill="none" stroke="url(#gr1)" stroke-width="14"
+              stroke-dasharray="390 113" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 95 95)"/>
+            <defs><linearGradient id="gr1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#0ea5e9"/></linearGradient></defs>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div style="font-size:38px;font-weight:800;color:#fff;line-height:1">12.4</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.65);margin-top:2px">L/menit</div>
+          </div>
+        </div>
+        <div class="lb on" style="margin-top:8px">
+          <span class="ld grn"></span>AIR MENGALIR
+        </div>
+      </div>
+
+      <!-- ACTIVE ROOM -->
+      <div class="cgl" style="margin-bottom:10px;display:flex;align-items:center;gap:10px" onclick="goTo('roomKitchen')">
+        <div style="font-size:24px">🍳</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">Dapur sedang aktif</div><div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px">Sudah 3 mnt 42 dtk · 7.8L terpakai</div></div>
+        <div style="font-size:16px;color:rgba(255,255,255,.4)">›</div>
+      </div>
+
+      <!-- TODAY PROGRESS -->
+      <div class="cgl">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="font-size:13px;font-weight:600">Pemakaian Hari Ini</div>
+          <div style="font-size:13px;color:#22d3ee;font-weight:700">245 / 400 L</div>
+        </div>
+        <div class="pb"><div class="pf" style="width:61%"></div></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px">61% dari target harian · Biaya: <b style="color:#fff">Rp 18.250</b></div>
+      </div>
+
+      <!-- STATS ROW -->
+      <div class="sr">
+        <div class="sc sc-dk"><div class="sv w">2.3</div><div class="su w">bar tekanan</div></div>
+        <div class="sc sc-dk"><div class="sv w">28°</div><div class="su w">suhu air</div></div>
+        <div class="sc sc-dk"><div class="sv w">92%</div><div class="su w">sensor</div></div>
+      </div>
+
+      <!-- ROOM MINI LIST -->
+      <div class="st" style="color:rgba(255,255,255,.4)">Semua Titik Pantau</div>
+      ${[['🚿','Kamar Mandi Utama','86L','off'],['🛁','Kamar Mandi Kedua','49L','off'],['🍳','Dapur','61L','on'],['🪥','Wastafel','12L','off'],['👕','Mesin Cuci','20L','off']].map(([i,n,v,s])=>`
+      <div class="rr" style="cursor:pointer">
+        <div class="ri dk">${i}</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#fff">${n}</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">${v} hari ini</div></div>
+        <div class="lb ${s}" style="font-size:10px;padding:3px 9px">${s==='on'?'Aktif':'Idle'}</div>
+      </div>`).join('')}
+      <div style="height:14px"></div>
+    </div>
+    ${TB('monitor', true)}`;
+
+  /* ══ 2. MONITORING — AIR BERHENTI ══ */
+  case 'mon2': return `${SBD}
+    <div class="content dk" style="flex:1;overflow:auto;padding-bottom:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+        <div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55)">Selasa, 26 Mei 2026</div>
+          <div style="font-size:17px;font-weight:700;color:#fff;margin-top:2px">Selamat siang, Nurhady 👋</div>
+        </div>
+        <div style="width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer">🔔</div>
+      </div>
+
+      <div style="text-align:center;margin:18px 0 10px">
+        <div style="position:relative;width:190px;height:190px;margin:0 auto">
+          <svg width="190" height="190" viewBox="0 0 190 190" style="position:absolute;inset:0">
+            <circle cx="95" cy="95" r="80" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="14"/>
+            <circle cx="95" cy="95" r="80" fill="none" stroke="rgba(100,116,139,.4)" stroke-width="14"
+              stroke-dasharray="50 453" stroke-linecap="round" transform="rotate(-90 95 95)"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div style="font-size:38px;font-weight:800;color:rgba(255,255,255,.4);line-height:1">0.0</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.3);margin-top:2px">L/menit</div>
+          </div>
+        </div>
+        <div class="lb off" style="margin-top:8px">
+          <span class="ld gry"></span>AIR BERHENTI
+        </div>
+      </div>
+
+      <div class="cgl" style="margin-bottom:10px;display:flex;align-items:center;gap:10px">
+        <div style="font-size:22px">⏱</div>
+        <div><div style="font-size:13px;font-weight:600">Terakhir aktif 5 menit lalu</div><div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">Kamar Mandi Utama · 40L · 7 mnt</div></div>
+      </div>
+
+      <div class="cgl">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="font-size:13px;font-weight:600">Pemakaian Hari Ini</div>
+          <div style="font-size:13px;color:#22d3ee;font-weight:700">245 / 400 L</div>
+        </div>
+        <div class="pb"><div class="pf" style="width:61%"></div></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px">Tidak ada aktivitas · <b style="color:#10b981">Hemat 18% vs kemarin</b></div>
+      </div>
+
+      <div class="sr">
+        <div class="sc sc-dk"><div class="sv w">0.0</div><div class="su w">L/menit</div></div>
+        <div class="sc sc-dk"><div class="sv w">245L</div><div class="su w">total hari ini</div></div>
+        <div class="sc sc-dk"><div class="sv w">Rp 18.2k</div><div class="su w">biaya hari ini</div></div>
+      </div>
+
+      <div class="st" style="color:rgba(255,255,255,.4)">Semua Titik Pantau</div>
+      ${[['🚿','Kamar Mandi Utama','86L'],['🛁','Kamar Mandi Kedua','49L'],['🍳','Dapur','61L'],['🪥','Wastafel','12L'],['👕','Mesin Cuci','20L'],['🌿','Taman','10L']].map(([i,n,v])=>`
+      <div class="rr">
+        <div class="ri dk">${i}</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#fff">${n}</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">${v} hari ini</div></div>
+        <div class="lb off" style="font-size:10px;padding:3px 9px">Idle</div>
+      </div>`).join('')}
+      <div style="height:14px"></div>
+    </div>
+    ${TB('monitor', true)}`;
+
+  /* ══ 3. LIVE FLOW METER DETAIL ══ */
+  case 'flowDetail': return `${SBD}
+    <div class="content dk" style="flex:1;overflow:auto;padding-bottom:16px">
+      <button class="bk bk-w" onclick="goTo('mon1')">‹</button>
+      <div style="text-align:center;margin-top:52px">
+        <div style="font-size:13px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px">Live Flow Meter</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.7);margin-top:4px">AquaSensor Pro · #AT-2049</div>
+      </div>
+
+      <!-- BIG GAUGE -->
+      <div style="text-align:center;margin:12px 0">
+        <div style="position:relative;width:210px;height:210px;margin:0 auto">
+          <svg width="210" height="210" viewBox="0 0 210 210" style="position:absolute;inset:0">
+            <circle cx="105" cy="105" r="88" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="16"/>
+            <circle cx="105" cy="105" r="88" fill="none" stroke="url(#gr2)" stroke-width="16"
+              stroke-dasharray="415 138" stroke-linecap="round" transform="rotate(-90 105 105)"/>
+            <defs>
+              <linearGradient id="gr2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#22d3ee"/>
+                <stop offset="100%" stop-color="#0ea5e9"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div style="font-size:44px;font-weight:800;color:#fff;line-height:1">12.4</div>
+            <div style="font-size:14px;color:rgba(255,255,255,.6);margin-top:4px">Liter / menit</div>
+            <div class="lb on" style="margin-top:8px;font-size:11px"><span class="ld grn"></span>MENGALIR</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS GRID 2x2 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0">
+        ${[['2.3 bar','Tekanan Air'],['28 °C','Suhu Air'],['3m 42s','Durasi Aktif'],['7.8 L','Terpakai Kini']].map(([v,l])=>`
+        <div class="cgl" style="text-align:center;margin-bottom:0">
+          <div style="font-size:22px;font-weight:700">${v}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:3px">${l}</div>
+        </div>`).join('')}
+      </div>
+
+      <!-- SPARKLINE 60s -->
+      <div class="cgl" style="margin-top:8px">
+        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:8px">Laju Alir — 60 Detik Terakhir</div>
+        ${sparkline([8,9,10,11,12,11,12,13,12,11,12,13,12,12,11,12,13,12,12,11,12,12,13,12], 310, 60, '#22d3ee')}
+        <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:rgba(255,255,255,.3)">
+          <span>-60s</span><span>-30s</span><span>Sekarang</span>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,.35)">
+        ✓ Laju stabil · Tidak ada anomali terdeteksi
+      </div>
+    </div>`;
+
+  /* ══ 4. BREAKDOWN PER RUANGAN ══ */
+  case 'roomBreak': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:16px">
+      <button class="bk" onclick="goTo('mon1')">‹</button>
+      <div style="margin-top:52px;display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:19px;font-weight:700;color:#0f172a">Per Ruangan</div><div style="font-size:12px;color:#64748b;margin-top:2px">Selasa, 26 Mei 2026 · Total: 245L</div></div>
+        <div style="font-size:12px;color:#0ea5e9;cursor:pointer;font-weight:600">Filter ›</div>
+      </div>
+
+      <!-- DONUT + LEGEND -->
+      <div style="display:flex;align-items:center;gap:12px;margin:14px 0">
+        ${donut([{pct:35,color:'#0ea5e9'},{pct:25,color:'#14b8a6'},{pct:20,color:'#38bdf8'},{pct:8,color:'#10b981'},{pct:5,color:'#a78bfa'},{pct:4,color:'#22d3ee'},{pct:3,color:'#f59e0b'}])}
+        <div style="flex:1">
+          ${[['#0ea5e9','🚿','Kmr Mandi 1','35%'],['#14b8a6','🍳','Dapur','25%'],['#38bdf8','🛁','Kmr Mandi 2','20%'],['#10b981','👕','Mesin Cuci','8%'],['#a78bfa','🪥','Wastafel','5%'],['#22d3ee','🌿','Taman','4%'],['#f59e0b','🚽','Toilet','3%']].map(([c,i,n,p])=>`
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <div style="width:8px;height:8px;border-radius:2px;background:${c};flex-shrink:0"></div>
+            <div style="font-size:11px;color:#0f172a;flex:1">${i} ${n}</div>
+            <div style="font-size:11px;font-weight:700;color:#0f172a">${p}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- ROOM LIST -->
+      <div class="st">Detail per Ruangan</div>
+      ${[['🚿','Kamar Mandi Utama',86,35,'#0ea5e9','roomBath1'],
+         ['🛁','Kamar Mandi Kedua',49,20,'#38bdf8','roomBath2'],
+         ['🍳','Dapur',61,25,'#14b8a6','roomKitchen'],
+         ['🪥','Wastafel Dapur',12,5,'#a78bfa','roomSink'],
+         ['👕','Mesin Cuci',20,8,'#10b981','roomWash'],
+         ['🌿','Taman',10,4,'#22d3ee','roomGarden'],
+         ['🚽','Toilet',7,3,'#f59e0b','roomToilet'],
+         ['🚰','Keran Luar',0,0,'#94a3b8','roomTap']
+        ].map(([i,n,l,p,c,k])=>`
+      <div class="rr rr-s" style="cursor:pointer" onclick="goTo('${k}')">
+        <div class="ri lt">${i}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:#0f172a">${n}</div>
+          ${minibar(p, c)}
+        </div>
+        <div style="text-align:right;flex-shrink:0;margin-left:8px">
+          <div style="font-size:14px;font-weight:700;color:#0f172a">${l}L</div>
+          <div style="font-size:11px;color:#94a3b8">${p}%</div>
+        </div>
+        <div style="color:#cbd5e1;margin-left:6px">›</div>
+      </div>`).join('')}
+      <div style="height:20px"></div>
+    </div>`;
+
+  /* ══ 5–12. ROOM DETAILS ══ */
+  case 'roomBath1': return SBL + roomDetail('🚿','Kamar Mandi Utama',86,92,[{t:'06:32',l:45,d:'8 mnt'},{t:'19:45',l:41,d:'7 mnt'}],[92,88,110,75,86,0,0],'roomBreak');
+  case 'roomBath2': return SBL + roomDetail('🛁','Kamar Mandi Kedua',49,55,[{t:'07:05',l:28,d:'6 mnt'},{t:'20:10',l:21,d:'5 mnt'}],[55,60,48,52,49,0,0],'roomBreak');
+  case 'roomKitchen': return SBL + roomDetail('🍳','Dapur',61,58,[{t:'07:30',l:14,d:'3 mnt'},{t:'12:15',l:18,d:'4 mnt'},{t:'14:02',l:12,d:'3 mnt 42 dtk (aktif)'}],[58,62,55,70,61,0,0],'roomBreak');
+  case 'roomSink': return SBL + roomDetail('🪥','Wastafel Dapur',12,14,[{t:'08:00',l:5,d:'2 mnt'},{t:'12:30',l:4,d:'1 mnt'},{t:'13:45',l:3,d:'1 mnt'}],[14,12,16,10,12,0,0],'roomBreak');
+  case 'roomWash': return SBL + roomDetail('👕','Mesin Cuci',20,45,[{t:'08:30',l:20,d:'25 mnt'}],[45,0,50,45,20,0,0],'roomBreak');
+  case 'roomGarden': return SBL + roomDetail('🌿','Taman',10,25,[{t:'06:00',l:10,d:'5 mnt'}],[25,25,0,30,10,0,0],'roomBreak');
+  case 'roomToilet': return SBL + roomDetail('🚽','Toilet',7,10,[{t:'06:35',l:3,d:'2 mnt'},{t:'12:00',l:2,d:'1 mnt'},{t:'13:50',l:2,d:'1 mnt'}],[10,8,12,9,7,0,0],'roomBreak');
+  case 'roomTap': return SBL + roomDetail('🚰','Keran Luar Rumah',0,8,[],[8,0,12,0,0,0,0],'roomBreak');
+
+  /* ══ 13. GRAFIK 24 JAM ══ */
+  case 'chart24': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:0">
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:19px;font-weight:700;color:#0f172a">Grafik Pemakaian</div>
+        <div style="font-size:12px;color:#0ea5e9;cursor:pointer;font-weight:600" onclick="goTo('filterTime')">Filter ›</div>
+      </div>
+      <div style="display:flex;gap:6px;margin:10px 0">
+        ${['Hari Ini','Kemarin','7 Hari'].map((l,i)=>`<div style="padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;background:${i===0?'#0ea5e9':'#fff'};color:${i===0?'#fff':'#64748b'};border:1px solid ${i===0?'#0ea5e9':'#e2e8f0'}">${l}</div>`).join('')}
+      </div>
+      <div class="cw" style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+          <div><div style="font-size:22px;font-weight:800;color:#0f172a">245 L</div><div style="font-size:11px;color:#64748b">Total hari ini (s/d 15:30)</div></div>
+          <div style="text-align:right"><div style="font-size:14px;font-weight:700;color:#10b981">−18%</div><div style="font-size:11px;color:#64748b">vs kemarin</div></div>
+        </div>
+        ${bars(D24, 320, 90)}
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          ${['00','03','06','09','12','15','18','21','23'].map(h=>`<div style="font-size:9px;color:#94a3b8">${h}</div>`).join('')}
+        </div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;font-size:12px;color:#64748b">
+          🔺 Puncak: <b style="color:#0f172a">06:00–07:00</b> · 48L &nbsp;|&nbsp; Rerata jam aktif: <b style="color:#0f172a">17L</b>
+        </div>
+      </div>
+
+      <div class="st">Breakdown per Waktu</div>
+      ${[['Pagi (06–12)','135L','55%','#0ea5e9'],['Siang (12–15)','78L','32%','#14b8a6'],['Sore/Malam (15–23)','32L','13%','#38bdf8']].map(([l,v,p,c])=>`
+      <div class="cw" style="padding:10px 14px;margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="font-size:13px;font-weight:600;color:#0f172a">${l}</div>
+          <div style="font-size:13px;font-weight:700;color:#0f172a">${v} <span style="font-weight:400;color:#94a3b8">${p}</span></div>
+        </div>
+        ${minibar(parseInt(p),c)}
+      </div>`).join('')}
+      <div style="height:12px"></div>
+    </div>
+    ${TB('chart')}`;
+
+  /* ══ 14. GRAFIK — TAP JAM TERTENTU ══ */
+  case 'chartTap': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:0">
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:19px;font-weight:700;color:#0f172a">Grafik Pemakaian</div>
+        <div style="font-size:12px;color:#64748b">Hari Ini</div>
+      </div>
+      <div class="cw" style="margin:10px 0">
+        ${bars(D24, 320, 90, 12)}
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          ${['00','03','06','09','12','15','18','21','23'].map(h=>`<div style="font-size:9px;color:#94a3b8">${h}</div>`).join('')}
+        </div>
+      </div>
+
+      <!-- TOOLTIP CARD -->
+      <div style="background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:16px;padding:16px;margin-bottom:12px;color:#fff">
+        <div style="font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Detail Jam 12:00</div>
+        <div style="font-size:28px;font-weight:800;margin-bottom:4px">32 L</div>
+        <div style="display:flex;gap:16px;font-size:13px;opacity:.9">
+          <div>⏱ 8 menit aktif</div>
+          <div>🍳 Dapur</div>
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.25);display:flex;justify-content:space-between;font-size:12px">
+          <div>Rata-rata jam ini: 28L</div>
+          <div style="font-weight:700">+14% vs avg</div>
+        </div>
+      </div>
+
+      <!-- SESSION IN THAT HOUR -->
+      <div class="st">Sesi pada 12:00–13:00</div>
+      ${[{t:'12:05',n:'🍳 Dapur',l:18,d:'4 mnt'},{t:'12:30',n:'🪥 Wastafel',l:8,d:'2 mnt'},{t:'12:52',n:'🚽 Toilet',l:6,d:'2 mnt'}].map(s=>`
+      <div class="tl">
+        <div class="tl-dot"></div>
+        <div class="tl-time">${s.t}</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#0f172a">${s.n}</div><div style="font-size:11px;color:#64748b;margin-top:2px">${s.d}</div></div>
+        <div class="tl-bd">${s.l}L</div>
+      </div>`).join('')}
+      <div style="height:12px"></div>
+    </div>
+    ${TB('chart')}`;
+
+  /* ══ 15. HEAT MAP ══ */
+  case 'heatmap': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:0">
+      <div style="margin-top:8px;font-size:19px;font-weight:700;color:#0f172a">Pola Pemakaian</div>
+      <div style="font-size:12px;color:#64748b;margin-top:2px;margin-bottom:14px">7 hari terakhir — intensitas per jam</div>
+
+      <!-- LABELS JAM -->
+      <div style="display:flex;margin-bottom:3px;padding-left:28px">
+        ${[0,3,6,9,12,15,18,21,23].map(h=>`<div style="font-size:9px;color:#94a3b8;position:absolute;left:${18+28+h*13}px">${String(h).padStart(2,'0')}</div>`).join('')}
+      </div>
+      <div style="position:relative">
+        <div style="display:flex;flex-direction:column;gap:1px">
+          ${['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map((d,i)=>`
+          <div style="display:flex;align-items:center;gap:4px">
+            <div style="font-size:9px;color:#94a3b8;width:24px;flex-shrink:0">${d}</div>
+            <div>${heatmap().replace('<svg',`<svg data-row="${i}"`)}</div>
+          </div>`).slice(0,1).join('')}
+        </div>
+      </div>
+
+      <!-- HEATMAP PROPER -->
+      <div style="overflow-x:auto;padding-bottom:4px">
+        <div style="min-width:320px">
+          ${['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map((d,ri)=>{
+            const rowData = [[0,0,0,0,0,1,8,7,3,2,2,1,5,4,2,2,1,1,7,8,4,2,1,0],[0,0,0,0,0,2,9,8,4,3,2,2,6,5,3,2,2,1,8,7,5,2,1,0],[0,0,0,0,0,1,8,7,3,2,1,1,5,4,3,2,1,2,7,8,4,1,0,0],[0,0,0,0,0,2,7,7,4,2,2,1,4,4,3,2,1,1,8,7,4,2,1,0],[0,0,0,0,0,2,9,8,5,3,2,2,6,5,4,3,2,2,8,9,5,3,1,0],[0,0,0,0,1,2,5,6,8,8,6,4,4,3,5,6,7,7,6,5,3,2,1,0],[0,0,0,0,1,1,4,6,9,8,5,4,3,3,5,6,8,6,5,3,2,1,0,0]][ri];
+            const colors=['#f0f9ff','#e0f2fe','#bae6fd','#7dd3fc','#38bdf8','#0ea5e9','#0284c7','#1d4ed8','#1e3a8a','#0f172a'];
+            const cells = rowData.map(v=>`<div style="width:12px;height:14px;border-radius:2px;background:${colors[Math.min(v,9)]}"></div>`).join('');
+            return `<div style="display:flex;align-items:center;gap:4px;margin-bottom:2px">
+              <div style="font-size:9px;color:#94a3b8;width:24px;flex-shrink:0">${d}</div>
+              <div style="display:flex;gap:1px">${cells}</div>
+            </div>`;
+          }).join('')}
+          <div style="display:flex;align-items:center;gap:4px;margin-top:4px">
+            <div style="width:24px"></div>
+            ${[0,3,6,9,12,15,18,21].map(h=>`<div style="font-size:9px;color:#94a3b8;width:${h===0?12:12+3*13}px;text-align:left">${String(h).padStart(2,'0')}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- LEGEND -->
+      <div style="display:flex;align-items:center;gap:6px;margin:10px 0">
+        <div style="font-size:11px;color:#64748b">Rendah</div>
+        ${['#f0f9ff','#bae6fd','#38bdf8','#0ea5e9','#0284c7'].map(c=>`<div style="width:20px;height:14px;border-radius:3px;background:${c}"></div>`).join('')}
+        <div style="font-size:11px;color:#64748b">Tinggi</div>
+      </div>
+
+      <!-- INSIGHTS -->
+      <div class="st">Insight</div>
+      <div class="cb" style="margin-bottom:8px">
+        <div style="font-size:13px;font-weight:600;color:#0c4a6e;margin-bottom:4px">⏰ Jam Puncak</div>
+        <div style="font-size:13px;color:#0369a1">Senin–Jumat: <b>06:00–07:00</b> dan <b>18:00–20:00</b><br/>Sabtu–Minggu: <b>08:00–10:00</b></div>
+      </div>
+      <div class="cg" style="margin-bottom:8px">
+        <div style="font-size:13px;font-weight:600;color:#14532d;margin-bottom:4px">💡 Rekomendasi</div>
+        <div style="font-size:13px;color:#166534">Jadwalkan mesin cuci di luar jam puncak untuk menghemat tekanan air.</div>
+      </div>
+      <div style="height:12px"></div>
+    </div>
+    ${TB('chart')}`;
+
+  /* ══ 16. ESTIMASI BIAYA REAL-TIME ══ */
+  case 'costRT': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:0">
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:19px;font-weight:700;color:#0f172a">Estimasi Biaya</div>
+        <div style="font-size:12px;color:#0ea5e9;cursor:pointer;font-weight:600" onclick="goTo('costDetail')">Rincian ›</div>
+      </div>
+
+      <!-- HERO COST -->
+      <div style="background:linear-gradient(135deg,#0ea5e9,#0284c7);border-radius:20px;padding:20px 18px;margin:12px 0;color:#fff;text-align:center">
+        <div style="font-size:12px;opacity:.75;margin-bottom:4px">Biaya Hari Ini (real-time)</div>
+        <div style="font-size:40px;font-weight:800;margin-bottom:4px">Rp 18.250</div>
+        <div style="font-size:13px;opacity:.8">245 L × Rp 7.450/m³ + biaya tetap</div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.2);display:flex;justify-content:space-around">
+          <div><div style="font-size:18px;font-weight:700">Rp 235k</div><div style="font-size:11px;opacity:.7">Proyeksi bulan ini</div></div>
+          <div style="width:1px;background:rgba(255,255,255,.2)"></div>
+          <div><div style="font-size:18px;font-weight:700;color:#86efac">−12%</div><div style="font-size:11px;opacity:.7">vs bulan lalu</div></div>
+        </div>
+      </div>
+
+      <!-- PER ROOM COST -->
+      <div class="st">Biaya per Ruangan</div>
+      ${[['🚿','Kamar Mandi Utama',6407,35],['🍳','Dapur',4543,25],['🛁','Kamar Mandi Kedua',3650,20],['👕','Mesin Cuci',1490,8],['🪥','Wastafel',895,5],['🌿','Taman',745,4],['🚽','Toilet',521,3]].map(([i,n,v,p])=>`
+      <div class="cw" style="padding:10px 14px;margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:18px">${i}</span>
+            <div><div style="font-size:13px;font-weight:600;color:#0f172a">${n}</div><div style="font-size:11px;color:#64748b">${p}% dari total</div></div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:#0f172a">Rp ${v.toLocaleString('id')}</div>
+        </div>
+        ${minibar(p,'#0ea5e9')}
+      </div>`).join('')}
+      <div style="height:12px"></div>
+    </div>
+    ${TB('cost')}`;
+
+  /* ══ 17. DETAIL ESTIMASI BIAYA ══ */
+  case 'costDetail': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:16px">
+      <button class="bk" onclick="goTo('costRT')">‹</button>
+      <div style="margin-top:52px;font-size:19px;font-weight:700;color:#0f172a">Detail Biaya — Mei 2026</div>
+
+      <div class="cb" style="margin-top:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <div style="font-size:14px;color:#0369a1">Total s/d hari ini</div>
+          <div style="font-size:16px;font-weight:700;color:#0c4a6e">Rp 152.400</div>
+        </div>
+        <div class="pb pb-s" style="background:#bae6fd"><div class="pf" style="width:64%;background:linear-gradient(90deg,#0ea5e9,#0284c7)"></div></div>
+        <div style="font-size:11px;color:#0369a1;margin-top:4px">64% dari estimasi bulan penuh (Rp 235.000)</div>
+      </div>
+
+      <div class="cw" style="margin-top:0">
+        <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:10px">KOMPONEN BIAYA</div>
+        ${[['Pemakaian Air (4.860L)','Rp 36.207',true],['Biaya Tetap PAM','Rp 15.000',true],['PPN 11%','Rp 5.632',false],['Total bersih','Rp 56.839',false]].map(([l,v,sep])=>`
+        <div style="display:flex;justify-content:space-between;padding:8px 0;${sep?'border-bottom:1px solid #f1f5f9':'font-weight:700;color:#0f172a;margin-top:4px'}">
+          <div style="font-size:13px;color:#0f172a">${l}</div>
+          <div style="font-size:13px;font-weight:600">${v}</div>
+        </div>`).join('')}
+      </div>
+
+      <!-- DAILY CHART MEI -->
+      <div class="st">Pemakaian Harian Mei 2026</div>
+      <div class="cw">
+        ${bars([18,22,19,25,31,28,15,12,22,24,27,20,18,24,28,25,22,19,21,23,26,24,22,20,21,0,0,0,0,0,0], 310, 60)}
+        <div style="display:flex;justify-content:space-between;margin-top:5px">
+          ${['1','5','10','15','20','25','26'].map(d=>`<div style="font-size:9px;color:#94a3b8">${d}</div>`).join('')}
+        </div>
+      </div>
+
+      <!-- COMPARISON -->
+      <div class="st">Perbandingan Bulan Lalu</div>
+      <div class="cg">
+        <div style="display:flex;justify-content:space-around;text-align:center">
+          <div><div style="font-size:20px;font-weight:700;color:#0f172a">Rp 235k</div><div style="font-size:11px;color:#64748b">Proyeksi Mei</div></div>
+          <div style="font-size:24px;color:#10b981;align-self:center">↓</div>
+          <div><div style="font-size:20px;font-weight:700;color:#0f172a">Rp 267k</div><div style="font-size:11px;color:#64748b">Aktual April</div></div>
+        </div>
+        <div style="margin-top:10px;text-align:center;font-size:13px;color:#166534;font-weight:600">
+          💚 Hemat ~Rp 32.000 dibanding bulan lalu
+        </div>
+      </div>
+    </div>`;
+
+  /* ══ 18. RIWAYAT PER JAM ══ */
+  case 'histHour': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:16px">
+      <button class="bk" onclick="goTo('chart24')">‹</button>
+      <div style="margin-top:52px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:19px;font-weight:700;color:#0f172a">Riwayat per Jam</div>
+        <div style="font-size:12px;color:#0ea5e9;cursor:pointer;font-weight:600" onclick="goTo('filterTime')">Filter ›</div>
+      </div>
+      <div style="font-size:12px;color:#64748b;margin:4px 0 14px">Selasa, 26 Mei 2026 · Total: 245L</div>
+
+      ${[{t:'06:32',i:'🚿',n:'Kamar Mandi Utama',l:45,d:'8 mnt',c:'#e0f2fe',tc:'#0284c7'},
+         {t:'06:00',i:'🌿',n:'Taman',l:10,d:'5 mnt',c:'#f0fdf4',tc:'#16a34a'},
+         {t:'07:05',i:'🛁',n:'Kamar Mandi Kedua',l:28,d:'6 mnt',c:'#e0f2fe',tc:'#0284c7'},
+         {t:'07:30',i:'🍳',n:'Dapur',l:14,d:'3 mnt',c:'#fef9c3',tc:'#a16207'},
+         {t:'08:00',i:'🪥',n:'Wastafel Dapur',l:5,d:'2 mnt',c:'#f5f3ff',tc:'#7c3aed'},
+         {t:'08:30',i:'👕',n:'Mesin Cuci',l:20,d:'25 mnt',c:'#f0fdf4',tc:'#16a34a'},
+         {t:'12:05',i:'🍳',n:'Dapur',l:18,d:'4 mnt',c:'#fef9c3',tc:'#a16207'},
+         {t:'12:30',i:'🪥',n:'Wastafel Dapur',l:4,d:'1 mnt',c:'#f5f3ff',tc:'#7c3aed'},
+         {t:'12:52',i:'🚽',n:'Toilet',l:3,d:'1 mnt',c:'#fff7ed',tc:'#c2410c'},
+         {t:'13:45',i:'🪥',n:'Wastafel Dapur',l:3,d:'1 mnt',c:'#f5f3ff',tc:'#7c3aed'},
+         {t:'14:02',i:'🍳',n:'Dapur',l:12,d:'3 mnt',c:'#fef9c3',tc:'#a16207'},
+         {t:'14:40',i:'🛁',n:'Kamar Mandi Kedua',l:21,d:'5 mnt',c:'#e0f2fe',tc:'#0284c7'},
+         {t:'19:45',i:'🚿',n:'Kamar Mandi Utama',l:41,d:'7 mnt',c:'#e0f2fe',tc:'#0284c7'},
+        ].map(s=>`
+      <div class="tl">
+        <div class="tl-dot" style="background:${s.tc}"></div>
+        <div class="tl-time" style="color:${s.tc}">${s.t}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:#0f172a">${s.i} ${s.n}</div>
+          <div style="font-size:11px;color:#64748b;margin-top:2px">⏱ ${s.d}</div>
+        </div>
+        <div style="font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px;background:${s.c};color:${s.tc}">${s.l}L</div>
+      </div>`).join('')}
+      <div style="height:20px"></div>
+    </div>`;
+
+  /* ══ 19. RIWAYAT PER HARI ══ */
+  case 'histDay': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:16px">
+      <button class="bk" onclick="goTo('chart24')">‹</button>
+      <div style="margin-top:52px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:19px;font-weight:700;color:#0f172a">Riwayat per Hari</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="font-size:16px;cursor:pointer;color:#94a3b8">‹</div>
+          <div style="font-size:13px;font-weight:600;color:#0f172a">Mei 2026</div>
+          <div style="font-size:16px;cursor:pointer;color:#94a3b8">›</div>
+        </div>
+      </div>
+
+      <div class="cw" style="margin:12px 0">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <div><div style="font-size:14px;font-weight:700;color:#0f172a">Total Mei (s/d tgl 26)</div><div style="font-size:12px;color:#64748b">26 hari · 4.860L</div></div>
+          <div style="text-align:right"><div style="font-size:16px;font-weight:700;color:#0ea5e9">Rp 152k</div><div style="font-size:11px;color:#64748b">biaya bulan ini</div></div>
+        </div>
+        ${bars([280,320,290,360,440,410,200,180,310,345,390,290,260,345,405,365,315,270,300,330,370,345,320,295,305,245,0,0,0,0,0],310,70)}
+        <div style="display:flex;justify-content:space-between;margin-top:5px">
+          ${['1','5','10','15','20','25','26'].map(d=>`<div style="font-size:9px;color:#94a3b8">${d}</div>`).join('')}
+        </div>
+      </div>
+
+      <div class="st">Daftar Harian</div>
+      ${[{d:'Sel 26 Mei',l:245,c:'#0ea5e9',note:'Hari ini'},
+         {d:'Sen 25 Mei',l:305,c:'#64748b'},
+         {d:'Min 24 Mei',l:295,c:'#64748b'},
+         {d:'Sab 23 Mei',l:320,c:'#64748b'},
+         {d:'Jum 22 Mei',l:345,c:'#64748b'},
+         {d:'Kam 21 Mei',l:370,c:'#64748b'},
+         {d:'Rab 20 Mei',l:330,c:'#64748b'},
+         {d:'Sel 19 Mei',l:300,c:'#64748b'},
+        ].map(r=>`
+      <div class="cw" style="padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:#0f172a">${r.d} ${r.note?`<span style="font-size:10px;background:#e0f2fe;color:#0284c7;padding:1px 7px;border-radius:999px;margin-left:4px">Hari ini</span>`:''}</div>
+          ${minibar(Math.round(r.l/4.5), r.c)}
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:14px;font-weight:700;color:#0f172a">${r.l}L</div>
+          <div style="font-size:10px;color:#64748b">Rp ${Math.round(r.l*0.0745).toFixed(1)}k</div>
+        </div>
+      </div>`).join('')}
+      <div style="height:20px"></div>
+    </div>`;
+
+  /* ══ 20. FILTER RUANGAN ══ */
+  case 'filterRoom': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:16px">
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:19px;font-weight:700;color:#0f172a">Filter Ruangan</div>
+        <button style="background:none;border:none;font-size:22px;color:#94a3b8;cursor:pointer;padding:0" onclick="goTo('roomBreak')">✕</button>
+      </div>
+      <div style="font-size:13px;color:#64748b;margin:6px 0 16px">Pilih ruangan yang ingin ditampilkan di monitoring</div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:0">
+        ${[['🚿','Kamar Mandi Utama',true],['🛁','Kamar Mandi Kedua',true],['🍳','Dapur',true],['🪥','Wastafel Dapur',false],['👕','Mesin Cuci',true],['🌿','Taman',false],['🚽','Toilet',false],['🚰','Keran Luar',false]].map(([i,n,s])=>`
+        <div class="fc${s?' fs':''}" style="margin:4px">
+          ${i} ${n}
+        </div>`).join('')}
+      </div>
+
+      <div style="display:flex;gap:8px;margin:16px 0 8px">
+        <div style="font-size:13px;color:#0ea5e9;cursor:pointer;font-weight:600">Pilih Semua</div>
+        <div style="color:#e2e8f0">|</div>
+        <div style="font-size:13px;color:#94a3b8;cursor:pointer">Hapus Semua</div>
+      </div>
+
+      <div class="st">Pengurutan</div>
+      <div class="cw">
+        ${[['Pemakaian tertinggi',true],['Nama ruangan',false],['Terakhir aktif',false]].map(([l,s])=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f1f5f9">
+          <div style="font-size:13px;color:#0f172a">${l}</div>
+          <div style="width:18px;height:18px;border-radius:50%;border:2px solid ${s?'#0ea5e9':'#cbd5e1'};background:${s?'#0ea5e9':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            ${s?'<div style="width:6px;height:6px;border-radius:50%;background:#fff"></div>':''}
+          </div>
+        </div>`).join('')}
+      </div>
+
+      <button class="btn bp" style="margin-top:16px">Terapkan Filter</button>
+      <button class="btn bg">Reset ke Default</button>
+    </div>`;
+
+  /* ══ 21. FILTER WAKTU ══ */
+  case 'filterTime': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:16px">
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:19px;font-weight:700;color:#0f172a">Filter Waktu</div>
+        <button style="background:none;border:none;font-size:22px;color:#94a3b8;cursor:pointer;padding:0" onclick="goTo('chart24')">✕</button>
+      </div>
+      <div style="font-size:13px;color:#64748b;margin:6px 0 16px">Pilih rentang waktu yang ingin ditampilkan</div>
+
+      <div class="st">Cepat</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+        ${[['Hari Ini',false],['Kemarin',false],['7 Hari',true],['30 Hari',false],['Bulan Ini',false],['3 Bulan',false]].map(([l,s])=>`
+        <div style="padding:12px 14px;border-radius:12px;border:1.5px solid ${s?'#0ea5e9':'#e2e8f0'};background:${s?'#e0f2fe':'#fff'};cursor:pointer;text-align:center">
+          <div style="font-size:14px;font-weight:600;color:${s?'#0284c7':'#0f172a'}">${l}</div>
+        </div>`).join('')}
+      </div>
+
+      <div class="st">Rentang Kustom</div>
+      <div class="cw">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="flex:1">
+            <div style="font-size:11px;color:#64748b;margin-bottom:6px">Dari</div>
+            <div style="padding:10px 12px;border:1.5px solid #bae6fd;border-radius:10px;font-size:14px;font-weight:600;color:#0284c7;background:#f0f9ff">26 Apr 2026</div>
+          </div>
+          <div style="font-size:20px;color:#94a3b8;margin-top:16px">→</div>
+          <div style="flex:1">
+            <div style="font-size:11px;color:#64748b;margin-bottom:6px">Sampai</div>
+            <div style="padding:10px 12px;border:1.5px solid #bae6fd;border-radius:10px;font-size:14px;font-weight:600;color:#0284c7;background:#f0f9ff">26 Mei 2026</div>
+          </div>
+        </div>
+        <!-- Mini calendar indication -->
+        <div style="margin-top:12px;display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center">
+          ${['M','S','S','R','K','J','S'].map(d=>`<div style="font-size:10px;color:#94a3b8;padding:2px 0">${d}</div>`).join('')}
+          ${Array.from({length:31},(_, i)=>{
+            const d=i+1; const sel=d>=20&&d<=26;
+            return `<div style="font-size:11px;padding:5px 0;border-radius:6px;cursor:pointer;background:${sel?'#0ea5e9':'transparent'};color:${sel?'#fff':d===26?'#0ea5e9':'#0f172a'};font-weight:${d===26?700:400}">${d}</div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <button class="btn bp" style="margin-top:8px">Terapkan</button>
+    </div>`;
+
+  /* ══ 22. BANDINGKAN RUANGAN ══ */
+  case 'compare': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:0">
+      <div style="margin-top:8px;font-size:19px;font-weight:700;color:#0f172a">Bandingkan Ruangan</div>
+      <div style="font-size:12px;color:#64748b;margin:4px 0 14px">Hari Ini, 26 Mei 2026</div>
+
+      <!-- SELECTOR -->
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <div style="flex:1;padding:10px 14px;background:#e0f2fe;border-radius:12px;border:2px solid #0ea5e9;text-align:center">
+          <div style="font-size:18px">🚿</div>
+          <div style="font-size:12px;font-weight:700;color:#0284c7;margin-top:4px">Kmr Mandi 1</div>
+          <div style="font-size:10px;color:#0369a1">Ruangan A</div>
+        </div>
+        <div style="font-size:22px;color:#94a3b8;align-self:center;font-weight:300">vs</div>
+        <div style="flex:1;padding:10px 14px;background:#f0fdfa;border-radius:12px;border:2px solid #14b8a6;text-align:center">
+          <div style="font-size:18px">🍳</div>
+          <div style="font-size:12px;font-weight:700;color:#0d9488;margin-top:4px">Dapur</div>
+          <div style="font-size:10px;color:#0f766e">Ruangan B</div>
+        </div>
+      </div>
+
+      <!-- COMPARISON CHART -->
+      <div class="cw" style="margin-bottom:12px">
+        <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:10px">Pemakaian 7 Hari Terakhir</div>
+        <svg width="320" height="80" viewBox="0 0 320 80" style="display:block">
+          ${[92,88,110,75,86,0,0].map((v,i)=>{
+            const bh=Math.round((v/120)*70);
+            return `<rect x="${i*24}" y="${80-bh}" width="10" height="${bh}" rx="2" fill="#0ea5e9"/>`;
+          }).join('')}
+          ${[58,62,55,70,61,0,0].map((v,i)=>{
+            const bh=Math.round((v/120)*70);
+            return `<rect x="${i*24+12}" y="${80-bh}" width="10" height="${bh}" rx="2" fill="#14b8a6"/>`;
+          }).join('')}
+        </svg>
+        <div style="display:flex;gap:14px;margin-top:8px">
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:2px;background:#0ea5e9"></div><div style="font-size:11px;color:#64748b">Kmr Mandi 1</div></div>
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:2px;background:#14b8a6"></div><div style="font-size:11px;color:#64748b">Dapur</div></div>
+        </div>
+      </div>
+
+      <!-- STATS TABLE -->
+      <div class="st">Perbandingan Statistik</div>
+      <div class="cw">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="border-bottom:2px solid #f1f5f9">
+              <th style="text-align:left;color:#64748b;font-weight:500;padding:4px 0">Metrik</th>
+              <th style="text-align:center;color:#0ea5e9;font-weight:700;padding:4px 0">🚿 KM1</th>
+              <th style="text-align:center;color:#14b8a6;font-weight:700;padding:4px 0">🍳 Dapur</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${[['Hari ini','86L','61L'],['Rata-rata harian','92L','58L'],['Tertinggi (7hr)','110L','70L'],['% dari total','35%','25%'],['Biaya hari ini','Rp 6.4k','Rp 4.5k']].map(([l,a,b])=>`
+            <tr style="border-bottom:1px solid #f1f5f9">
+              <td style="padding:8px 0;color:#64748b">${l}</td>
+              <td style="padding:8px 0;text-align:center;font-weight:600;color:#0ea5e9">${a}</td>
+              <td style="padding:8px 0;text-align:center;font-weight:600;color:#14b8a6">${b}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="height:12px"></div>
+    </div>
+    ${TB('chart')}`;
+
+  /* ══ 23. SET NOTIFIKASI ══ */
+  case 'notifSet': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:0">
+      <div style="margin-top:8px;font-size:19px;font-weight:700;color:#0f172a">Pengaturan Notifikasi</div>
+      <div style="font-size:12px;color:#64748b;margin:4px 0 14px">Kelola peringatan pemakaian air berlebih</div>
+
+      <!-- MASTER TOGGLE -->
+      <div class="cw" style="display:flex;align-items:center;justify-content:space-between;padding:14px">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#0f172a">Aktifkan Peringatan</div>
+          <div style="font-size:12px;color:#64748b;margin-top:3px">Notifikasi saat batas terlampaui</div>
+        </div>
+        <div class="tg on"></div>
+      </div>
+
+      <!-- TOTAL THRESHOLD -->
+      <div class="st">Batas Total Harian</div>
+      <div class="cw">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-size:13px;color:#0f172a">Maksimum per hari</div>
+          <div style="font-size:22px;font-weight:700;color:#0ea5e9">400 L</div>
+        </div>
+        <input type="range" min="100" max="800" value="400" style="width:100%;accent-color:#0ea5e9"/>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;margin-top:4px">
+          <span>100L</span><span>400L (terpilih)</span><span>800L</span>
+        </div>
+      </div>
+
+      <!-- PER ROOM -->
+      <div class="st">Batas per Ruangan</div>
+      ${[['🚿','Kamar Mandi Utama',100,true],['🍳','Dapur',80,true],['🛁','Kamar Mandi Kedua',70,true],['👕','Mesin Cuci',60,false],['🌿','Taman',40,false]].map(([i,n,v,on])=>`
+      <div class="cw" style="padding:12px 14px;margin-bottom:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:36px;height:36px;background:#e0f2fe;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px">${i}</div>
+            <div><div style="font-size:13px;font-weight:600;color:#0f172a">${n}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px">Batas: ${v}L/hari</div></div>
+          </div>
+          <div class="tg${on?' on':''}"></div>
+        </div>
+      </div>`).join('')}
+
+      <!-- NOTIF TYPE -->
+      <div class="st">Tipe Notifikasi</div>
+      <div class="cw">
+        ${[['Push notification',true],['Dalam aplikasi',true],['Getaran',false]].map(([l,on])=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f1f5f9">
+          <div style="font-size:13px;color:#0f172a">${l}</div>
+          <div class="tg${on?' on':''}"></div>
+        </div>`).join('')}
+      </div>
+      <div style="height:12px"></div>
+    </div>
+    ${TB('settings')}`;
+
+  /* ══ 24. NOTIFIKASI MELEBIHI BATAS ══ */
+  case 'notifAlert': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:16px">
+      <!-- ALERT HEADER -->
+      <div style="background:linear-gradient(135deg,#ef4444,#b91c1c);padding:28px 18px 24px;margin:-8px -18px 0;text-align:center;color:#fff">
+        <div style="font-size:52px;margin-bottom:8px">⚠️</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:4px">Batas Terlampaui!</div>
+        <div style="font-size:14px;opacity:.85">Kamar Mandi Utama</div>
+      </div>
+
+      <!-- STATS ALERT -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:16px 0">
+        ${[['86L','Terpakai hari ini','#ef4444'],['80L','Batas yang diatur','#64748b'],['+7.5%','Melebihi batas','#f59e0b']].map(([v,l,c])=>`
+        <div class="cw" style="text-align:center;padding:10px 8px">
+          <div style="font-size:18px;font-weight:700;color:${c}">${v}</div>
+          <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.3">${l}</div>
+        </div>`).join('')}
+      </div>
+
+      <!-- DETAIL -->
+      <div class="cr" style="margin-bottom:12px">
+        <div style="font-size:14px;font-weight:700;color:#991b1b;margin-bottom:8px">🚿 Kamar Mandi Utama</div>
+        <div style="font-size:13px;color:#7f1d1d;line-height:1.6">
+          Waktu kejadian: <b>19:45</b><br/>
+          Sesi penyebab: Mandi 7 mnt (41L)<br/>
+          Pemakaian awal: 45L (06:32) + 41L (19:45) = <b>86L</b>
+        </div>
+      </div>
+
+      <!-- TREND -->
+      <div class="cw" style="margin-bottom:12px">
+        <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:8px">TREN 7 HARI</div>
+        ${bars([92,88,110,75,86,0,0], 310, 50)}
+        <div style="display:flex;justify-content:space-between;margin-top:5px">
+          ${['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map(d=>`<div style="font-size:9px;color:#94a3b8">${d}</div>`).join('')}
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:#64748b">
+          Rata-rata 7 hari: <b style="color:#0f172a">88L</b> — hari ini <b style="color:#ef4444">lebih 7.5%</b> dari avg
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+      <button class="btn bp" onclick="goTo('roomBath1')">Lihat Detail Ruangan</button>
+      <button class="btn" style="background:#fff;color:#0f172a;border:1.5px solid #e2e8f0;margin-top:8px">⏰ Ingatkan Lagi 1 Jam</button>
+      <button class="btn" style="background:transparent;color:#94a3b8;border:none;font-size:14px;margin-top:4px" onclick="goTo('notifSet')">Ubah Batas Notifikasi</button>
+    </div>`;
+
+  /* ══ 25. TIDAK ADA AKTIVITAS ══ */
+  case 'noActivity': return `${SBL}
+    <div class="content wh" style="flex:1;overflow:auto;padding-bottom:0">
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:19px;font-weight:700;color:#0f172a">Monitor</div>
+        <div style="width:36px;height:36px;border-radius:12px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer">🔔</div>
+      </div>
+      <div style="font-size:12px;color:#64748b;margin:3px 0 0">Rabu, 27 Mei 2026 · 07:00</div>
+
+      <!-- SENSOR BADGE -->
+      <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;margin:12px 0">
+        <div style="font-size:16px">📡</div>
+        <div style="font-size:13px;color:#166534;font-weight:500">AquaSensor Pro · Online · Baterai 89%</div>
+      </div>
+
+      <!-- EMPTY STATE HERO -->
+      <div style="text-align:center;padding:30px 20px">
+        <div style="width:120px;height:120px;background:linear-gradient(135deg,#e0f2fe,#bae6fd);border-radius:40px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:56px">💧</div>
+        <div style="font-size:22px;font-weight:700;color:#0f172a;margin-bottom:8px">Tidak Ada Aktivitas</div>
+        <div style="font-size:14px;color:#64748b;line-height:1.6;margin-bottom:4px">Belum ada penggunaan air<br/>dalam <b style="color:#0f172a">8 jam terakhir</b></div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px">Sensor aktif dan memantau</div>
+      </div>
+
+      <!-- LAST ACTIVITY -->
+      <div class="cb" style="margin-bottom:12px">
+        <div style="font-size:12px;font-weight:600;color:#0369a1;margin-bottom:8px">AKTIVITAS TERAKHIR</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:38px;height:38px;background:#bae6fd;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">🚿</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:#0c4a6e">Kamar Mandi Utama</div>
+            <div style="font-size:12px;color:#0369a1;margin-top:2px">Tadi malam 21:45 · 40L · 7 menit</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- YESTERDAY SUMMARY -->
+      <div class="cw" style="margin-bottom:12px">
+        <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:10px">KEMARIN (26 MEI)</div>
+        <div style="display:flex;justify-content:space-around;text-align:center">
+          <div><div style="font-size:20px;font-weight:700;color:#0f172a">245L</div><div style="font-size:11px;color:#64748b">Total pakai</div></div>
+          <div><div style="font-size:20px;font-weight:700;color:#10b981">−18%</div><div style="font-size:11px;color:#64748b">vs rata-rata</div></div>
+          <div><div style="font-size:20px;font-weight:700;color:#0f172a">Rp 18k</div><div style="font-size:11px;color:#64748b">Biaya</div></div>
+        </div>
+      </div>
+
+      <!-- TIP -->
+      <div class="cg" style="margin-bottom:12px">
+        <div style="font-size:13px;font-weight:600;color:#14532d;margin-bottom:4px">💡 Tahukah Anda?</div>
+        <div style="font-size:13px;color:#166534;line-height:1.5">Pagi ini belum ada aktivitas air. Waktu terbaik untuk menyiram tanaman adalah sebelum jam 08:00 untuk mengurangi penguapan.</div>
+      </div>
+      <div style="height:12px"></div>
+    </div>
+    ${TB('monitor')}`;
+
+  default: return `${SBL}<div class="content wh"><div style="padding:60px 20px;text-align:center;color:#94a3b8">Screen belum dirancang</div></div>`;
+  }
+}
+
+/* ─── navigation ─── */
+let current = 0;
+function render() {
+  const s = SCREENS[current];
+  document.getElementById('screen16').innerHTML = renderScreen(s.key);
+  document.getElementById('screen17').innerHTML = renderScreen(s.key);
+  document.getElementById('screenPill').textContent = `Screen ${current+1} / ${SCREENS.length} — ${s.name}`;
+  document.querySelectorAll('.nav-item').forEach((el,i) => el.classList.toggle('active', i===current));
+}
+function next(){ if(current<SCREENS.length-1){current++;render();} }
+function prev(){ if(current>0){current--;render();} }
+function goTo(key){ const i=SCREENS.findIndex(x=>x.key===key); if(i>=0){current=i;render();} }
+
+document.getElementById('nextBtn').onclick = next;
+document.getElementById('prevBtn').onclick = prev;
+document.addEventListener('keydown', e=>{ if(e.key==='ArrowRight') next(); if(e.key==='ArrowLeft') prev(); });
+
+const nav = document.getElementById('navList');
+SCREENS.forEach((s,i)=>{
+  const el = document.createElement('div');
+  el.className = 'nav-item';
+  el.innerHTML = `<span class="num">${String(i+1).padStart(2,'0')}</span><span>${s.name}</span>`;
+  el.onclick = ()=>{current=i;render();};
+  nav.appendChild(el);
+});
+
+render();
+</script>
+</body>
+</html>

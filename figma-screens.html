@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>AquaTrack — Figma Screens</title>
+<style>
+
+/* ─── CANVAS (Figma-like dark background) ─────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0d1117;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Inter, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  padding: 48px 48px 80px;
+  min-height: 100vh;
+}
+.canvas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  align-items: flex-start;
+}
+.frame-wrapper { flex-shrink: 0; }
+.frame-name {
+  font-size: 11px;
+  color: #4b5563;
+  text-align: center;
+  margin-bottom: 10px;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+}
+
+/* ─── PHONE SCREEN (402 × 874) ─────────────────────────── */
+.phone {
+  width: 402px;
+  height: 874px;
+  background: #f8fafc;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ─── STATUS BAR ────────────────────────────────────────── */
+.status-bar {
+  height: 54px;
+  min-height: 54px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 24px 10px;
+  background: #f8fafc;
+  color: #0f172a;
+}
+.sb-time { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+.sb-icons { display: flex; align-items: center; gap: 6px; color: #0f172a; }
+
+/* ─── PAGE CONTENT (scrollable) ────────────────────────── */
+.page {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 20px 24px;
+  background: #f8fafc;
+  scrollbar-width: none;
+}
+.page::-webkit-scrollbar { display: none; }
+
+/* ─── TYPOGRAPHY ────────────────────────────────────────── */
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 16px 0 5px;
+  letter-spacing: -0.3px;
+}
+.page-sub {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 22px;
+  line-height: 1.4;
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 22px 0 10px;
+}
+
+/* ─── CARD ──────────────────────────────────────────────── */
+.card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.card-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px 16px;
+}
+.card-row + .card-row { border-top: 1px solid #f1f5f9; }
+
+/* ─── CARD ICON ─────────────────────────────────────────── */
+.card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.ci-blue   { background: #dbeafe; }
+.ci-sky    { background: #e0f2fe; }
+.ci-teal   { background: #ccfbf1; }
+.ci-green  { background: #dcfce7; }
+.ci-amber  { background: #fef3c7; }
+.ci-purple { background: #ede9fe; }
+.ci-red    { background: #fee2e2; }
+.ci-slate  { background: #f1f5f9; }
+
+/* ─── CARD TEXT ─────────────────────────────────────────── */
+.card-text { flex: 1; min-width: 0; }
+.card-title { font-size: 15px; font-weight: 600; color: #0f172a; line-height: 1.3; }
+.card-sub   { font-size: 13px; color: #64748b; margin-top: 3px; line-height: 1.35; }
+
+/* ─── TOGGLE ────────────────────────────────────────────── */
+.toggle {
+  width: 50px;
+  height: 30px;
+  border-radius: 15px;
+  background: #cbd5e1;
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle.on { background: #0ea5e9; }
+.toggle.on::after { left: 24px; }
+
+/* ─── SLIDER SECTION ────────────────────────────────────── */
+.slider-section { padding: 14px 16px; }
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+.slider-lbl { font-size: 14px; font-weight: 500; color: #0f172a; }
+.slider-val {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0ea5e9;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.slider-val span { font-size: 14px; font-weight: 500; color: #94a3b8; margin-left: 2px; }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, #0ea5e9 43%, #e2e8f0 43%);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #0ea5e9;
+  box-shadow: 0 2px 8px rgba(14,165,233,0.45);
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+.slider-marks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 6px;
+}
+.slider-marks .mark-active { color: #0ea5e9; font-weight: 600; }
+
+/* ─── CARD HINT (blue info strip) ──────────────────────── */
+.card-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 16px;
+  background: #f0f9ff;
+  border-top: 1px solid #e0f2fe;
+}
+.card-hint-text { font-size: 13px; color: #0369a1; line-height: 1.4; }
+.card-hint-text b { font-weight: 700; }
+
+/* ─── ROOM ROW ──────────────────────────────────────────── */
+.room-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  margin-bottom: 8px;
+}
+.room-info { flex: 1; min-width: 0; }
+.room-name  { font-size: 14px; font-weight: 600; color: #0f172a; }
+.room-limit { font-size: 12px; color: #94a3b8; margin-top: 3px; }
+.room-limit.active-limit { color: #0ea5e9; font-weight: 500; }
+
+/* ─── SEE ALL LINK ──────────────────────────────────────── */
+.see-all {
+  text-align: center;
+  padding: 8px 0 4px;
+  font-size: 13px;
+  color: #0ea5e9;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ─── TOGGLE ROW (inside card) ──────────────────────────── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-top: 1px solid #f1f5f9;
+}
+.toggle-row:first-child { border-top: none; }
+.toggle-info { flex: 1; }
+.toggle-title { font-size: 14px; font-weight: 500; color: #0f172a; }
+.toggle-sub   { font-size: 12px; color: #94a3b8; margin-top: 3px; }
+
+/* ─── TAB BAR ───────────────────────────────────────────── */
+.tab-bar {
+  height: 56px;
+  min-height: 56px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+}
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  height: 100%;
+}
+.tab-icon  { font-size: 22px; line-height: 1.1; }
+.tab-label { font-size: 10px; color: #94a3b8; font-weight: 400; }
+.tab.active .tab-label { color: #0ea5e9; font-weight: 700; }
+
+/* ─── ACTIVE DOT on tab icon ─────────────────────────────── */
+.tab.active .tab-icon { position: relative; }
+
+/* ─── SCREEN 24 · NOTIFIKASI MELEBIHI BATAS ─────────────── */
+.alert-bg { background: #fff5f5; }
+.alert-header { background: linear-gradient(135deg,#ef4444,#b91c1c); padding: 28px 20px 24px; margin: 0 -20px; text-align: center; color: #fff; }
+.alert-emoji { font-size: 52px; margin-bottom: 8px; }
+.alert-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.alert-sub   { font-size: 14px; opacity: .85; }
+.stat-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 16px 0; }
+.stat-box    { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; text-align: center; padding: 10px 8px; }
+.stat-val    { font-size: 18px; font-weight: 700; }
+.stat-lbl    { font-size: 10px; color: #64748b; margin-top: 3px; line-height: 1.3; }
+.detail-card { background: #fff; border: 1px solid #fecaca; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+.detail-ttl  { font-size: 14px; font-weight: 700; color: #991b1b; margin-bottom: 8px; }
+.detail-body { font-size: 13px; color: #7f1d1d; line-height: 1.7; }
+.trend-card  { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.trend-lbl   { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 8px; }
+.trend-days  { display: flex; justify-content: space-between; margin-top: 5px; }
+.trend-day   { font-size: 9px; color: #94a3b8; }
+.trend-note  { margin-top: 8px; font-size: 12px; color: #64748b; }
+.action-stack { display: flex; flex-direction: column; gap: 8px; }
+.ab { width: 100%; padding: 14px; border-radius: 14px; font-size: 15px; font-weight: 600; text-align: center; cursor: pointer; border: none; }
+.ab-primary { background: #ef4444; color: #fff; }
+.ab-outline { background: #fff; color: #0f172a; border: 1.5px solid #e2e8f0 !important; }
+.ab-ghost   { background: transparent; color: #94a3b8; font-size: 14px; }
+
+</style>
+</head>
+<body>
+
+<div class="canvas">
+
+  <!-- ═══════════════════════════════════════════════════
+       SCREEN 24 · NOTIFIKASI MELEBIHI BATAS · 402 × 874
+  ════════════════════════════════════════════════════ -->
+  <div class="frame-wrapper">
+    <div class="frame-name">24 · Notifikasi Melebihi Batas · 402 × 874</div>
+    <div class="phone alert-bg">
+
+      <!-- STATUS BAR (red gradient) -->
+      <div class="status-bar" style="background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;min-height:54px;">
+        <span style="font-size:12px;font-weight:600;">19:45</span>
+        <span style="font-size:11px;letter-spacing:.5px;">● ● ●</span>
+      </div>
+
+      <!-- PAGE -->
+      <div class="page" style="padding:0 20px 24px;">
+
+        <!-- ALERT HEADER -->
+        <div class="alert-header">
+          <div class="alert-emoji">⚠️</div>
+          <div class="alert-title">Batas Terlampaui!</div>
+          <div class="alert-sub">Kamar Mandi Utama</div>
+        </div>
+
+        <!-- 3-COLUMN STATS -->
+        <div class="stat-grid-3">
+          <div class="stat-box">
+            <div class="stat-val" style="color:#ef4444;">86L</div>
+            <div class="stat-lbl">Terpakai hari ini</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" style="color:#64748b;">80L</div>
+            <div class="stat-lbl">Batas yang diatur</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" style="color:#f59e0b;">+7.5%</div>
+            <div class="stat-lbl">Melebihi batas</div>
+          </div>
+        </div>
+
+        <!-- DETAIL CARD -->
+        <div class="detail-card">
+          <div class="detail-ttl">🚿 Kamar Mandi Utama</div>
+          <div class="detail-body">
+            Waktu kejadian: <b>19:45</b><br>
+            Sesi penyebab: Mandi 7 mnt (41L)<br>
+            Pemakaian awal: 45L (06:32) + 41L (19:45) = <b>86L</b>
+          </div>
+        </div>
+
+        <!-- TREND 7 HARI -->
+        <div class="trend-card">
+          <div class="trend-lbl">TREN 7 HARI</div>
+          <svg width="100%" height="56" viewBox="0 0 310 56" preserveAspectRatio="none">
+            <!-- bars: Sen=92 Sel=88 Rab=110 Kam=75 Jum=86 Sab=0 Min=0 (max=110) -->
+            <rect x="0"   y="11" width="38" height="45" rx="4" fill="#fca5a5"/>
+            <rect x="45"  y="15" width="38" height="41" rx="4" fill="#fca5a5"/>
+            <rect x="90"  y="0"  width="38" height="56" rx="4" fill="#ef4444"/>
+            <rect x="135" y="22" width="38" height="34" rx="4" fill="#fca5a5"/>
+            <rect x="180" y="12" width="38" height="44" rx="4" fill="#ef4444"/>
+            <rect x="225" y="56" width="38" height="0"  rx="4" fill="#e2e8f0"/>
+            <rect x="270" y="56" width="38" height="0"  rx="4" fill="#e2e8f0"/>
+            <!-- limit line at 80L = 72.7% → y = 56*(1-0.727) = 15.3 -->
+            <line x1="0" y1="15" x2="310" y2="15" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="275" y="12" font-size="9" fill="#f59e0b">batas</text>
+          </svg>
+          <div class="trend-days">
+            <span class="trend-day">Sen</span><span class="trend-day">Sel</span>
+            <span class="trend-day">Rab</span><span class="trend-day">Kam</span>
+            <span class="trend-day">Jum</span><span class="trend-day">Sab</span>
+            <span class="trend-day">Min</span>
+          </div>
+          <div class="trend-note">
+            Rata-rata 7 hari: <b style="color:#0f172a;">88L</b> — hari ini
+            <b style="color:#ef4444;">lebih 7.5%</b> dari avg
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-stack">
+          <button class="ab ab-primary">Lihat Detail Ruangan</button>
+          <button class="ab ab-outline">⏰ Ingatkan Lagi 1 Jam</button>
+          <button class="ab ab-ghost">Ubah Batas Notifikasi</button>
+        </div>
+
+      </div><!-- /page -->
+    </div><!-- /phone -->
+  </div><!-- /frame-wrapper -->
+
+
+  <!-- ═══════════════════════════════════════════════════
+       SCREEN 25 · TIDAK ADA AKTIVITAS · 402 × 874
+  ════════════════════════════════════════════════════ -->
+  <div class="frame-wrapper">
+    <div class="frame-name">25 · Tidak Ada Aktivitas · 402 × 874</div>
+    <div class="phone">
+
+      <!-- STATUS BAR -->
+      <div class="status-bar">
+        <span class="sb-time">07:00</span>
+        <div class="sb-icons">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0" y="3" width="3" height="9" rx="1" fill="#0f172a"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#0f172a"/><rect x="9" y="0" width="3" height="12" rx="1" fill="#0f172a"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="#cbd5e1"/></svg>
+          <svg width="16" height="12" viewBox="0 0 24 24" fill="none"><path d="M1 6s5-6 11-6 11 6 11 6" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/><path d="M5 10s3-4 7-4 7 4 7 4" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/><path d="M9 14s1.5-2 3-2 3 2 3 2" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="18" r="1.5" fill="#0f172a"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#0f172a" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#0f172a"/><path d="M23 4v4a2 2 0 000-4z" fill="#0f172a" fill-opacity=".4"/></svg>
+        </div>
+      </div>
+
+      <!-- PAGE -->
+      <div class="page">
+
+        <!-- TOP NAV -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+          <div style="font-size:19px;font-weight:700;color:#0f172a;">Monitor</div>
+          <div style="width:36px;height:36px;border-radius:12px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:18px;">🔔</div>
+        </div>
+        <div style="font-size:12px;color:#64748b;margin:3px 0 12px;">Rabu, 27 Mei 2026 · 07:00</div>
+
+        <!-- SENSOR BADGE -->
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;margin-bottom:12px;">
+          <span style="font-size:16px;">📡</span>
+          <span style="font-size:13px;color:#166534;font-weight:500;">AquaSensor Pro · Online · Baterai 89%</span>
+        </div>
+
+        <!-- EMPTY STATE HERO -->
+        <div style="text-align:center;padding:28px 20px;">
+          <div style="width:120px;height:120px;background:linear-gradient(135deg,#e0f2fe,#bae6fd);border-radius:40px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:56px;">💧</div>
+          <div style="font-size:22px;font-weight:700;color:#0f172a;margin-bottom:8px;">Tidak Ada Aktivitas</div>
+          <div style="font-size:14px;color:#64748b;line-height:1.6;margin-bottom:4px;">Belum ada penggunaan air<br>dalam <b style="color:#0f172a;">8 jam terakhir</b></div>
+          <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Sensor aktif dan memantau</div>
+        </div>
+
+        <!-- LAST ACTIVITY -->
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:14px 16px;margin-bottom:10px;">
+          <div style="font-size:12px;font-weight:700;color:#0369a1;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;">Aktivitas Terakhir</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:38px;height:38px;background:#bae6fd;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🚿</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#0c4a6e;">Kamar Mandi Utama</div>
+              <div style="font-size:12px;color:#0369a1;margin-top:2px;">Tadi malam 21:45 · 40L · 7 menit</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- YESTERDAY SUMMARY -->
+        <div class="card" style="margin-bottom:10px;">
+          <div style="padding:14px 16px;">
+            <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em;">Kemarin (26 Mei)</div>
+            <div style="display:flex;justify-content:space-around;text-align:center;">
+              <div>
+                <div style="font-size:20px;font-weight:700;color:#0f172a;">245L</div>
+                <div style="font-size:11px;color:#64748b;">Total pakai</div>
+              </div>
+              <div>
+                <div style="font-size:20px;font-weight:700;color:#10b981;">−18%</div>
+                <div style="font-size:11px;color:#64748b;">vs rata-rata</div>
+              </div>
+              <div>
+                <div style="font-size:20px;font-weight:700;color:#0f172a;">Rp 18k</div>
+                <div style="font-size:11px;color:#64748b;">Biaya</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIP -->
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px 16px;">
+          <div style="font-size:13px;font-weight:600;color:#14532d;margin-bottom:4px;">💡 Tahukah Anda?</div>
+          <div style="font-size:13px;color:#166534;line-height:1.5;">Pagi ini belum ada aktivitas air. Waktu terbaik untuk menyiram tanaman adalah sebelum jam 08:00 untuk mengurangi penguapan.</div>
+        </div>
+
+      </div><!-- /page -->
+
+      <!-- TAB BAR (Monitor active) -->
+      <div class="tab-bar">
+        <div class="tab active">
+          <div class="tab-icon">📊</div>
+          <div class="tab-label">Monitor</div>
+        </div>
+        <div class="tab">
+          <div class="tab-icon">💧</div>
+          <div class="tab-label">Penggunaan</div>
+        </div>
+        <div class="tab">
+          <div class="tab-icon">⚙️</div>
+          <div class="tab-label">Atur</div>
+        </div>
+        <div class="tab">
+          <div class="tab-icon">👤</div>
+          <div class="tab-label">Profil</div>
+        </div>
+      </div>
+
+    </div><!-- /phone -->
+  </div><!-- /frame-wrapper -->
+
+</div><!-- /canvas -->
+
+</body>
+</html>

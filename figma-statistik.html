@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AquaTrack — Statistik · Figma Screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;padding:48px 48px 80px;min-height:100vh;}
+.canvas{display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;}
+.frame-wrapper{flex-shrink:0;}
+.frame-name{font-size:11px;color:#4b5563;text-align:center;margin-bottom:10px;letter-spacing:.4px;font-weight:500;}
+.phone{width:402px;height:874px;background:#F8FAFC;overflow:hidden;display:flex;flex-direction:column;position:relative;font-family:'Plus Jakarta Sans',sans-serif;}
+.status-bar{height:54px;min-height:54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 10px;background:#F8FAFC;color:#0F172A;}
+.sb-time{font-size:15px;font-weight:600;letter-spacing:-.2px;}
+.sb-icons{display:flex;align-items:center;gap:6px;}
+.page{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 20px 24px;background:#F8FAFC;scrollbar-width:none;}
+.page::-webkit-scrollbar{display:none;}
+
+/* TYPOGRAPHY */
+.page-title{font-size:22px;font-weight:700;color:#0F172A;margin:14px 0 4px;letter-spacing:-.3px;}
+.page-sub{font-size:13px;color:#64748B;margin-bottom:16px;}
+.sec-lbl{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em;margin:18px 0 10px;}
+
+/* CARD */
+.card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;margin-bottom:10px;}
+.card-pad{padding:16px;}
+.card-row{display:flex;align-items:center;gap:12px;padding:13px 16px;}
+.card-row+.card-row{border-top:1px solid #F1F5F9;}
+.ci{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.ci-blue{background:#DBEAFE;} .ci-green{background:#DCFCE7;} .ci-amber{background:#FEF3C7;}
+.ci-purple{background:#EDE9FE;} .ci-red{background:#FEE2E2;} .ci-sky{background:#E0F2FE;}
+.ct{flex:1;min-width:0;}
+.ct-t{font-size:14px;font-weight:600;color:#0F172A;line-height:1.3;}
+.ct-s{font-size:12px;color:#64748B;margin-top:2px;}
+
+/* STAT GRIDS */
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.sbox{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:12px 10px;text-align:center;}
+.sv{font-size:22px;font-weight:800;line-height:1.1;}
+.sl{font-size:11px;color:#64748B;margin-top:4px;line-height:1.3;}
+
+/* PERIOD TABS */
+.period-tabs{display:flex;background:#F1F5F9;border-radius:12px;padding:4px;margin-bottom:16px;gap:2px;}
+.ptab{flex:1;text-align:center;padding:8px 4px;font-size:13px;font-weight:600;border-radius:9px;color:#64748B;}
+.ptab.on{background:#fff;color:#01579B;box-shadow:0 1px 4px rgba(0,0,0,.1);}
+
+/* CHART CONTAINER */
+.chart-wrap{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;margin-bottom:12px;}
+.chart-ttl{font-size:12px;font-weight:700;color:#64748B;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;}
+.chart-days{display:flex;justify-content:space-between;margin-top:6px;}
+.chart-day{font-size:10px;color:#94A3B8;text-align:center;flex:1;}
+.chart-note{font-size:12px;color:#64748B;margin-top:8px;line-height:1.5;}
+
+/* INFO BOXES */
+.ibox{border-radius:12px;padding:13px 15px;margin-bottom:10px;}
+.ib-blue{background:#EFF6FF;border:1px solid #BFDBFE;}
+.ib-green{background:#F0FDF4;border:1px solid #BBF7D0;}
+.ib-amber{background:#FFFBEB;border:1px solid #FDE68A;}
+.ib-red{background:#FEF2F2;border:1px solid #FECACA;}
+.ib-purple{background:#F5F3FF;border:1px solid #DDD6FE;}
+.ibt{font-size:13px;font-weight:700;margin-bottom:3px;}
+.ibb{font-size:13px;line-height:1.55;}
+
+/* BUTTONS */
+.btn{display:block;width:100%;padding:14px;border-radius:14px;font-size:15px;font-weight:700;text-align:center;cursor:pointer;border:none;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:8px;}
+.btn-primary{background:#0288D1;color:#fff;}
+.btn-dark{background:#01579B;color:#fff;}
+.btn-green{background:#66BB6A;color:#fff;}
+.btn-outline{background:#fff;color:#0F172A;border:1.5px solid #E2E8F0;}
+.btn-ghost{background:transparent;color:#94A3B8;font-size:14px;}
+
+/* COMPARISON ROW */
+.cmp-row{display:flex;gap:10px;margin-bottom:12px;}
+.cmp-col{flex:1;background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;}
+.cmp-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+.cmp-val{font-size:26px;font-weight:800;line-height:1;}
+.cmp-sub{font-size:11px;color:#64748B;margin-top:4px;}
+
+/* ACHIEVEMENT BADGE */
+.badge-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;}
+.badge-item{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px 10px;text-align:center;}
+.badge-icon{font-size:32px;margin-bottom:6px;}
+.badge-name{font-size:11px;font-weight:700;color:#0F172A;line-height:1.3;}
+.badge-sub{font-size:10px;color:#64748B;margin-top:3px;}
+.badge-item.locked{opacity:.45;filter:grayscale(.8);}
+
+/* BILL LINE */
+.bill-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;}
+.bill-row+.bill-row{border-top:1px solid #F1F5F9;}
+.bill-label{font-size:14px;color:#0F172A;}
+.bill-val{font-size:14px;font-weight:600;color:#0F172A;}
+.bill-sub-label{font-size:12px;color:#64748B;}
+.bill-total{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#F8FAFC;border-top:2px solid #E2E8F0;}
+
+/* SHARE CARD */
+.share-card{background:linear-gradient(135deg,#0288D1,#01579B);border-radius:20px;padding:24px;margin-bottom:14px;color:#fff;}
+
+/* PROGRESS BAR */
+.prog-track{height:10px;background:#E2E8F0;border-radius:5px;overflow:hidden;margin:6px 0 4px;}
+.prog-fill{height:100%;border-radius:5px;}
+
+/* TAB BAR */
+.tab-bar{height:56px;min-height:56px;background:#fff;border-top:1px solid #E2E8F0;display:flex;align-items:center;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;height:100%;}
+.tab-icon{font-size:22px;line-height:1.1;}
+.tab-label{font-size:10px;color:#94A3B8;font-weight:400;}
+.tab.active .tab-label{color:#0288D1;font-weight:700;}
+
+/* NAV */
+.nav-h{display:flex;justify-content:space-between;align-items:center;margin:10px 0 4px;}
+.nav-title{font-size:20px;font-weight:700;color:#0F172A;}
+.nav-back{font-size:15px;color:#0288D1;font-weight:600;cursor:pointer;margin:10px 0 4px;display:block;}
+.nav-icon{width:36px;height:36px;border-radius:12px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:18px;}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<!-- ═══ 1 · STATISTIK OVERVIEW ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">1 · Statistik Overview · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Statistik Air</div><div class="nav-icon">📥</div></div>
+      <div class="period-tabs">
+        <div class="ptab on">Hari</div><div class="ptab">Minggu</div><div class="ptab">Bulan</div><div class="ptab">Tahun</div>
+      </div>
+      <!-- hero number -->
+      <div class="card card-pad" style="text-align:center;margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Hari Ini · 27 Mei 2026</div>
+        <div style="font-size:52px;font-weight:800;color:#01579B;line-height:1;">245<span style="font-size:22px;font-weight:600;color:#64748B;margin-left:4px;">L</span></div>
+        <div style="font-size:13px;color:#66BB6A;font-weight:600;margin-top:6px;">↓ 12% dari rata-rata harian</div>
+        <!-- mini sparkline -->
+        <svg width="100%" height="40" viewBox="0 0 320 40" style="margin-top:10px;">
+          <polyline points="20,30 65,22 110,28 155,15 200,25 245,18 290,32" fill="none" stroke="#0288D1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="290" cy="32" r="4" fill="#0288D1"/>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#94A3B8;padding:0 14px;margin-top:2px;">
+          <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+        </div>
+      </div>
+      <div class="g3">
+        <div class="sbox"><div class="sv" style="color:#0288D1;font-size:18px;">1,720</div><div class="sl">Liter minggu ini</div></div>
+        <div class="sbox"><div class="sv" style="color:#66BB6A;font-size:18px;">Rp 14k</div><div class="sl">Estimasi tagihan hari ini</div></div>
+        <div class="sbox"><div class="sv" style="color:#66BB6A;font-size:18px;">−18%</div><div class="sl">vs bulan lalu</div></div>
+      </div>
+      <div class="sec-lbl">Per Ruangan (Hari Ini)</div>
+      <div class="card">
+        <div class="card-row"><div class="ci ci-sky">🚿</div><div class="ct"><div class="ct-t">Kamar Mandi Utama</div><div class="ct-s">86L · 35%</div></div><div style="font-size:13px;font-weight:700;color:#0288D1;">35%</div></div>
+        <div class="card-row"><div class="ci ci-amber">🍳</div><div class="ct"><div class="ct-t">Dapur</div><div class="ct-s">69L · 28%</div></div><div style="font-size:13px;font-weight:700;color:#0288D1;">28%</div></div>
+        <div class="card-row"><div class="ci ci-green">🛁</div><div class="ct"><div class="ct-t">Kamar Mandi Kedua</div><div class="ct-s">44L · 18%</div></div><div style="font-size:13px;font-weight:700;color:#0288D1;">18%</div></div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 2 · STATISTIK HARIAN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">2 · Statistik Harian · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <a class="nav-back">← Statistik</a>
+      <!-- date nav -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="font-size:22px;color:#64748B;">‹</div>
+        <div style="font-size:17px;font-weight:700;color:#0F172A;">Rabu, 27 Mei 2026</div>
+        <div style="font-size:22px;color:#CBD5E1;">›</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;margin-bottom:12px;">
+        <div style="font-size:44px;font-weight:800;color:#01579B;">245 <span style="font-size:18px;color:#64748B;font-weight:500;">L</span></div>
+        <div style="font-size:13px;color:#66BB6A;font-weight:600;margin-top:4px;">↓ 12% dari rata-rata harian (278L)</div>
+      </div>
+      <!-- hourly bars -->
+      <div class="chart-wrap">
+        <div class="chart-ttl">Pemakaian Per Jam</div>
+        <svg width="100%" height="90" viewBox="0 0 362 90">
+          <!-- 8 representative bars for 3-hour intervals: 0,3,6,9,12,15,18,21 -->
+          <rect x="4"   y="82" width="38" height="8"  rx="3" fill="#BFDBFE"/>
+          <rect x="48"  y="78" width="38" height="12" rx="3" fill="#BFDBFE"/>
+          <rect x="92"  y="55" width="38" height="35" rx="3" fill="#0288D1"/>
+          <rect x="136" y="35" width="38" height="55" rx="3" fill="#0288D1"/>
+          <rect x="180" y="60" width="38" height="30" rx="3" fill="#BFDBFE"/>
+          <rect x="224" y="20" width="38" height="70" rx="3" fill="#01579B"/>
+          <rect x="268" y="42" width="38" height="48" rx="3" fill="#0288D1"/>
+          <rect x="312" y="68" width="38" height="22" rx="3" fill="#BFDBFE"/>
+        </svg>
+        <div class="chart-days"><span>00</span><span>03</span><span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span></div>
+        <div class="chart-note">Puncak pemakaian: <b style="color:#01579B;">15:00–18:00</b> · 82L</div>
+      </div>
+      <div class="g2">
+        <div class="sbox"><div class="sv" style="color:#01579B;font-size:18px;">82L</div><div class="sl">Puncak (15:00)</div></div>
+        <div class="sbox"><div class="sv" style="color:#66BB6A;font-size:18px;">8L</div><div class="sl">Terendah (02:00)</div></div>
+      </div>
+      <div class="ibox ib-blue"><div class="ibt" style="color:#1D4ED8;">💡 Insight Harian</div><div class="ibb" style="color:#1E3A5F;">Pemakaian sore lebih tinggi 34% dari rata-rata. Pertimbangkan memundurkan jadwal mandi ke malam hari.</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 3 · STATISTIK MINGGUAN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">3 · Statistik Mingguan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <a class="nav-back">← Statistik</a>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="font-size:22px;color:#64748B;">‹</div>
+        <div style="font-size:16px;font-weight:700;color:#0F172A;">21–27 Mei 2026</div>
+        <div style="font-size:22px;color:#CBD5E1;">›</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;margin-bottom:12px;">
+        <div style="font-size:44px;font-weight:800;color:#01579B;">1,720 <span style="font-size:18px;color:#64748B;font-weight:500;">L</span></div>
+        <div style="font-size:13px;color:#66BB6A;font-weight:600;margin-top:4px;">↓ 8% dari minggu lalu (1,872L)</div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-ttl">7 Hari Terakhir</div>
+        <svg width="100%" height="110" viewBox="0 0 362 110">
+          <!-- bars: Sen=245 Sel=280 Rab=220 Kam=195 Jum=310 Sab=290 Min=180, max=320 -->
+          <rect x="4"   y="14" width="44" height="84" rx="4" fill="#BFDBFE"/><!-- 245 -->
+          <rect x="56"  y="5"  width="44" height="93" rx="4" fill="#BFDBFE"/><!-- 280 -->
+          <rect x="108" y="20" width="44" height="78" rx="4" fill="#BFDBFE"/><!-- 220 -->
+          <rect x="160" y="28" width="44" height="70" rx="4" fill="#BFDBFE"/><!-- 195 -->
+          <rect x="212" y="2"  width="44" height="96" rx="4" fill="#EF4444"/><!-- 310 peak -->
+          <rect x="264" y="7"  width="44" height="91" rx="4" fill="#BFDBFE"/><!-- 290 -->
+          <rect x="316" y="35" width="44" height="63" rx="4" fill="#BFDBFE"/><!-- today 245-->
+          <!-- avg line at ~246L = 76% height → y=110-86=24 -->
+          <line x1="0" y1="26" x2="362" y2="26" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="330" y="21" font-size="9" fill="#94A3B8">Avg</text>
+        </svg>
+        <div class="chart-days"><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span></div>
+      </div>
+      <div class="g3">
+        <div class="sbox"><div class="sv" style="color:#EF4444;font-size:16px;">Jum</div><div class="sl">Hari terbanyak</div></div>
+        <div class="sbox"><div class="sv" style="color:#66BB6A;font-size:16px;">Min</div><div class="sl">Hari terendah</div></div>
+        <div class="sbox"><div class="sv" style="color:#01579B;font-size:16px;">246L</div><div class="sl">Rata-rata/hari</div></div>
+      </div>
+      <div class="ibox ib-green"><div class="ibt" style="color:#166534;">📉 Tren Baik</div><div class="ibb" style="color:#166534;">Minggu ini 8% lebih hemat dari minggu lalu. Pertahankan kebiasaan ini!</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 4 · STATISTIK BULANAN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">4 · Statistik Bulanan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <a class="nav-back">← Statistik</a>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="font-size:22px;color:#64748B;">‹</div>
+        <div style="font-size:17px;font-weight:700;color:#0F172A;">Mei 2026</div>
+        <div style="font-size:22px;color:#CBD5E1;">›</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;margin-bottom:12px;">
+        <div style="font-size:44px;font-weight:800;color:#01579B;">6,840 <span style="font-size:18px;color:#64748B;font-weight:500;">L</span></div>
+        <div style="font-size:13px;color:#66BB6A;font-weight:600;margin-top:4px;">↓ 14% dari bulan lalu (7,960L)</div>
+        <div style="font-size:12px;color:#94A3B8;margin-top:3px;">27 hari tercatat · est. total 7,520L</div>
+      </div>
+      <!-- monthly bar chart - compressed 30 bars -->
+      <div class="chart-wrap">
+        <div class="chart-ttl">Harian Bulan Ini</div>
+        <svg width="100%" height="80" viewBox="0 0 362 80">
+          <!-- 27 bars compressed, showing general pattern -->
+          <rect x="2"   y="40" width="10" height="38" rx="2" fill="#BFDBFE"/>
+          <rect x="14"  y="32" width="10" height="46" rx="2" fill="#BFDBFE"/>
+          <rect x="26"  y="45" width="10" height="33" rx="2" fill="#BFDBFE"/>
+          <rect x="38"  y="20" width="10" height="58" rx="2" fill="#0288D1"/>
+          <rect x="50"  y="38" width="10" height="40" rx="2" fill="#BFDBFE"/>
+          <rect x="62"  y="50" width="10" height="28" rx="2" fill="#BFDBFE"/>
+          <rect x="74"  y="35" width="10" height="43" rx="2" fill="#BFDBFE"/>
+          <rect x="86"  y="28" width="10" height="50" rx="2" fill="#BFDBFE"/>
+          <rect x="98"  y="42" width="10" height="36" rx="2" fill="#BFDBFE"/>
+          <rect x="110" y="18" width="10" height="60" rx="2" fill="#01579B"/>
+          <rect x="122" y="44" width="10" height="34" rx="2" fill="#BFDBFE"/>
+          <rect x="134" y="36" width="10" height="42" rx="2" fill="#BFDBFE"/>
+          <rect x="146" y="52" width="10" height="26" rx="2" fill="#BFDBFE"/>
+          <rect x="158" y="30" width="10" height="48" rx="2" fill="#BFDBFE"/>
+          <rect x="170" y="40" width="10" height="38" rx="2" fill="#BFDBFE"/>
+          <rect x="182" y="25" width="10" height="53" rx="2" fill="#BFDBFE"/>
+          <rect x="194" y="48" width="10" height="30" rx="2" fill="#BFDBFE"/>
+          <rect x="206" y="34" width="10" height="44" rx="2" fill="#BFDBFE"/>
+          <rect x="218" y="22" width="10" height="56" rx="2" fill="#0288D1"/>
+          <rect x="230" y="46" width="10" height="32" rx="2" fill="#BFDBFE"/>
+          <rect x="242" y="38" width="10" height="40" rx="2" fill="#BFDBFE"/>
+          <rect x="254" y="55" width="10" height="23" rx="2" fill="#BFDBFE"/>
+          <rect x="266" y="14" width="10" height="64" rx="2" fill="#EF4444"/>
+          <rect x="278" y="30" width="10" height="48" rx="2" fill="#BFDBFE"/>
+          <rect x="290" y="28" width="10" height="50" rx="2" fill="#BFDBFE"/>
+          <rect x="302" y="36" width="10" height="42" rx="2" fill="#BFDBFE"/>
+          <rect x="314" y="42" width="10" height="36" rx="2" fill="#0288D1"/>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:#94A3B8;margin-top:4px;"><span>1</span><span>7</span><span>14</span><span>21</span><span>27</span></div>
+      </div>
+      <div class="g2">
+        <div class="sbox"><div class="sv" style="color:#01579B;">253L</div><div class="sl">Rata-rata harian</div></div>
+        <div class="sbox"><div class="sv" style="color:#66BB6A;">Rp 48rb</div><div class="sl">Estimasi tagihan</div></div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 5 · STATISTIK TAHUNAN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">5 · Statistik Tahunan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <a class="nav-back">← Statistik</a>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="font-size:22px;color:#64748B;">‹</div>
+        <div style="font-size:17px;font-weight:700;color:#0F172A;">2026</div>
+        <div style="font-size:22px;color:#CBD5E1;">›</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;margin-bottom:12px;">
+        <div style="font-size:42px;font-weight:800;color:#01579B;">35,420 <span style="font-size:18px;color:#64748B;font-weight:500;">L</span></div>
+        <div style="font-size:13px;color:#66BB6A;font-weight:600;margin-top:4px;">↓ 11% dari 2025 (39,800L)</div>
+        <div style="font-size:12px;color:#94A3B8;margin-top:3px;">5 bulan tercatat · est. tahunan ~85,000L</div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-ttl">Per Bulan</div>
+        <svg width="100%" height="120" viewBox="0 0 362 120">
+          <!-- 12 months bars, Jan-Des, max 8000 -->
+          <rect x="4"   y="28" width="24" height="80" rx="3" fill="#BFDBFE"/><!-- Jan 7200 -->
+          <rect x="32"  y="34" width="24" height="74" rx="3" fill="#BFDBFE"/><!-- Feb 6600 -->
+          <rect x="60"  y="24" width="24" height="84" rx="3" fill="#BFDBFE"/><!-- Mar 7500 -->
+          <rect x="88"  y="38" width="24" height="70" rx="3" fill="#BFDBFE"/><!-- Apr 6300 -->
+          <rect x="116" y="30" width="24" height="78" rx="3" fill="#0288D1"/><!-- May (curr) -->
+          <!-- Jun-Des lighter (projected) -->
+          <rect x="144" y="48" width="24" height="60" rx="3" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="3,2"/>
+          <rect x="172" y="44" width="24" height="64" rx="3" fill="#E2E8F0"/>
+          <rect x="200" y="32" width="24" height="76" rx="3" fill="#E2E8F0"/>
+          <rect x="228" y="36" width="24" height="72" rx="3" fill="#E2E8F0"/>
+          <rect x="256" y="28" width="24" height="80" rx="3" fill="#E2E8F0"/>
+          <rect x="284" y="44" width="24" height="64" rx="3" fill="#E2E8F0"/>
+          <rect x="312" y="20" width="24" height="88" rx="3" fill="#E2E8F0"/>
+          <!-- avg line -->
+          <line x1="0" y1="38" x2="362" y2="38" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="330" y="34" font-size="9" fill="#94A3B8">Avg</text>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:#94A3B8;margin-top:4px;"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>Mei</span><span>Jun</span><span>Jul</span><span>Ags</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Des</span></div>
+        <div style="font-size:11px;color:#94A3B8;margin-top:6px;font-style:italic;">Jun–Des: proyeksi berdasarkan pola tahun lalu</div>
+      </div>
+      <div class="g2">
+        <div class="sbox"><div class="sv" style="color:#01579B;">Mar</div><div class="sl">Bulan terbanyak</div></div>
+        <div class="sbox"><div class="sv" style="color:#66BB6A;">Rp 247rb</div><div class="sl">Total tagihan s/d Mei</div></div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 6 · GRAFIK GARIS TREN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">6 · Grafik Garis Tren Pemakaian · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Grafik Tren</div><div class="nav-icon">📅</div></div>
+      <div class="period-tabs">
+        <div class="ptab">7 Hari</div><div class="ptab on">30 Hari</div><div class="ptab">3 Bulan</div><div class="ptab">1 Tahun</div>
+      </div>
+      <div class="chart-wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div class="chart-ttl" style="margin:0;">Liter / Hari</div>
+          <div style="display:flex;gap:12px;font-size:11px;">
+            <div style="display:flex;align-items:center;gap:4px;"><div style="width:16px;height:3px;background:#0288D1;border-radius:2px;"></div>Aktual</div>
+            <div style="display:flex;align-items:center;gap:4px;"><div style="width:16px;height:2px;background:#94A3B8;border-radius:2px;border-top:1px dashed #94A3B8;"></div>Rata-rata</div>
+          </div>
+        </div>
+        <svg width="100%" height="180" viewBox="0 0 362 180">
+          <!-- Y-axis labels -->
+          <text x="0" y="18" font-size="9" fill="#94A3B8">350</text>
+          <text x="0" y="58" font-size="9" fill="#94A3B8">250</text>
+          <text x="0" y="98" font-size="9" fill="#94A3B8">150</text>
+          <text x="0" y="138" font-size="9" fill="#94A3B8">50</text>
+          <!-- Grid lines -->
+          <line x1="24" y1="14" x2="362" y2="14" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="24" y1="54" x2="362" y2="54" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="24" y1="94" x2="362" y2="94" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="24" y1="134" x2="362" y2="134" stroke="#F1F5F9" stroke-width="1"/>
+          <!-- avg dashed line at ~250L → y=54 -->
+          <line x1="24" y1="54" x2="362" y2="54" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <!-- area fill -->
+          <polygon points="24,155 24,85 66,68 108,90 150,104 192,42 234,58 276,110 318,72 362,78 362,155" fill="rgba(2,136,209,0.1)"/>
+          <!-- main line: data roughly 7→30 days trend -->
+          <polyline points="24,85 66,68 108,90 150,104 192,42 234,58 276,110 318,72 362,78" fill="none" stroke="#0288D1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- data points -->
+          <circle cx="24" cy="85" r="4" fill="#0288D1"/>
+          <circle cx="192" cy="42" r="5" fill="#EF4444"/>
+          <circle cx="362" cy="78" r="4" fill="#0288D1"/>
+          <!-- max annotation -->
+          <line x1="192" y1="42" x2="192" y2="14" stroke="#EF4444" stroke-width="1" stroke-dasharray="3,2"/>
+          <rect x="170" y="4" width="42" height="16" rx="4" fill="#FEE2E2"/>
+          <text x="191" y="14" text-anchor="middle" font-size="9" fill="#DC2626" font-weight="700">310L</text>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:#94A3B8;margin-top:4px;padding:0 24px;">
+          <span>1 Mei</span><span>8</span><span>15</span><span>22</span><span>27</span>
+        </div>
+      </div>
+      <div class="g3">
+        <div class="sbox"><div class="sv" style="color:#EF4444;font-size:16px;">310L</div><div class="sl">Puncak (Jum 23)</div></div>
+        <div class="sbox"><div class="sv" style="color:#66BB6A;font-size:16px;">180L</div><div class="sl">Terendah (Min 18)</div></div>
+        <div class="sbox"><div class="sv" style="color:#01579B;font-size:16px;">253L</div><div class="sl">Rata-rata</div></div>
+      </div>
+      <div class="ibox ib-blue"><div class="ibt" style="color:#1D4ED8;">📉 Tren Menurun</div><div class="ibb" style="color:#1E3A5F;">Pemakaian minggu ke-4 turun 11% dibanding minggu ke-1. Konsisten dengan target penghematan.</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 7 · GRAFIK BATANG PERBANDINGAN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">7 · Grafik Batang Perbandingan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Grafik Batang</div><div class="nav-icon">📅</div></div>
+      <div class="period-tabs">
+        <div class="ptab">Minggu</div><div class="ptab on">6 Bulan</div><div class="ptab">Tahun</div><div class="ptab">Kustom</div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-ttl">Pemakaian 6 Bulan Terakhir (Liter)</div>
+        <svg width="100%" height="160" viewBox="0 0 362 160">
+          <!-- bars: Dec=7200 Jan=6800 Feb=6500 Mar=7100 Apr=6200 May=5840 (current, highlighted) -->
+          <!-- max=7500, usable=130px, bottom=150 -->
+          <rect x="8"   y="25"  width="46" height="125" rx="5" fill="#BFDBFE"/>
+          <rect x="64"  y="32"  width="46" height="118" rx="5" fill="#BFDBFE"/>
+          <rect x="120" y="38"  width="46" height="112" rx="5" fill="#BFDBFE"/>
+          <rect x="176" y="26"  width="46" height="124" rx="5" fill="#BFDBFE"/>
+          <rect x="232" y="43"  width="46" height="107" rx="5" fill="#BFDBFE"/>
+          <rect x="288" y="49"  width="46" height="101" rx="5" fill="#0288D1"/><!-- current month -->
+          <!-- avg line at 6608L → 114/130*height = 112 → y=150-112=38 -->
+          <line x1="0" y1="38" x2="362" y2="38" stroke="#01579B" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="4" y="34" font-size="9" fill="#01579B">Avg</text>
+          <!-- value labels on bars -->
+          <text x="31"  y="20" text-anchor="middle" font-size="9" fill="#64748B">7.2k</text>
+          <text x="87"  y="27" text-anchor="middle" font-size="9" fill="#64748B">6.8k</text>
+          <text x="143" y="33" text-anchor="middle" font-size="9" fill="#64748B">6.5k</text>
+          <text x="199" y="21" text-anchor="middle" font-size="9" fill="#64748B">7.1k</text>
+          <text x="255" y="38" text-anchor="middle" font-size="9" fill="#64748B">6.2k</text>
+          <text x="311" y="44" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">5.8k</text>
+        </svg>
+        <div class="chart-days"><span>Des</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span style="color:#0288D1;font-weight:700;">Mei</span></div>
+      </div>
+      <div class="g2">
+        <div class="sbox"><div class="sv" style="color:#66BB6A;">5,840L</div><div class="sl">Bulan terbaik (Mei)</div></div>
+        <div class="sbox"><div class="sv" style="color:#EF4444;">7,200L</div><div class="sl">Bulan terbanyak (Des)</div></div>
+      </div>
+      <div class="ibox ib-green"><div class="ibt" style="color:#166534;">📊 Analisis</div><div class="ibb" style="color:#166534;">Tren 6 bulan menunjukkan penurunan konsisten. Mei 2026 adalah bulan paling hemat dalam 6 bulan terakhir, <b>19% lebih rendah</b> dari Desember.</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 8 · GRAFIK LINGKARAN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">8 · Grafik Lingkaran per Ruangan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Per Ruangan</div><div class="nav-icon">📅</div></div>
+      <div class="period-tabs">
+        <div class="ptab on">Hari Ini</div><div class="ptab">Minggu</div><div class="ptab">Bulan</div><div class="ptab">Tahun</div>
+      </div>
+      <!-- donut chart -->
+      <div class="chart-wrap" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="chart-ttl" style="align-self:flex-start;">Pembagian Pemakaian</div>
+        <svg width="220" height="220" viewBox="0 0 220 220">
+          <!-- donut using stroke-dasharray, r=80, circumference=502.65, stroke-width=40 -->
+          <!-- KM Utama 35%: 502.65*0.35=175.9, offset=-125.7 -->
+          <circle cx="110" cy="110" r="80" fill="none" stroke="#0288D1" stroke-width="38" stroke-dasharray="175.9 326.8" stroke-dashoffset="-125.7"/>
+          <!-- Dapur 28%: 502.65*0.28=140.7, offset=-301.6 -->
+          <circle cx="110" cy="110" r="80" fill="none" stroke="#66BB6A" stroke-width="38" stroke-dasharray="140.7 362.0" stroke-dashoffset="-301.6"/>
+          <!-- KM Kedua 18%: 90.5, offset=-442.3 -->
+          <circle cx="110" cy="110" r="80" fill="none" stroke="#F59E0B" stroke-width="38" stroke-dasharray="90.5 412.2" stroke-dashoffset="-442.3"/>
+          <!-- Taman 12%: 60.3, offset=-532.8 -->
+          <circle cx="110" cy="110" r="80" fill="none" stroke="#8B5CF6" stroke-width="38" stroke-dasharray="60.3 442.4" stroke-dashoffset="-532.8"/>
+          <!-- Lainnya 7%: 35.2, offset=-593.1 -->
+          <circle cx="110" cy="110" r="80" fill="none" stroke="#E2E8F0" stroke-width="38" stroke-dasharray="35.2 467.5" stroke-dashoffset="-593.1"/>
+          <!-- center -->
+          <circle cx="110" cy="110" r="54" fill="#F8FAFC"/>
+          <text x="110" y="104" text-anchor="middle" font-size="22" font-weight="800" fill="#0F172A">245L</text>
+          <text x="110" y="122" text-anchor="middle" font-size="11" fill="#64748B">Hari Ini</text>
+        </svg>
+      </div>
+      <!-- legend -->
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;">
+          <div style="width:14px;height:14px;border-radius:4px;background:#0288D1;flex-shrink:0;"></div>
+          <div style="flex:1;font-size:14px;font-weight:600;color:#0F172A;">🚿 Kamar Mandi Utama</div>
+          <div style="font-size:14px;font-weight:700;color:#0288D1;">35% · 86L</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;">
+          <div style="width:14px;height:14px;border-radius:4px;background:#66BB6A;flex-shrink:0;"></div>
+          <div style="flex:1;font-size:14px;font-weight:600;color:#0F172A;">🍳 Dapur</div>
+          <div style="font-size:14px;font-weight:700;color:#66BB6A;">28% · 69L</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;">
+          <div style="width:14px;height:14px;border-radius:4px;background:#F59E0B;flex-shrink:0;"></div>
+          <div style="flex:1;font-size:14px;font-weight:600;color:#0F172A;">🛁 Kamar Mandi Kedua</div>
+          <div style="font-size:14px;font-weight:700;color:#F59E0B;">18% · 44L</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;">
+          <div style="width:14px;height:14px;border-radius:4px;background:#8B5CF6;flex-shrink:0;"></div>
+          <div style="flex:1;font-size:14px;font-weight:600;color:#0F172A;">🌿 Taman / Irigasi</div>
+          <div style="font-size:14px;font-weight:700;color:#8B5CF6;">12% · 29L</div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 9 · HEAT MAP WAKTU ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">9 · Grafik Heat Map Waktu · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Pola Waktu</div><div class="nav-icon">📅</div></div>
+      <p class="page-sub">Intensitas pemakaian per waktu & hari</p>
+      <div class="chart-wrap">
+        <div class="chart-ttl">Heat Map · 7 Hari × 6 Periode</div>
+        <!-- Legend -->
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:11px;color:#64748B;">
+          <span>Rendah</span>
+          <div style="display:flex;gap:2px;">
+            <div style="width:14px;height:14px;border-radius:3px;background:#E0F2FE;"></div>
+            <div style="width:14px;height:14px;border-radius:3px;background:#BAE6FD;"></div>
+            <div style="width:14px;height:14px;border-radius:3px;background:#7DD3FC;"></div>
+            <div style="width:14px;height:14px;border-radius:3px;background:#0288D1;"></div>
+            <div style="width:14px;height:14px;border-radius:3px;background:#01579B;"></div>
+          </div>
+          <span>Tinggi</span>
+        </div>
+        <svg width="100%" height="180" viewBox="0 0 362 180">
+          <!-- Row labels (time periods) -->
+          <text x="0" y="28"  font-size="9" fill="#94A3B8">00–04</text>
+          <text x="0" y="56"  font-size="9" fill="#94A3B8">04–08</text>
+          <text x="0" y="84"  font-size="9" fill="#94A3B8">08–12</text>
+          <text x="0" y="112" font-size="9" fill="#94A3B8">12–16</text>
+          <text x="0" y="140" font-size="9" fill="#94A3B8">16–20</text>
+          <text x="0" y="168" font-size="9" fill="#94A3B8">20–24</text>
+          <!-- Col labels (days) -->
+          <text x="54"  y="10" text-anchor="middle" font-size="9" fill="#94A3B8">Sen</text>
+          <text x="102" y="10" text-anchor="middle" font-size="9" fill="#94A3B8">Sel</text>
+          <text x="150" y="10" text-anchor="middle" font-size="9" fill="#94A3B8">Rab</text>
+          <text x="198" y="10" text-anchor="middle" font-size="9" fill="#94A3B8">Kam</text>
+          <text x="246" y="10" text-anchor="middle" font-size="9" fill="#94A3B8">Jum</text>
+          <text x="294" y="10" text-anchor="middle" font-size="9" fill="#94A3B8">Sab</text>
+          <text x="342" y="10" text-anchor="middle" font-size="9" fill="#94A3B8">Min</text>
+          <!-- Row 00-04 (low usage) -->
+          <rect x="30" y="14" width="44" height="20" rx="4" fill="#E0F2FE"/>
+          <rect x="78" y="14" width="44" height="20" rx="4" fill="#BAE6FD"/>
+          <rect x="126" y="14" width="44" height="20" rx="4" fill="#E0F2FE"/>
+          <rect x="174" y="14" width="44" height="20" rx="4" fill="#E0F2FE"/>
+          <rect x="222" y="14" width="44" height="20" rx="4" fill="#BAE6FD"/>
+          <rect x="270" y="14" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <rect x="318" y="14" width="44" height="20" rx="4" fill="#BAE6FD"/>
+          <!-- Row 04-08 (medium) -->
+          <rect x="30" y="42" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <rect x="78" y="42" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="126" y="42" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <rect x="174" y="42" width="44" height="20" rx="4" fill="#BAE6FD"/>
+          <rect x="222" y="42" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="270" y="42" width="44" height="20" rx="4" fill="#01579B"/>
+          <rect x="318" y="42" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <!-- Row 08-12 (high morning) -->
+          <rect x="30" y="70" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="78" y="70" width="44" height="20" rx="4" fill="#01579B"/>
+          <rect x="126" y="70" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="174" y="70" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <rect x="222" y="70" width="44" height="20" rx="4" fill="#01579B"/>
+          <rect x="270" y="70" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="318" y="70" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <!-- Row 12-16 (medium) -->
+          <rect x="30" y="98" width="44" height="20" rx="4" fill="#BAE6FD"/>
+          <rect x="78" y="98" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <rect x="126" y="98" width="44" height="20" rx="4" fill="#BAE6FD"/>
+          <rect x="174" y="98" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <rect x="222" y="98" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="270" y="98" width="44" height="20" rx="4" fill="#BAE6FD"/>
+          <rect x="318" y="98" width="44" height="20" rx="4" fill="#E0F2FE"/>
+          <!-- Row 16-20 (highest evening) -->
+          <rect x="30" y="126" width="44" height="20" rx="4" fill="#01579B"/>
+          <rect x="78" y="126" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="126" y="126" width="44" height="20" rx="4" fill="#01579B"/>
+          <rect x="174" y="126" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="222" y="126" width="44" height="20" rx="4" fill="#01579B"/>
+          <rect x="270" y="126" width="44" height="20" rx="4" fill="#01579B"/>
+          <rect x="318" y="126" width="44" height="20" rx="4" fill="#0288D1"/>
+          <!-- Row 20-24 (medium evening) -->
+          <rect x="30" y="154" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <rect x="78" y="154" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="126" y="154" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <rect x="174" y="154" width="44" height="20" rx="4" fill="#BAE6FD"/>
+          <rect x="222" y="154" width="44" height="20" rx="4" fill="#0288D1"/>
+          <rect x="270" y="154" width="44" height="20" rx="4" fill="#7DD3FC"/>
+          <rect x="318" y="154" width="44" height="20" rx="4" fill="#BAE6FD"/>
+        </svg>
+      </div>
+      <div class="ibox ib-amber"><div class="ibt" style="color:#92400E;">🔥 Waktu Puncak</div><div class="ibb" style="color:#78350F;">Pemakaian tertinggi setiap hari pada pukul <b>16:00–20:00</b>. Sabtu pukul 04–08 juga tinggi (kemungkinan isi bak mandi).</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 10 · DETAIL DATA TAP GRAFIK ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">10 · Detail Data Saat Tap Grafik · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Grafik Tren</div><div class="nav-icon">📅</div></div>
+      <div class="chart-wrap">
+        <div class="chart-ttl">Liter / Hari — Ketuk titik untuk detail</div>
+        <svg width="100%" height="160" viewBox="0 0 362 160">
+          <line x1="0" y1="50" x2="362" y2="50" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="0" y1="90" x2="362" y2="90" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="0" y1="130" x2="362" y2="130" stroke="#F1F5F9" stroke-width="1"/>
+          <polygon points="24,145 24,85 66,68 108,90 150,104 192,42 234,58 276,110 318,72 362,145" fill="rgba(2,136,209,0.08)"/>
+          <polyline points="24,85 66,68 108,90 150,104 192,42 234,58 276,110 318,72" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- vertical tap indicator at Jum (192) -->
+          <line x1="192" y1="14" x2="192" y2="145" stroke="#0288D1" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <!-- all dots -->
+          <circle cx="24"  cy="85"  r="4" fill="#BFDBFE" stroke="#0288D1" stroke-width="1.5"/>
+          <circle cx="66"  cy="68"  r="4" fill="#BFDBFE" stroke="#0288D1" stroke-width="1.5"/>
+          <circle cx="108" cy="90"  r="4" fill="#BFDBFE" stroke="#0288D1" stroke-width="1.5"/>
+          <circle cx="150" cy="104" r="4" fill="#BFDBFE" stroke="#0288D1" stroke-width="1.5"/>
+          <!-- tapped dot highlighted -->
+          <circle cx="192" cy="42"  r="7" fill="#0288D1" stroke="#fff" stroke-width="2.5"/>
+          <circle cx="234" cy="58"  r="4" fill="#BFDBFE" stroke="#0288D1" stroke-width="1.5"/>
+          <circle cx="276" cy="110" r="4" fill="#BFDBFE" stroke="#0288D1" stroke-width="1.5"/>
+          <circle cx="318" cy="72"  r="4" fill="#BFDBFE" stroke="#0288D1" stroke-width="1.5"/>
+          <!-- tooltip bubble -->
+          <rect x="148" y="14" width="90" height="54" rx="10" fill="#01579B"/>
+          <polygon points="192,68 182,68 192,78" fill="#01579B"/>
+          <text x="193" y="30" text-anchor="middle" font-size="10" fill="rgba(255,255,255,.75)">Jum, 23 Mei</text>
+          <text x="193" y="46" text-anchor="middle" font-size="16" fill="#fff" font-weight="800">310 L</text>
+          <text x="193" y="61" text-anchor="middle" font-size="10" fill="#BAE6FD">↑ 26% dari avg</text>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:#94A3B8;margin-top:4px;padding:0 8px;">
+          <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span style="color:#0288D1;font-weight:700;">Jum ●</span><span>Sab</span><span>Min</span>
+        </div>
+      </div>
+      <!-- detail card for tapped point -->
+      <div class="card" style="border-color:#BFDBFE;">
+        <div style="padding:16px;border-bottom:1px solid #F1F5F9;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:16px;font-weight:700;color:#01579B;">Jum, 23 Mei 2026</div>
+            <div style="font-size:28px;font-weight:800;color:#0288D1;">310L</div>
+          </div>
+          <div style="font-size:13px;color:#EF4444;font-weight:600;margin-top:4px;">↑ 26% di atas rata-rata (246L)</div>
+        </div>
+        <div class="card-row"><div class="ci ci-red">🚿</div><div class="ct"><div class="ct-t">Kamar Mandi Utama</div><div class="ct-s">108L · 35%</div></div></div>
+        <div class="card-row"><div class="ci ci-amber">🍳</div><div class="ct"><div class="ct-t">Dapur</div><div class="ct-s">87L · 28%</div></div></div>
+        <div class="card-row"><div class="ci ci-purple">🌿</div><div class="ct"><div class="ct-t">Taman (siram ekstra)</div><div class="ct-s">56L · 18%</div></div></div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 11 · BANDINGKAN BULAN LALU ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">11 · Bandingkan dengan Bulan Lalu · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Perbandingan</div><div class="nav-icon">⚖️</div></div>
+      <div class="cmp-row">
+        <div class="cmp-col" style="border-color:#BFDBFE;">
+          <div class="cmp-label" style="color:#0288D1;">BULAN INI</div>
+          <div class="cmp-val" style="color:#01579B;">6,840L</div>
+          <div class="cmp-sub">Mei 2026</div>
+        </div>
+        <div class="cmp-col" style="background:#F8FAFC;">
+          <div class="cmp-label" style="color:#94A3B8;">BULAN LALU</div>
+          <div class="cmp-val" style="color:#64748B;">7,960L</div>
+          <div class="cmp-sub">Apr 2026</div>
+        </div>
+      </div>
+      <div class="ibox ib-green" style="text-align:center;margin-bottom:14px;">
+        <div style="font-size:36px;font-weight:800;color:#16A34A;margin-bottom:4px;">↓ 14%</div>
+        <div style="font-size:14px;color:#166534;font-weight:600;">Lebih hemat 1,120 liter dari bulan lalu</div>
+        <div style="font-size:12px;color:#64748B;margin-top:4px;">≈ Rp 7,840 lebih hemat</div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-ttl">Overlay Per Minggu</div>
+        <svg width="100%" height="120" viewBox="0 0 362 120">
+          <line x1="0" y1="30" x2="362" y2="30" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="0" y1="70" x2="362" y2="70" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="0" y1="110" x2="362" y2="110" stroke="#F1F5F9" stroke-width="1"/>
+          <!-- Apr (bulan lalu) dashed -->
+          <polyline points="20,22 98,38 176,28 254,42 332,35" fill="none" stroke="#CBD5E1" stroke-width="2" stroke-dasharray="6,3" stroke-linecap="round"/>
+          <!-- Mei (bulan ini) solid -->
+          <polyline points="20,38 98,52 176,44 254,60 332,55" fill="none" stroke="#0288D1" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="20"  cy="38"  r="4" fill="#0288D1"/>
+          <circle cx="98"  cy="52"  r="4" fill="#0288D1"/>
+          <circle cx="176" cy="44"  r="4" fill="#0288D1"/>
+          <circle cx="254" cy="60"  r="4" fill="#0288D1"/>
+          <circle cx="332" cy="55"  r="4" fill="#0288D1"/>
+        </svg>
+        <div class="chart-days"><span>M1</span><span>M2</span><span>M3</span><span>M4</span><span style="color:#94A3B8;">M4→</span></div>
+        <div style="display:flex;gap:16px;margin-top:8px;font-size:12px;">
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:20px;height:3px;background:#0288D1;border-radius:2px;"></div><span style="color:#0F172A;font-weight:600;">Mei 2026</span></div>
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:20px;height:2px;background:#CBD5E1;border-radius:2px;border-top:2px dashed #CBD5E1;"></div><span style="color:#94A3B8;">Apr 2026</span></div>
+        </div>
+      </div>
+      <div class="sec-lbl">Selisih per Ruangan</div>
+      <div class="card">
+        <div class="card-row"><div class="ci ci-sky">🚿</div><div class="ct"><div class="ct-t">KM Utama</div><div class="ct-s">2,394L vs 2,788L</div></div><div style="font-size:13px;font-weight:700;color:#66BB6A;">−14%</div></div>
+        <div class="card-row"><div class="ci ci-amber">🍳</div><div class="ct"><div class="ct-t">Dapur</div><div class="ct-s">1,915L vs 2,228L</div></div><div style="font-size:13px;font-weight:700;color:#66BB6A;">−14%</div></div>
+        <div class="card-row"><div class="ci ci-green">🛁</div><div class="ct"><div class="ct-t">KM Kedua</div><div class="ct-s">1,231L vs 1,433L</div></div><div style="font-size:13px;font-weight:700;color:#66BB6A;">−14%</div></div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 12 · BANDINGKAN TAHUN LALU ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">12 · Bandingkan dengan Tahun Lalu · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">vs Tahun Lalu</div><div class="nav-icon">⚖️</div></div>
+      <div class="cmp-row">
+        <div class="cmp-col" style="border-color:#BFDBFE;">
+          <div class="cmp-label" style="color:#0288D1;">MEI 2026</div>
+          <div class="cmp-val" style="color:#01579B;">6,840L</div>
+          <div class="cmp-sub">Tahun ini</div>
+        </div>
+        <div class="cmp-col" style="background:#F8FAFC;">
+          <div class="cmp-label" style="color:#94A3B8;">MEI 2025</div>
+          <div class="cmp-val" style="color:#64748B;">8,120L</div>
+          <div class="cmp-sub">Tahun lalu</div>
+        </div>
+      </div>
+      <div class="ibox ib-green" style="text-align:center;margin-bottom:14px;">
+        <div style="font-size:36px;font-weight:800;color:#16A34A;margin-bottom:4px;">↓ 16%</div>
+        <div style="font-size:14px;color:#166534;font-weight:600;">1,280 liter lebih hemat year-on-year</div>
+        <div style="font-size:12px;color:#64748B;margin-top:4px;">≈ Rp 8,960 lebih hemat</div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-ttl">12 Bulan: 2025 vs 2026</div>
+        <svg width="100%" height="120" viewBox="0 0 362 120">
+          <line x1="0" y1="30" x2="362" y2="30" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="0" y1="70" x2="362" y2="70" stroke="#F1F5F9" stroke-width="1"/>
+          <!-- 2025 line (dashed) -->
+          <polyline points="14,28 42,34 70,24 98,40 126,32 154,36 182,22 210,38 238,30 266,26 294,42 322,18" fill="none" stroke="#CBD5E1" stroke-width="2" stroke-dasharray="5,3" stroke-linecap="round"/>
+          <!-- 2026 line (solid) -->
+          <polyline points="14,40 42,48 70,36 98,52 126,44" fill="none" stroke="#0288D1" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- dots for 2026 -->
+          <circle cx="14"  cy="40" r="3.5" fill="#0288D1"/>
+          <circle cx="42"  cy="48" r="3.5" fill="#0288D1"/>
+          <circle cx="70"  cy="36" r="3.5" fill="#0288D1"/>
+          <circle cx="98"  cy="52" r="3.5" fill="#0288D1"/>
+          <circle cx="126" cy="44" r="5" fill="#0288D1" stroke="#fff" stroke-width="2"/>
+          <!-- projected continuation -->
+          <polyline points="126,44 154,48 182,40 210,52 238,44 266,40 294,56 322,32" fill="none" stroke="#BFDBFE" stroke-width="2" stroke-dasharray="5,3" stroke-linecap="round"/>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size="9px;color:#94A3B8;margin-top:4px;font-size:9px;"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span style="color:#0288D1;font-weight:700;">Mei</span><span>Jun</span><span>Jul</span><span>Ags</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Des</span></div>
+        <div style="display:flex;gap:16px;margin-top:8px;font-size:12px;">
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:20px;height:3px;background:#0288D1;border-radius:2px;"></div><span style="color:#0F172A;font-weight:600;">2026 (aktual)</span></div>
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:20px;border-top:2px dashed #CBD5E1;"></div><span style="color:#94A3B8;">2025</span></div>
+        </div>
+      </div>
+      <div class="ibox ib-blue"><div class="ibt" style="color:#1D4ED8;">🏆 Pencapaian</div><div class="ibb" style="color:#1E3A5F;">Setiap bulan di 2026 lebih hemat dari bulan yang sama di 2025. Konsistensi luar biasa!</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 13 · BANDINGKAN RATA-RATA RUMAH LAIN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">13 · Bandingkan dengan Rata-rata Rumah Lain · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">vs Lingkungan</div><div class="nav-icon">🏘️</div></div>
+      <!-- hero comparison -->
+      <div style="background:linear-gradient(135deg,#66BB6A,#2E7D32);border-radius:18px;padding:22px;margin-bottom:14px;color:#fff;text-align:center;">
+        <div style="font-size:13px;font-weight:600;opacity:.85;margin-bottom:8px;">Rumah Anda vs Rata-rata Lingkungan</div>
+        <div style="font-size:44px;font-weight:800;margin-bottom:6px;">18%</div>
+        <div style="font-size:15px;font-weight:700;">Lebih Hemat 🌟</div>
+        <div style="font-size:12px;opacity:.85;margin-top:4px;">Top 22% rumah paling hemat di area Anda</div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-col" style="border-color:#BBF7D0;">
+          <div class="cmp-label" style="color:#16A34A;">RUMAH ANDA</div>
+          <div class="cmp-val" style="color:#14532D;">253L</div>
+          <div class="cmp-sub">Rata-rata/hari</div>
+        </div>
+        <div class="cmp-col" style="background:#F8FAFC;">
+          <div class="cmp-label" style="color:#94A3B8;">RATA-RATA AREA</div>
+          <div class="cmp-val" style="color:#64748B;">308L</div>
+          <div class="cmp-sub">4 penghuni</div>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-ttl">Perbandingan Horizontal</div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:13px;font-weight:600;color:#0F172A;margin-bottom:5px;">Rumah Anda · 253L/hari</div>
+          <div style="background:#E2E8F0;border-radius:6px;height:22px;overflow:hidden;">
+            <div style="background:#66BB6A;height:100%;width:82%;border-radius:6px;display:flex;align-items:center;padding-right:8px;justify-content:flex-end;"><span style="font-size:11px;font-weight:700;color:#fff;">253L</span></div>
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:13px;font-weight:600;color:#64748B;margin-bottom:5px;">Rata-rata area · 308L/hari</div>
+          <div style="background:#E2E8F0;border-radius:6px;height:22px;overflow:hidden;">
+            <div style="background:#94A3B8;height:100%;width:100%;border-radius:6px;display:flex;align-items:center;padding-right:8px;justify-content:flex-end;"><span style="font-size:11px;font-weight:700;color:#fff;">308L</span></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#0288D1;margin-bottom:5px;">Rumah paling hemat · 185L/hari</div>
+          <div style="background:#E2E8F0;border-radius:6px;height:22px;overflow:hidden;">
+            <div style="background:#BFDBFE;height:100%;width:60%;border-radius:6px;display:flex;align-items:center;padding-right:8px;justify-content:flex-end;"><span style="font-size:11px;font-weight:700;color:#0288D1;">185L</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ibox ib-green"><div class="ibt" style="color:#166534;">🏆 Peringkat Anda</div><div class="ibb" style="color:#166534;">Anda termasuk <b>22% rumah paling hemat</b> di area. Hemat 55L/hari dibanding tetangga! Kurangi 30L lagi untuk masuk top 10%.</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 14 · TARGET VS REALISASI ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">14 · Bandingkan Target vs Realisasi · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Target vs Realisasi</div><div class="nav-icon">🎯</div></div>
+      <!-- progress ring area -->
+      <div class="card card-pad" style="text-align:center;margin-bottom:14px;">
+        <svg width="180" height="180" viewBox="0 0 180 180" style="margin:0 auto;display:block;">
+          <!-- background ring -->
+          <circle cx="90" cy="90" r="72" fill="none" stroke="#E2E8F0" stroke-width="14"/>
+          <!-- progress ring: 91% = 452.4/497 -->
+          <circle cx="90" cy="90" r="72" fill="none" stroke="#66BB6A" stroke-width="14" stroke-dasharray="413 99" stroke-dashoffset="-124.25" stroke-linecap="round"/>
+          <!-- center text -->
+          <text x="90" y="82" text-anchor="middle" font-size="34" font-weight="800" fill="#01579B">91%</text>
+          <text x="90" y="102" text-anchor="middle" font-size="12" fill="#64748B">tercapai</text>
+          <text x="90" y="118" text-anchor="middle" font-size="10" fill="#94A3B8">27/31 hari</text>
+        </svg>
+        <div style="font-size:15px;font-weight:700;color:#0F172A;margin-bottom:4px;">Target Mei: ≤ 7,500L</div>
+        <div style="font-size:13px;color:#66BB6A;font-weight:600;">Realisasi s/d hari ini: 6,840L</div>
+        <div style="font-size:12px;color:#64748B;margin-top:3px;">Sisa kapasitas: 660L dalam 4 hari</div>
+      </div>
+      <div class="g2">
+        <div class="sbox"><div class="sv" style="color:#01579B;">7,500L</div><div class="sl">Target bulan ini</div></div>
+        <div class="sbox"><div class="sv" style="color:#66BB6A;">6,840L</div><div class="sl">Realisasi (27 hari)</div></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-ttl">Target Harian vs Realisasi</div>
+        <svg width="100%" height="80" viewBox="0 0 362 80">
+          <!-- target line at ~242L/day = fixed horizontal -->
+          <line x1="0" y1="20" x2="362" y2="20" stroke="#01579B" stroke-width="2" stroke-dasharray="6,3"/>
+          <!-- actual bars -->
+          <rect x="2"   y="32" width="11" height="48" rx="2" fill="#66BB6A"/>
+          <rect x="15"  y="26" width="11" height="54" rx="2" fill="#EF4444"/>
+          <rect x="28"  y="38" width="11" height="42" rx="2" fill="#66BB6A"/>
+          <rect x="41"  y="44" width="11" height="36" rx="2" fill="#66BB6A"/>
+          <rect x="54"  y="16" width="11" height="64" rx="2" fill="#EF4444"/>
+          <rect x="67"  y="34" width="11" height="46" rx="2" fill="#66BB6A"/>
+          <rect x="80"  y="40" width="11" height="40" rx="2" fill="#66BB6A"/>
+          <rect x="93"  y="30" width="11" height="50" rx="2" fill="#EF4444"/>
+          <rect x="106" y="36" width="11" height="44" rx="2" fill="#66BB6A"/>
+          <rect x="119" y="42" width="11" height="38" rx="2" fill="#66BB6A"/>
+          <rect x="132" y="28" width="11" height="52" rx="2" fill="#EF4444"/>
+          <rect x="145" y="34" width="11" height="46" rx="2" fill="#66BB6A"/>
+          <rect x="158" y="38" width="11" height="42" rx="2" fill="#66BB6A"/>
+          <rect x="171" y="44" width="11" height="36" rx="2" fill="#66BB6A"/>
+          <rect x="184" y="22" width="11" height="58" rx="2" fill="#EF4444"/>
+          <rect x="197" y="36" width="11" height="44" rx="2" fill="#66BB6A"/>
+          <rect x="210" y="40" width="11" height="40" rx="2" fill="#66BB6A"/>
+          <!-- projected remaining days (light) -->
+          <rect x="223" y="32" width="11" height="48" rx="2" fill="#BFDBFE"/>
+          <rect x="236" y="32" width="11" height="48" rx="2" fill="#BFDBFE"/>
+          <rect x="249" y="32" width="11" height="48" rx="2" fill="#BFDBFE"/>
+          <rect x="262" y="32" width="11" height="48" rx="2" fill="#BFDBFE"/>
+          <text x="292" y="18" font-size="9" fill="#01579B" font-weight="600">Target</text>
+        </svg>
+        <div style="display:flex;gap:14px;margin-top:8px;font-size:11px;">
+          <div style="display:flex;align-items:center;gap:4px;"><div style="width:12px;height:12px;border-radius:3px;background:#66BB6A;"></div>Di bawah target</div>
+          <div style="display:flex;align-items:center;gap:4px;"><div style="width:12px;height:12px;border-radius:3px;background:#EF4444;"></div>Melebihi target</div>
+          <div style="display:flex;align-items:center;gap:4px;"><div style="width:12px;height:12px;border-radius:3px;background:#BFDBFE;"></div>Proyeksi</div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 15 · ESTIMASI TAGIHAN BULAN INI ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">15 · Estimasi Tagihan Bulan Ini · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Estimasi Tagihan</div><div class="nav-icon">💰</div></div>
+      <!-- hero bill card -->
+      <div style="background:linear-gradient(150deg,#0288D1,#01579B);border-radius:20px;padding:24px 20px;margin-bottom:14px;color:#fff;">
+        <div style="font-size:13px;opacity:.8;margin-bottom:6px;">Estimasi Tagihan Mei 2026</div>
+        <div style="font-size:48px;font-weight:800;letter-spacing:-1px;margin-bottom:4px;">Rp 52.400</div>
+        <div style="font-size:13px;opacity:.85;">berdasarkan pemakaian 6,840L (27 hari)</div>
+        <div style="margin-top:14px;background:rgba(255,255,255,.15);border-radius:12px;padding:10px 14px;">
+          <div style="font-size:12px;opacity:.8;margin-bottom:4px;">Proyeksi akhir bulan</div>
+          <div style="font-size:20px;font-weight:800;">Rp 59.200</div>
+          <div style="font-size:11px;opacity:.75;">jika pola tetap sama (est. 7,750L)</div>
+        </div>
+      </div>
+      <!-- progress to limit -->
+      <div class="card card-pad" style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:#0F172A;margin-bottom:8px;">
+          <span>Pemakaian bulan ini</span>
+          <span style="color:#0288D1;">6,840 / 10,000L</span>
+        </div>
+        <div class="prog-track">
+          <div class="prog-fill" style="width:68%;background:linear-gradient(90deg,#0288D1,#01579B);"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#94A3B8;margin-top:4px;">
+          <span>0L (Blok I ≤4,000L)</span><span>7,000L (Blok III)</span><span>10,000L</span>
+        </div>
+      </div>
+      <!-- tariff breakdown -->
+      <div class="sec-lbl">Rincian Blok Tarif</div>
+      <div class="card">
+        <div class="bill-row"><div><div class="bill-label">Blok I: 4,000L × Rp 3.500</div><div class="bill-sub-label">0 – 4.000 L</div></div><div class="bill-val">Rp 14.000</div></div>
+        <div class="bill-row"><div><div class="bill-label">Blok II: 2,840L × Rp 7.000</div><div class="bill-sub-label">4.001 – 10.000 L</div></div><div class="bill-val">Rp 19.880</div></div>
+        <div class="bill-row"><div><div class="bill-label">Biaya Administrasi</div><div class="bill-sub-label">Tetap per bulan</div></div><div class="bill-val">Rp 15.000</div></div>
+        <div class="bill-row"><div><div class="bill-label">Biaya Pemeliharaan</div></div><div class="bill-val">Rp 3.520</div></div>
+        <div class="bill-total"><div style="font-size:15px;font-weight:700;color:#0F172A;">Estimasi Total</div><div style="font-size:18px;font-weight:800;color:#0288D1;">Rp 52.400</div></div>
+      </div>
+      <div class="ibox ib-green"><div class="ibt" style="color:#166534;">💡 Tips Hemat</div><div class="ibb" style="color:#166534;">Jika pemakaian tetap di bawah 7,000L, tagihan akhir bulan ≈ <b>Rp 55rb</b> — 18% lebih hemat dari bulan lalu.</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab active"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ 16 · DETAIL RINCIAN TAGIHAN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">16 · Detail Rincian Tagihan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <a class="nav-back">← Tagihan</a>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:14px;">Rincian Tagihan</div>
+      <!-- meter reading -->
+      <div class="card card-pad" style="margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:#94A3B8;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;">Pembacaan Meteran</div>
+        <div class="g2" style="margin:0;">
+          <div style="text-align:center;"><div style="font-size:11px;color:#94A3B8;margin-bottom:4px;">Awal Bulan</div><div style="font-size:22px;font-weight:800;color:#0F172A;">12,840</div><div style="font-size:11px;color:#64748B;">m³</div></div>
+          <div style="text-align:center;"><div style="font-size:11px;color:#94A3B8;margin-bottom:4px;">Akhir Bulan</div><div style="font-size:22px;font-weight:800;color:#0288D1;">20,600</div><div style="font-size:11px;color:#64748B;">m³</div></div>
+        </div>
+        <div style="text-align:center;margin-top:10px;font-size:15px;font-weight:700;color:#01579B;">Pemakaian: 7,760 L = 7.76 m³</div>
+      </div>
+      <!-- full calculation -->
+      <div class="sec-lbl">Perhitungan Lengkap</div>
+      <div class="card">
+        <div class="bill-row"><div><div class="bill-label">Blok I: Rumah Tangga</div><div class="bill-sub-label">4.000 L × Rp 3.500/m³</div></div><div class="bill-val">Rp 14.000</div></div>
+        <div class="bill-row"><div><div class="bill-label">Blok II: Rumah Tangga</div><div class="bill-sub-label">3.760 L × Rp 7.000/m³</div></div><div class="bill-val">Rp 26.320</div></div>
+        <div style="background:#F8FAFC;padding:8px 16px;border-top:1px solid #F1F5F9;border-bottom:1px solid #F1F5F9;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:#64748B;"><span>Subtotal Pemakaian</span><span>Rp 40.320</span></div>
+        </div>
+        <div class="bill-row"><div><div class="bill-label">Biaya Administrasi</div><div class="bill-sub-label">Tetap per bulan</div></div><div class="bill-val">Rp 15.000</div></div>
+        <div class="bill-row"><div><div class="bill-label">Biaya Pemeliharaan (3%)</div><div class="bill-sub-label">3% × Rp 40.320</div></div><div class="bill-val">Rp 1.210</div></div>
+        <div class="bill-row"><div><div class="bill-label">PPN 11%</div><div class="bill-sub-label">11% × Rp 40.320</div></div><div class="bill-val">Rp 4.435</div></div>
+        <div class="bill-total"><div style="font-size:16px;font-weight:800;color:#0F172A;">TOTAL TAGIHAN</div><div style="font-size:20px;font-weight:800;color:#0288D1;">Rp 60.965</div></div>
+      </div>
+      <div class="ibox ib-blue"><div class="ibt" style="color:#1D4ED8;">📋 Informasi Pembayaran</div><div class="ibb" style="color:#1E3A5F;">Jatuh tempo: <b>15 Juni 2026</b>. Bayar sebelum jatuh tempo untuk menghindari denda 2%.</div></div>
+      <button class="btn btn-primary">Bayar Sekarang</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab active"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 17 · RIWAYAT TAGIHAN BULANAN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">17 · Riwayat Tagihan Bulanan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Riwayat Tagihan</div><div class="nav-icon">📥</div></div>
+      <!-- mini trend -->
+      <div class="chart-wrap" style="margin-bottom:14px;">
+        <div class="chart-ttl">Tren 6 Bulan</div>
+        <svg width="100%" height="50" viewBox="0 0 362 50">
+          <polyline points="20,14 86,18 152,22 218,12 284,24 350,28" fill="none" stroke="#0288D1" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="20" cy="14" r="3.5" fill="#0288D1"/>
+          <circle cx="86" cy="18" r="3.5" fill="#0288D1"/>
+          <circle cx="152" cy="22" r="3.5" fill="#0288D1"/>
+          <circle cx="218" cy="12" r="3.5" fill="#0288D1"/>
+          <circle cx="284" cy="24" r="3.5" fill="#0288D1"/>
+          <circle cx="350" cy="28" r="3.5" fill="#0288D1"/>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:#94A3B8;"><span>Des</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span style="color:#0288D1;font-weight:700;">Mei</span></div>
+      </div>
+      <!-- bill list -->
+      <div class="card">
+        <div class="card-row" style="background:#EFF6FF;">
+          <div style="font-size:28px;">💳</div>
+          <div class="ct"><div class="ct-t" style="color:#0288D1;">Mei 2026 · Berjalan</div><div class="ct-s">6,840L · Est. Rp 52.400</div></div>
+          <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:#DBEAFE;color:#1D4ED8;">Berjalan</span>
+        </div>
+        <div class="card-row">
+          <div style="font-size:28px;">🧾</div>
+          <div class="ct"><div class="ct-t">April 2026</div><div class="ct-s">7,960L · Rp 68.200</div></div>
+          <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:#DCFCE7;color:#16A34A;">✓ Lunas</span>
+        </div>
+        <div class="card-row">
+          <div style="font-size:28px;">🧾</div>
+          <div class="ct"><div class="ct-t">Maret 2026</div><div class="ct-s">7,100L · Rp 60.100</div></div>
+          <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:#DCFCE7;color:#16A34A;">✓ Lunas</span>
+        </div>
+        <div class="card-row">
+          <div style="font-size:28px;">🧾</div>
+          <div class="ct"><div class="ct-t">Februari 2026</div><div class="ct-s">6,500L · Rp 54.800</div></div>
+          <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:#DCFCE7;color:#16A34A;">✓ Lunas</span>
+        </div>
+        <div class="card-row">
+          <div style="font-size:28px;">🧾</div>
+          <div class="ct"><div class="ct-t">Januari 2026</div><div class="ct-s">6,800L · Rp 57.400</div></div>
+          <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:#DCFCE7;color:#16A34A;">✓ Lunas</span>
+        </div>
+        <div class="card-row">
+          <div style="font-size:28px;">🧾</div>
+          <div class="ct"><div class="ct-t">Desember 2025</div><div class="ct-s">7,200L · Rp 62.100</div></div>
+          <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:#DCFCE7;color:#16A34A;">✓ Lunas</span>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:13px;color:#0288D1;font-weight:600;padding:8px 0;">Lihat tagihan lebih lama ›</div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab active"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 18 · DETAIL TAGIHAN BULAN TERTENTU ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">18 · Detail Tagihan Bulan Tertentu · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <a class="nav-back">← Riwayat Tagihan</a>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:14px;">April 2026</div>
+      <!-- paid receipt style -->
+      <div style="background:#F0FDF4;border:2px solid #BBF7D0;border-radius:16px;padding:20px;margin-bottom:14px;text-align:center;">
+        <div style="font-size:24px;margin-bottom:8px;">✅</div>
+        <div style="font-size:14px;font-weight:600;color:#16A34A;margin-bottom:4px;">Sudah Dibayar</div>
+        <div style="font-size:36px;font-weight:800;color:#0F172A;margin-bottom:2px;">Rp 68.200</div>
+        <div style="font-size:12px;color:#64748B;">Dibayar: 10 Mei 2026 via GoPay</div>
+      </div>
+      <!-- details -->
+      <div class="card">
+        <div style="padding:14px 16px;background:#F8FAFC;border-bottom:1px solid #F1F5F9;">
+          <div style="font-size:12px;font-weight:700;color:#94A3B8;margin-bottom:8px;text-transform:uppercase;">Pembacaan Meteran</div>
+          <div style="display:flex;justify-content:space-between;"><div style="text-align:center;"><div style="font-size:11px;color:#94A3B8;">1 Apr</div><div style="font-size:20px;font-weight:700;color:#0F172A;">4,880</div></div><div style="font-size:20px;color:#E2E8F0;align-self:center;">→</div><div style="text-align:center;"><div style="font-size:11px;color:#94A3B8;">30 Apr</div><div style="font-size:20px;font-weight:700;color:#0288D1;">12,840</div></div><div style="text-align:center;"><div style="font-size:11px;color:#94A3B8;">Total</div><div style="font-size:20px;font-weight:700;color:#01579B;">7,960L</div></div></div>
+        </div>
+        <div class="bill-row"><div class="bill-label">Blok I: 4,000L × Rp 3.500</div><div class="bill-val">Rp 14.000</div></div>
+        <div class="bill-row"><div class="bill-label">Blok II: 3,960L × Rp 7.000</div><div class="bill-val">Rp 27.720</div></div>
+        <div class="bill-row"><div class="bill-label">Administrasi + Pemeliharaan</div><div class="bill-val">Rp 16.246</div></div>
+        <div class="bill-row"><div class="bill-label">PPN 11%</div><div class="bill-val">Rp 10.234</div></div>
+        <div class="bill-total"><div style="font-size:15px;font-weight:800;color:#0F172A;">TOTAL</div><div style="font-size:18px;font-weight:800;color:#0288D1;">Rp 68.200</div></div>
+      </div>
+      <button class="btn btn-outline">📥 Unduh Struk PDF</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab active"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 19 · PENGHEMATAN RUPIAH ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">19 · Hitungan Total Penghematan Rupiah · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Penghematan Rupiah</div></div>
+      <div style="background:linear-gradient(150deg,#66BB6A,#2E7D32);border-radius:20px;padding:28px 20px;margin-bottom:14px;text-align:center;color:#fff;">
+        <div style="font-size:14px;opacity:.85;margin-bottom:6px;">Total Penghematan Tahun Ini</div>
+        <div style="font-size:52px;font-weight:800;letter-spacing:-1px;margin-bottom:4px;">Rp 94.200</div>
+        <div style="font-size:14px;opacity:.85;">vs tagihan tahun lalu periode yang sama</div>
+        <div style="margin-top:16px;display:flex;justify-content:space-around;">
+          <div><div style="font-size:22px;font-weight:800;">Rp 18.840</div><div style="font-size:11px;opacity:.75;">Rata-rata/bulan</div></div>
+          <div style="width:1px;background:rgba(255,255,255,.3);"></div>
+          <div><div style="font-size:22px;font-weight:800;">Rp 628</div><div style="font-size:11px;opacity:.75;">Rata-rata/hari</div></div>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-ttl">Penghematan per Bulan (Rp ribu)</div>
+        <svg width="100%" height="80" viewBox="0 0 362 80">
+          <rect x="8"   y="20" width="46" height="58" rx="4" fill="#66BB6A"/>
+          <rect x="64"  y="28" width="46" height="50" rx="4" fill="#66BB6A"/>
+          <rect x="120" y="14" width="46" height="64" rx="4" fill="#66BB6A"/>
+          <rect x="176" y="22" width="46" height="56" rx="4" fill="#66BB6A"/>
+          <rect x="232" y="30" width="46" height="48" rx="4" fill="#66BB6A"/>
+          <text x="31"  y="15" text-anchor="middle" font-size="9" fill="#064E3B">18k</text>
+          <text x="87"  y="23" text-anchor="middle" font-size="9" fill="#064E3B">16k</text>
+          <text x="143" y="9"  text-anchor="middle" font-size="9" fill="#064E3B">22k</text>
+          <text x="199" y="17" text-anchor="middle" font-size="9" fill="#064E3B">19k</text>
+          <text x="255" y="25" text-anchor="middle" font-size="9" fill="#064E3B">15k</text>
+        </svg>
+        <div class="chart-days"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>Mei</span></div>
+      </div>
+      <div class="g2">
+        <div class="sbox"><div class="sv" style="color:#66BB6A;font-size:18px;">Mar</div><div class="sl">Bulan paling hemat (Rp 22rb)</div></div>
+        <div class="sbox"><div class="sv" style="color:#01579B;font-size:16px;">Rp 94.200</div><div class="sl">Total Jan–Mei</div></div>
+      </div>
+      <div class="ibox ib-green"><div class="ibt" style="color:#166534;">💡 Setara dengan apa?</div><div class="ibb" style="color:#166534;">Rp 94.200 setara biaya <b>1,5 bulan langganan streaming</b> atau <b>3x makan keluarga</b> di restoran. Penghematan nyata!</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab active"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 20 · PENGHEMATAN LITER ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">20 · Hitungan Total Penghematan Liter · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Penghematan Air</div></div>
+      <div style="background:linear-gradient(150deg,#0288D1,#01579B);border-radius:20px;padding:28px 20px;margin-bottom:14px;text-align:center;color:#fff;">
+        <div style="font-size:60px;margin-bottom:8px;">💧</div>
+        <div style="font-size:14px;opacity:.85;margin-bottom:6px;">Total Air Dihemat Tahun Ini</div>
+        <div style="font-size:52px;font-weight:800;letter-spacing:-1px;margin-bottom:4px;">13,450<span style="font-size:24px;font-weight:500;margin-left:4px;">L</span></div>
+        <div style="font-size:14px;opacity:.85;">vs pemakaian tahun lalu periode sama</div>
+      </div>
+      <!-- equivalencies -->
+      <div class="sec-lbl">Setara Dengan...</div>
+      <div class="card">
+        <div class="card-row"><div style="font-size:30px;">🚿</div><div class="ct"><div class="ct-t">Mandi selama 224 menit</div><div class="ct-s">@ 60L per 10 menit = 224 kali mandi</div></div></div>
+        <div class="card-row"><div style="font-size:30px;">🪣</div><div class="ct"><div class="ct-t">895 ember penuh</div><div class="ct-s">@ 15L per ember standard</div></div></div>
+        <div class="card-row"><div style="font-size:30px;">🚰</div><div class="ct"><div class="ct-t">Kebutuhan 18 orang selama 1 hari</div><div class="ct-s">@ 150L/orang/hari (standar WHO)</div></div></div>
+        <div class="card-row"><div style="font-size:30px;">🏊</div><div class="ct"><div class="ct-t">5.4% kolam renang standar</div><div class="ct-s">Kolam olimpik = 2,500,000L</div></div></div>
+      </div>
+      <div class="ibox ib-blue"><div class="ibt" style="color:#1D4ED8;">📊 Progres ke Target Tahunan</div>
+        <div style="margin-top:8px;">
+          <div class="prog-track"><div class="prog-fill" style="width:56%;background:#0288D1;"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#94A3B8;margin-top:4px;"><span>0L</span><span>Tercapai: 13,450L</span><span>Target: 24,000L</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab active"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 21 · JEJAK KARBON ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">21 · Jejak Karbon dari Pemakaian Air · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Jejak Karbon</div></div>
+      <!-- gauge -->
+      <div class="card card-pad" style="text-align:center;margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">Emisi CO₂ dari Pemakaian Air</div>
+        <svg width="200" height="130" viewBox="0 0 200 130" style="margin:0 auto;display:block;">
+          <!-- semi-circle gauge background -->
+          <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="#E2E8F0" stroke-width="16" stroke-linecap="round"/>
+          <!-- filled arc (62% = 111.6 of 180 degrees) -->
+          <path d="M 20 110 A 80 80 0 0 1 140 38" fill="none" stroke="#66BB6A" stroke-width="16" stroke-linecap="round"/>
+          <!-- needle -->
+          <line x1="100" y1="110" x2="148" y2="44" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="100" cy="110" r="6" fill="#0F172A"/>
+          <!-- labels -->
+          <text x="14" y="128" font-size="9" fill="#94A3B8">Rendah</text>
+          <text x="160" y="128" font-size="9" fill="#94A3B8">Tinggi</text>
+          <!-- center value -->
+          <text x="100" y="92" text-anchor="middle" font-size="22" font-weight="800" fill="#01579B">4.2</text>
+          <text x="100" y="108" text-anchor="middle" font-size="10" fill="#64748B">kg CO₂/bulan</text>
+        </svg>
+        <div style="font-size:14px;font-weight:700;color:#16A34A;margin-top:8px;">38% lebih rendah dari rata-rata nasional</div>
+      </div>
+      <div class="g2">
+        <div class="sbox"><div class="sv" style="color:#01579B;font-size:20px;">4.2</div><div class="sl">kg CO₂/bulan Anda</div></div>
+        <div class="sbox"><div class="sv" style="color:#64748B;font-size:20px;">6.8</div><div class="sl">kg CO₂/bulan rata-rata</div></div>
+      </div>
+      <div class="sec-lbl">Rincian Sumber Emisi</div>
+      <div class="card">
+        <div class="card-row"><div class="ci ci-blue">⚡</div><div class="ct"><div class="ct-t">Pompa & distribusi air</div><div class="ct-s">Energi untuk mengalirkan air ke rumah</div></div><div style="font-size:13px;font-weight:700;color:#01579B;">2.1 kg</div></div>
+        <div class="card-row"><div class="ci ci-amber">♨️</div><div class="ct"><div class="ct-t">Pemanasan air</div><div class="ct-s">Water heater & memasak</div></div><div style="font-size:13px;font-weight:700;color:#01579B;">1.4 kg</div></div>
+        <div class="card-row"><div class="ci ci-green">💧</div><div class="ct"><div class="ct-t">Pengolahan air bersih</div><div class="ct-s">PDAM treatment plant</div></div><div style="font-size:13px;font-weight:700;color:#01579B;">0.7 kg</div></div>
+      </div>
+      <div class="ibox ib-green"><div class="ibt" style="color:#166534;">🌿 Dampak Penghematan</div><div class="ibb" style="color:#166534;">13,450L air yang dihemat tahun ini mencegah emisi <b>11.4 kg CO₂</b> — setara menghindari perjalanan 57 km dengan mobil.</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab active"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 22 · SETARA X POHON ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">22 · Setara dengan X Pohon · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar" style="background:linear-gradient(135deg,#66BB6A,#2E7D32);color:#fff;"><span class="sb-time" style="color:#fff;">9:41</span><div class="sb-icons" style="color:#fff;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="white" stroke-opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="2" fill="white"/><path d="M23 4v4a2 2 0 000-4z" fill="white" fill-opacity=".4"/></svg></div></div>
+    <div class="page" style="background:#F0FDF4;">
+      <div style="text-align:center;padding:24px 0 16px;">
+        <div style="font-size:80px;margin-bottom:8px;">🌳🌳🌳</div>
+        <div style="font-size:14px;color:#64748B;font-weight:500;margin-bottom:8px;">Penghematan air Anda setara dengan</div>
+        <div style="font-size:56px;font-weight:800;color:#14532D;line-height:1;margin-bottom:4px;">3</div>
+        <div style="font-size:22px;font-weight:700;color:#16A34A;margin-bottom:4px;">Pohon yang diselamatkan</div>
+        <div style="font-size:13px;color:#64748B;">setiap tahun berdasarkan 13,450L dihemat</div>
+      </div>
+      <!-- tree grid illustration -->
+      <div style="background:#fff;border:1px solid #BBF7D0;border-radius:16px;padding:20px;margin-bottom:14px;text-align:center;">
+        <div style="display:flex;justify-content:center;gap:24px;margin-bottom:14px;">
+          <div style="text-align:center;"><div style="font-size:48px;">🌳</div><div style="font-size:11px;color:#16A34A;font-weight:600;margin-top:4px;">Diselamatkan</div></div>
+          <div style="text-align:center;"><div style="font-size:48px;">🌳</div><div style="font-size:11px;color:#16A34A;font-weight:600;margin-top:4px;">Diselamatkan</div></div>
+          <div style="text-align:center;"><div style="font-size:48px;">🌳</div><div style="font-size:11px;color:#16A34A;font-weight:600;margin-top:4px;">Diselamatkan</div></div>
+        </div>
+        <div style="font-size:12px;color:#64748B;line-height:1.6;">Setiap pohon dewasa membutuhkan <b>± 4,500L air/tahun</b> untuk bertahan hidup di musim kering. Dengan menghemat 13,450L, Anda membantu ekosistem bertahan.</div>
+      </div>
+      <div class="ibox ib-green"><div class="ibt" style="color:#166534;">🌿 Cara Hitungnya</div><div class="ibb" style="color:#166534;">13,450L ÷ 4,500L per pohon = <b>2.99 ≈ 3 pohon</b>. Setiap 1,500L air yang Anda hemat = 1 pohon yang diselamatkan dari kekeringan.</div></div>
+      <div class="ibox ib-blue"><div class="ibt" style="color:#1D4ED8;">🏆 Target Tahun Ini</div><div class="ibb" style="color:#1E3A5F;">Hemat 24,000L untuk menyelamatkan <b>5 pohon</b>. Saat ini sudah <b>56% menuju target!</b></div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab active"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 23 · SETARA AIR MINUM X ORANG ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">23 · Setara Air Minum X Orang · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div style="text-align:center;padding:20px 0 12px;">
+        <div style="font-size:64px;margin-bottom:10px;">🚰</div>
+        <div style="font-size:14px;color:#64748B;font-weight:500;margin-bottom:6px;">Air yang Anda hemat tahun ini cukup untuk</div>
+        <div style="font-size:60px;font-weight:800;color:#0288D1;line-height:1;margin-bottom:4px;">90</div>
+        <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:4px;">orang minum selama 1 hari</div>
+        <div style="font-size:12px;color:#64748B;">13,450L ÷ 2L/hari/orang = 6,725 hari-orang</div>
+      </div>
+      <!-- people grid -->
+      <div class="card card-pad" style="text-align:center;margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:#94A3B8;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em;">Visualisasi Dampak</div>
+        <div style="font-size:28px;line-height:1.6;letter-spacing:2px;">👤👤👤👤👤👤👤👤👤👤<br>👤👤👤👤👤👤👤👤👤👤<br>👤👤👤👤👤👤👤👤👤👤<br>👤👤👤👤👤👤👤👤👤👤<br>👤👤👤👤👤👤👤👤👤👤<br>👤👤👤👤👤👤👤👤👤👤<br>👤👤👤👤👤👤👤👤👤👤<br>👤👤👤👤👤👤👤👤👤👤<br>👤👤👤👤👤👤👤👤👤👤</div>
+        <div style="font-size:12px;color:#64748B;margin-top:12px;">Setiap ikon = 1 orang mendapat air minum 1 hari</div>
+      </div>
+      <div class="g3">
+        <div class="sbox"><div class="sv" style="color:#0288D1;font-size:18px;">90</div><div class="sl">Orang per hari</div></div>
+        <div class="sbox"><div class="sv" style="color:#66BB6A;font-size:18px;">3 bln</div><div class="sl">1 keluarga (4 orang)</div></div>
+        <div class="sbox"><div class="sv" style="color:#01579B;font-size:18px;">18 bln</div><div class="sl">Kebutuhan minum Anda</div></div>
+      </div>
+      <div class="ibox ib-blue"><div class="ibt" style="color:#1D4ED8;">🌍 Konteks Global</div><div class="ibb" style="color:#1E3A5F;">785 juta orang di dunia tidak memiliki akses air bersih. Setiap tetes yang Anda hemat memiliki makna. Terima kasih sudah berkontribusi!</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab active"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 24 · PENCAPAIAN LINGKUNGAN BULAN INI ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">24 · Pencapaian Lingkungan Bulan Ini · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Pencapaian Mei</div><div class="nav-icon">🏆</div></div>
+      <div class="ibox ib-green" style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:600;color:#16A34A;margin-bottom:4px;">🌟 Bulan Terbaik Anda!</div>
+        <div style="font-size:14px;color:#166534;line-height:1.5;">4 dari 5 pencapaian terbuka. Hemat lagi 660L untuk pencapaian sempurna!</div>
+      </div>
+      <div class="badge-grid">
+        <div class="badge-item"><div class="badge-icon">💧</div><div class="badge-name">Penjaga Air</div><div class="badge-sub">Hemat 1,000L+</div></div>
+        <div class="badge-item"><div class="badge-icon">🌿</div><div class="badge-name">Ramah Alam</div><div class="badge-sub">CO₂ di bawah 5kg</div></div>
+        <div class="badge-item"><div class="badge-icon">🎯</div><div class="badge-name">On Target</div><div class="badge-sub">Tidak melebihi target</div></div>
+        <div class="badge-item"><div class="badge-icon">📉</div><div class="badge-name">Tren Turun</div><div class="badge-sub">Lebih hemat 7 hari berturut</div></div>
+        <div class="badge-item locked"><div class="badge-icon">🏆</div><div class="badge-name">Master Hemat</div><div class="badge-sub">Butuh 660L lagi</div></div>
+        <div class="badge-item"><div class="badge-icon">🌳</div><div class="badge-name">Eco Hero</div><div class="badge-sub">Selamatkan 1 pohon/bln</div></div>
+      </div>
+      <div class="sec-lbl">Progress Menuju Badge Berikutnya</div>
+      <div class="card card-pad">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:14px;font-weight:600;color:#0F172A;">🏆 Master Hemat</div>
+          <div style="font-size:13px;font-weight:600;color:#0288D1;">6,840 / 7,500L</div>
+        </div>
+        <div class="prog-track"><div class="prog-fill" style="width:91%;background:#66BB6A;"></div></div>
+        <div style="font-size:12px;color:#64748B;margin-top:6px;">Butuh <b style="color:#0F172A;">660L lagi</b> di bawah target untuk membuka badge ini (≈4 hari ke depan)</div>
+      </div>
+      <div class="sec-lbl">Semua Badge Bulan Ini</div>
+      <div style="text-align:center;font-size:13px;color:#0288D1;font-weight:600;">4 / 5 Badge Terbuka ⭐</div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab active"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 25 · PENCAPAIAN LINGKUNGAN TAHUN INI ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">25 · Pencapaian Lingkungan Tahun Ini · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <div class="nav-h"><div class="nav-title">Pencapaian 2026</div><div class="nav-icon">🏆</div></div>
+      <!-- level card -->
+      <div style="background:linear-gradient(150deg,#01579B,#004B87);border-radius:20px;padding:22px 20px;margin-bottom:14px;color:#fff;text-align:center;">
+        <div style="font-size:48px;margin-bottom:8px;">🌍</div>
+        <div style="font-size:14px;opacity:.8;margin-bottom:4px;">Level Saat Ini</div>
+        <div style="font-size:26px;font-weight:800;margin-bottom:8px;">Eco Guardian ⭐⭐⭐</div>
+        <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:8px 16px;display:flex;justify-content:space-between;font-size:13px;"><span>Poin: 2,840</span><span>Next level: 3,500</span></div>
+        <div style="background:rgba(255,255,255,.2);border-radius:6px;height:8px;margin-top:10px;overflow:hidden;"><div style="background:#66BB6A;height:100%;width:81%;border-radius:6px;"></div></div>
+      </div>
+      <div class="sec-lbl">Badge Tahunan (12 Total)</div>
+      <div class="badge-grid">
+        <div class="badge-item"><div class="badge-icon">🌱</div><div class="badge-name">Pemula Hijau</div><div class="badge-sub">Jan 2026</div></div>
+        <div class="badge-item"><div class="badge-icon">💧</div><div class="badge-name">Penjaga Air</div><div class="badge-sub">Jan 2026</div></div>
+        <div class="badge-item"><div class="badge-icon">🎯</div><div class="badge-name">On Target</div><div class="badge-sub">Feb 2026</div></div>
+        <div class="badge-item"><div class="badge-icon">📉</div><div class="badge-name">Tren Turun</div><div class="badge-sub">Mar 2026</div></div>
+        <div class="badge-item"><div class="badge-icon">🌳</div><div class="badge-name">Eco Hero</div><div class="badge-sub">Mar 2026</div></div>
+        <div class="badge-item"><div class="badge-icon">🏆</div><div class="badge-name">Master Hemat</div><div class="badge-sub">Apr 2026</div></div>
+        <div class="badge-item"><div class="badge-icon">🌿</div><div class="badge-name">Ramah Alam</div><div class="badge-sub">Mei 2026</div></div>
+        <div class="badge-item"><div class="badge-icon">⭐</div><div class="badge-name">Konsisten</div><div class="badge-sub">Mei 2026</div></div>
+        <div class="badge-item locked"><div class="badge-icon">🌍</div><div class="badge-name">Planet Saver</div><div class="badge-sub">Level selanjutnya</div></div>
+      </div>
+      <div class="ibox ib-blue" style="margin-top:4px;"><div class="ibt" style="color:#1D4ED8;">🚀 Menuju Level Berikutnya</div><div class="ibb" style="color:#1E3A5F;">Butuh 660 poin lagi untuk naik ke <b>Eco Master</b>. Hemat air konsisten selama 2 bulan lagi!</div></div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab active"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 26 · FILTER PER KATEGORI ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">26 · Filter Statistik per Kategori · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page" style="background:rgba(0,0,0,.05);">
+      <!-- dimmed background with bottom sheet -->
+      <div style="position:absolute;top:54px;left:0;right:0;bottom:56px;background:rgba(15,23,42,.4);"></div>
+      <div style="position:absolute;bottom:56px;left:0;right:0;background:#fff;border-radius:24px 24px 0 0;padding:0 20px 24px;">
+        <div style="width:40px;height:4px;background:#E2E8F0;border-radius:2px;margin:14px auto 18px;"></div>
+        <div style="font-size:18px;font-weight:700;color:#0F172A;margin-bottom:16px;">Filter Kategori</div>
+        <!-- category checkboxes -->
+        <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:20px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#EFF6FF;border:1.5px solid #0288D1;border-radius:12px;">
+            <div style="width:22px;height:22px;border-radius:6px;background:#0288D1;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0;">✓</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#0F172A;">Semua Ruangan</div><div style="font-size:12px;color:#64748B;">Termasuk semua area rumah</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;">
+            <div style="width:22px;height:22px;border-radius:6px;background:#0288D1;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0;">✓</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#0F172A;">💧 Konsumsi Langsung</div><div style="font-size:12px;color:#64748B;">Minum, masak, cuci</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;">
+            <div style="width:22px;height:22px;border-radius:6px;background:#0288D1;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0;">✓</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#0F172A;">🚿 Kebersihan Diri</div><div style="font-size:12px;color:#64748B;">Mandi, cuci tangan, toilet</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;">
+            <div style="width:22px;height:22px;border-radius:6px;border:2px solid #E2E8F0;flex-shrink:0;"></div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#94A3B8;">🌿 Irigasi Taman</div><div style="font-size:12px;color:#94A3B8;">Siram tanaman, kolam</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;">
+            <div style="width:22px;height:22px;border-radius:6px;border:2px solid #E2E8F0;flex-shrink:0;"></div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#94A3B8;">🏠 Kebersihan Rumah</div><div style="font-size:12px;color:#94A3B8;">Pel lantai, cuci kendaraan</div></div>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="margin-bottom:8px;">Terapkan Filter</button>
+        <button class="btn btn-ghost">Reset ke Default</button>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 27 · FILTER PER RUANGAN ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">27 · Filter Statistik per Ruangan · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page" style="background:rgba(0,0,0,.05);">
+      <div style="position:absolute;top:54px;left:0;right:0;bottom:56px;background:rgba(15,23,42,.4);"></div>
+      <div style="position:absolute;bottom:56px;left:0;right:0;background:#fff;border-radius:24px 24px 0 0;padding:0 20px 24px;">
+        <div style="width:40px;height:4px;background:#E2E8F0;border-radius:2px;margin:14px auto 18px;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div style="font-size:18px;font-weight:700;color:#0F172A;">Filter Ruangan</div>
+          <div style="font-size:13px;color:#0288D1;font-weight:600;">4 dipilih</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:20px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:12px;background:#EFF6FF;border:1.5px solid #0288D1;border-radius:12px;">
+            <div class="ci ci-sky" style="width:36px;height:36px;font-size:18px;flex-shrink:0;">🚿</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#0F172A;">Kamar Mandi Utama</div><div style="font-size:12px;color:#0288D1;">35% · 86L hari ini</div></div>
+            <div style="width:22px;height:22px;border-radius:6px;background:#0288D1;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;">✓</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:12px;background:#EFF6FF;border:1.5px solid #0288D1;border-radius:12px;">
+            <div class="ci ci-amber" style="width:36px;height:36px;font-size:18px;flex-shrink:0;">🍳</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#0F172A;">Dapur</div><div style="font-size:12px;color:#0288D1;">28% · 69L hari ini</div></div>
+            <div style="width:22px;height:22px;border-radius:6px;background:#0288D1;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;">✓</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:12px;background:#EFF6FF;border:1.5px solid #0288D1;border-radius:12px;">
+            <div class="ci ci-green" style="width:36px;height:36px;font-size:18px;flex-shrink:0;">🛁</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#0F172A;">Kamar Mandi Kedua</div><div style="font-size:12px;color:#0288D1;">18% · 44L hari ini</div></div>
+            <div style="width:22px;height:22px;border-radius:6px;background:#0288D1;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;">✓</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:12px;background:#EFF6FF;border:1.5px solid #0288D1;border-radius:12px;">
+            <div class="ci ci-purple" style="width:36px;height:36px;font-size:18px;flex-shrink:0;">🌿</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#0F172A;">Taman / Irigasi</div><div style="font-size:12px;color:#0288D1;">12% · 29L hari ini</div></div>
+            <div style="width:22px;height:22px;border-radius:6px;background:#0288D1;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;">✓</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:12px;background:#fff;border:1px solid #E2E8F0;border-radius:12px;">
+            <div class="ci ci-red" style="width:36px;height:36px;font-size:18px;flex-shrink:0;">🚗</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#94A3B8;">Cuci Kendaraan</div><div style="font-size:12px;color:#94A3B8;">Tidak aktif hari ini</div></div>
+            <div style="width:22px;height:22px;border-radius:6px;border:2px solid #E2E8F0;"></div>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="margin-bottom:8px;">Terapkan (4 ruangan)</button>
+        <button class="btn btn-ghost">Pilih Semua · Reset</button>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 28 · EXPORT LAPORAN PDF ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">28 · Export Laporan PDF · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <a class="nav-back">← Statistik</a>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:14px;">Export Laporan PDF</div>
+      <!-- preview card -->
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;overflow:hidden;margin-bottom:14px;">
+        <div style="background:linear-gradient(135deg,#0288D1,#01579B);padding:20px;color:#fff;">
+          <div style="font-size:12px;opacity:.8;margin-bottom:4px;">📄 Preview Laporan</div>
+          <div style="font-size:18px;font-weight:800;">AquaTrack Report</div>
+          <div style="font-size:13px;opacity:.85;">Mei 2026 · Rumah Budi Santoso</div>
+        </div>
+        <div style="padding:14px;">
+          <div style="font-size:12px;color:#94A3B8;margin-bottom:8px;">ISI LAPORAN:</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#0F172A;">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="color:#66BB6A;font-weight:700;">✓</span> Ringkasan pemakaian bulanan</div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="color:#66BB6A;font-weight:700;">✓</span> Grafik tren 30 hari</div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="color:#66BB6A;font-weight:700;">✓</span> Rincian per ruangan</div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="color:#66BB6A;font-weight:700;">✓</span> Estimasi tagihan & rincian</div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="color:#66BB6A;font-weight:700;">✓</span> Data penghematan & jejak karbon</div>
+          </div>
+        </div>
+      </div>
+      <!-- options -->
+      <div class="sec-lbl">Rentang Waktu</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <div style="padding:8px 16px;background:#01579B;color:#fff;border-radius:10px;font-size:13px;font-weight:600;">Bulan Ini</div>
+        <div style="padding:8px 16px;background:#F1F5F9;color:#64748B;border-radius:10px;font-size:13px;font-weight:600;">3 Bulan</div>
+        <div style="padding:8px 16px;background:#F1F5F9;color:#64748B;border-radius:10px;font-size:13px;font-weight:600;">6 Bulan</div>
+        <div style="padding:8px 16px;background:#F1F5F9;color:#64748B;border-radius:10px;font-size:13px;font-weight:600;">Custom</div>
+      </div>
+      <div class="sec-lbl">Format</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-row"><div class="ci ci-red">📄</div><div class="ct"><div class="ct-t">PDF Ringkas</div><div class="ct-s">1-2 halaman, cocok untuk print</div></div><div style="width:20px;height:20px;border-radius:50%;border:2px solid #0288D1;background:#0288D1;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;">●</div></div>
+        <div class="card-row"><div class="ci ci-blue">📊</div><div class="ct"><div class="ct-t">PDF Lengkap</div><div class="ct-s">4-6 halaman, semua grafik & data</div></div><div style="width:20px;height:20px;border-radius:50%;border:2px solid #E2E8F0;"></div></div>
+      </div>
+      <button class="btn btn-primary">📥 Generate & Unduh PDF</button>
+      <button class="btn btn-outline">📧 Kirim ke Email</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 29 · SHARE STATISTIK ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">29 · Share Statistik ke Sosmed · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page">
+      <a class="nav-back">← Statistik</a>
+      <div style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:14px;">Bagikan Pencapaian</div>
+      <!-- share card preview -->
+      <div class="share-card">
+        <div style="font-size:11px;font-weight:600;opacity:.7;margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em;">AquaTrack · Mei 2026</div>
+        <div style="font-size:28px;font-weight:800;margin-bottom:6px;">💧 Saya hemat 13,450L air!</div>
+        <div style="font-size:14px;opacity:.85;line-height:1.6;margin-bottom:14px;">Setara dengan 3 pohon diselamatkan dan menghemat Rp 94.200 tahun ini.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <div style="background:rgba(255,255,255,.2);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;">🌍 Eco Guardian</div>
+          <div style="background:rgba(255,255,255,.2);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;">↓ 18% dari target</div>
+          <div style="background:rgba(255,255,255,.2);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;">🏆 Top 22% area</div>
+        </div>
+        <div style="margin-top:14px;font-size:11px;opacity:.6;">#AquaTrack #HematAir #EcoLife</div>
+      </div>
+      <!-- caption -->
+      <div class="sec-lbl">Caption</div>
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:14px;margin-bottom:16px;min-height:80px;">
+        <div style="font-size:14px;color:#0F172A;line-height:1.6;">💧 Bulan Mei aku berhasil hemat 13.450 liter air! Setara menyelamatkan 3 pohon 🌳 dan hemat Rp 94rb dari tagihan air. Yuk bareng jaga lingkungan! #AquaTrack #HematAir</div>
+      </div>
+      <!-- platforms -->
+      <div class="sec-lbl">Bagikan ke</div>
+      <div style="display:flex;gap:12px;margin-bottom:20px;">
+        <div style="flex:1;background:#25D366;border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:28px;">💬</div>
+          <div style="font-size:12px;font-weight:700;color:#fff;margin-top:4px;">WhatsApp</div>
+        </div>
+        <div style="flex:1;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:28px;">📸</div>
+          <div style="font-size:12px;font-weight:700;color:#fff;margin-top:4px;">Instagram</div>
+        </div>
+        <div style="flex:1;background:#1DA1F2;border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:28px;">🐦</div>
+          <div style="font-size:12px;font-weight:700;color:#fff;margin-top:4px;">Twitter</div>
+        </div>
+        <div style="flex:1;background:#F1F5F9;border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:28px;">📋</div>
+          <div style="font-size:12px;font-weight:700;color:#64748B;margin-top:4px;">Salin</div>
+        </div>
+      </div>
+      <button class="btn btn-dark">📤 Bagikan Sekarang</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 30 · EMPTY STATE ═══ -->
+<div class="frame-wrapper">
+  <div class="frame-name">30 · Empty State Statistik · 402 × 874</div>
+  <div class="phone">
+    <div class="status-bar"><span class="sb-time">9:41</span><div class="sb-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" fill-opacity=".4"/></svg></div></div>
+    <div class="page" style="display:flex;flex-direction:column;align-items:center;padding-top:32px;">
+      <div class="nav-h" style="width:100%;margin-bottom:0;"><div class="nav-title">Statistik Air</div><div class="nav-icon">📊</div></div>
+      <div class="period-tabs" style="width:100%;">
+        <div class="ptab on">Hari</div><div class="ptab">Minggu</div><div class="ptab">Bulan</div><div class="ptab">Tahun</div>
+      </div>
+      <!-- empty illustration -->
+      <div style="text-align:center;padding:20px 0;">
+        <svg width="160" height="140" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto;display:block;margin-bottom:20px;">
+          <!-- empty chart bars (just outlines) -->
+          <rect x="10" y="20" width="30" height="100" rx="5" fill="none" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="5,3"/>
+          <rect x="50" y="50" width="30" height="70" rx="5" fill="none" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="5,3"/>
+          <rect x="90" y="35" width="30" height="85" rx="5" fill="none" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="5,3"/>
+          <rect x="130" y="60" width="30" height="60" rx="5" fill="none" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="5,3"/>
+          <!-- bottom line -->
+          <line x1="5" y1="120" x2="160" y2="120" stroke="#E2E8F0" stroke-width="2"/>
+          <!-- question mark overlaid -->
+          <circle cx="80" cy="60" r="30" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="2"/>
+          <text x="80" y="70" text-anchor="middle" font-size="28" fill="#0288D1">?</text>
+        </svg>
+        <div style="font-size:22px;font-weight:800;color:#0F172A;margin-bottom:8px;">Data Belum Cukup</div>
+        <div style="font-size:14px;color:#64748B;line-height:1.6;max-width:280px;margin:0 auto 20px;">Sensor AquaTrack butuh minimal <b style="color:#0F172A;">3 hari data</b> untuk menampilkan statistik yang akurat.</div>
+      </div>
+      <!-- progress to unlock -->
+      <div class="card card-pad" style="width:100%;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:10px;">Progress Membuka Statistik</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span style="color:#0F172A;font-weight:500;">📊 Statistik Harian</span><span style="color:#66BB6A;font-weight:700;">✓ Tersedia</span></div>
+            <div class="prog-track"><div class="prog-fill" style="width:100%;background:#66BB6A;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span style="color:#0F172A;font-weight:500;">📈 Statistik Mingguan</span><span style="color:#0288D1;font-weight:700;">3/7 hari</span></div>
+            <div class="prog-track"><div class="prog-fill" style="width:43%;background:#0288D1;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span style="color:#94A3B8;font-weight:500;">📅 Statistik Bulanan</span><span style="color:#94A3B8;font-weight:600;">3/30 hari</span></div>
+            <div class="prog-track"><div class="prog-fill" style="width:10%;background:#CBD5E1;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span style="color:#94A3B8;font-weight:500;">📆 Statistik Tahunan</span><span style="color:#94A3B8;font-weight:600;">3/365 hari</span></div>
+            <div class="prog-track"><div class="prog-fill" style="width:1%;background:#CBD5E1;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="ibox ib-blue" style="width:100%;"><div class="ibt" style="color:#1D4ED8;">💡 Sementara itu...</div><div class="ibb" style="color:#1E3A5F;">Anda bisa menggunakan fitur <b>Monitor</b> untuk melihat pemakaian air secara real-time sambil menunggu data terkumpul.</div></div>
+      <button class="btn btn-primary" style="width:100%;">💧 Lihat Monitor Real-time</button>
+    </div>
+    <div class="tab-bar">
+      <div class="tab"><div class="tab-icon">🏠</div><div class="tab-label">Beranda</div></div>
+      <div class="tab active"><div class="tab-icon">📊</div><div class="tab-label">Statistik</div></div>
+      <div class="tab"><div class="tab-icon">💰</div><div class="tab-label">Tagihan</div></div>
+      <div class="tab"><div class="tab-icon">🌿</div><div class="tab-label">Eco</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /canvas -->
+</body>
+</html>

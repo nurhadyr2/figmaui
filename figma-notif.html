@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AquaTrack — Notifikasi</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d1117;font-family:'Plus Jakarta Sans',sans-serif;padding:24px;}
+.canvas{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;}
+.frame-wrapper{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.screen-label{color:#8B92A9;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.phone{width:402px;height:874px;background:#F8FAFC;border-radius:32px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.sb{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 8px;background:#fff;flex-shrink:0;}
+.sb-t{font-size:14px;font-weight:700;color:#0F172A;}
+.sb-i{display:flex;align-items:center;gap:5px;font-size:12px;color:#0F172A;}
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.tabbar{display:flex;background:#fff;border-top:1px solid #E2E8F0;flex-shrink:0;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px 12px;gap:3px;font-size:10px;font-weight:600;color:#94A3B8;}
+.tab.on{color:#0288D1;}
+.tab-ic{width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.tab-ic svg{display:block;}
+.hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border-bottom:1px solid #E2E8F0;flex-shrink:0;}
+.hdr-back{width:34px;height:34px;border-radius:10px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;}
+.hdr-t{font-size:16px;font-weight:700;color:#0F172A;flex:1;}
+.hdr-a{width:34px;height:34px;border-radius:10px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;}
+.scroll{flex:1;overflow-y:auto;padding:0 16px 12px;}
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px;}
+.sec-t{font-size:12px;font-weight:700;color:#94A3B8;letter-spacing:.4px;text-transform:uppercase;}
+.sec-a{font-size:12px;font-weight:600;color:#0288D1;}
+/* Filter tabs */
+.ftabs{display:flex;gap:0;background:#F1F5F9;border-radius:12px;padding:3px;margin:12px 16px;flex-shrink:0;}
+.ftab{flex:1;padding:7px 4px;text-align:center;font-size:12px;font-weight:600;color:#64748B;border-radius:10px;cursor:pointer;}
+.ftab.on{background:#fff;color:#0288D1;box-shadow:0 1px 4px rgba(0,0,0,.1);}
+/* Notif item */
+.nitem{display:flex;align-items:flex-start;gap:12px;background:#fff;border-radius:16px;border:1px solid #E2E8F0;padding:14px;margin-bottom:8px;position:relative;}
+.nitem.unread{border-color:#BFDBFE;background:#F0F9FF;}
+.nitem.unread::before{content:'';position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background:#0288D1;}
+.nic{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ninfo{flex:1;}
+.ntitle{font-size:13px;font-weight:700;color:#0F172A;margin-bottom:3px;padding-right:16px;}
+.ndesc{font-size:12px;color:#64748B;margin-bottom:5px;line-height:1.4;}
+.nmeta{display:flex;align-items:center;gap:6px;}
+.ntime{font-size:11px;color:#94A3B8;}
+.ntag{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;}
+/* Btn */
+.btn-primary{width:100%;background:linear-gradient(135deg,#0288D1,#01579B);border:none;border-radius:16px;padding:16px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;}
+.btn-outline{width:100%;background:#fff;border:2px solid #E2E8F0;border-radius:16px;padding:15px;font-size:15px;font-weight:700;color:#0F172A;cursor:pointer;font-family:inherit;}
+.btn-red{width:100%;background:linear-gradient(135deg,#EF4444,#DC2626);border:none;border-radius:16px;padding:16px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;}
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #F1F5F9;}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-info{display:flex;align-items:center;gap:12px;}
+.toggle-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;}
+.toggle-label{font-size:13px;font-weight:700;color:#0F172A;}
+.toggle-sub{font-size:11px;color:#64748B;margin-top:2px;}
+.toggle{width:46px;height:26px;border-radius:13px;position:relative;flex-shrink:0;}
+.toggle.on{background:#0288D1;}
+.toggle.off{background:#CBD5E1;}
+.toggle-knob{width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.toggle.on .toggle-knob{right:3px;}
+.toggle.off .toggle-knob{left:3px;}
+/* Day checkbox */
+.day-check-grid{display:flex;gap:6px;margin-top:10px;}
+.dc{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:#F1F5F9;color:#64748B;}
+.dc.on{background:#0288D1;color:#fff;}
+/* Card */
+.card{background:#fff;border-radius:20px;border:1px solid #E2E8F0;padding:18px;margin-bottom:14px;}
+/* Modal overlay */
+.overlay{position:absolute;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;}
+.modal{background:#fff;border-radius:28px;width:100%;padding:28px 22px;text-align:center;}
+.modal-ic{width:72px;height:72px;border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.modal-title{font-size:18px;font-weight:800;color:#0F172A;margin-bottom:8px;}
+.modal-desc{font-size:13px;color:#64748B;line-height:1.5;margin-bottom:20px;}
+.modal-btns{display:flex;gap:10px;}
+.modal-btns .btn-primary,.modal-btns .btn-outline,.modal-btns .btn-red{padding:14px;}
+/* Bottom sheet */
+.bsheet-bg{position:absolute;inset:0;background:rgba(15,23,42,.4);z-index:10;}
+.bsheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:28px 28px 0 0;padding:20px 16px 32px;z-index:11;}
+.bsheet-handle{width:40px;height:4px;background:#E2E8F0;border-radius:2px;margin:0 auto 20px;}
+/* Detail header */
+.det-hero{padding:24px 20px 20px;text-align:center;}
+.det-ic-wrap{width:80px;height:80px;border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+/* Time picker row */
+.time-row{display:flex;align-items:center;justify-content:space-between;background:#F8FAFC;border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.time-label{font-size:13px;font-weight:700;color:#0F172A;}
+.time-val{font-size:15px;font-weight:800;color:#0288D1;}
+/* Divider */
+.div-label{font-size:11px;font-weight:700;color:#94A3B8;letter-spacing:.5px;text-transform:uppercase;padding:8px 0 6px;}
+/* Filter chip */
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:#F1F5F9;color:#64748B;cursor:pointer;}
+.chip.on{background:#DBEAFE;color:#0288D1;}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<!-- SVG defs reused inline as needed -->
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 01 — Daftar Semua Notifikasi                        -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">01 — Daftar Semua Notifikasi</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Notifikasi</div>
+    <div style="display:flex;gap:8px;">
+      <div class="hdr-a"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg></div>
+      <div class="hdr-a" style="position:relative;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:6px;right:6px;width:8px;height:8px;background:#EF4444;border-radius:50%;border:2px solid #fff;"></div></div>
+    </div>
+  </div>
+  <div class="ftabs">
+    <div class="ftab on">Semua</div>
+    <div class="ftab">Belum Dibaca</div>
+    <div class="ftab">Dibaca</div>
+  </div>
+  <div class="scroll" style="padding-top:4px;">
+    <div class="div-label">Hari Ini</div>
+    <!-- unread leak -->
+    <div class="nitem unread">
+      <div class="nic" style="background:#FEE2E2;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle">Potensi Kebocoran Terdeteksi</div>
+        <div class="ndesc">Pemakaian air melonjak 42% melebihi batas normal. Segera cek instalasi kamu.</div>
+        <div class="nmeta"><span class="ntag" style="background:#FEE2E2;color:#DC2626;">Kebocoran</span><span class="ntime">08:30</span></div>
+      </div>
+    </div>
+    <!-- unread target -->
+    <div class="nitem unread">
+      <div class="nic" style="background:#DBEAFE;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle">Target Mingguan Tercapai!</div>
+        <div class="ndesc">Selamat! Kamu berhasil hemat 18% air minggu ini. +200 poin didapat.</div>
+        <div class="nmeta"><span class="ntag" style="background:#DBEAFE;color:#0288D1;">Target</span><span class="ntime">07:15</span></div>
+      </div>
+    </div>
+    <!-- read tips -->
+    <div class="nitem">
+      <div class="nic" style="background:#DCFCE7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle">Tips Hemat Air: Shower Timer</div>
+        <div class="ndesc">Mandi lebih cepat dengan timer 5 menit. Hemat hingga 40 liter per hari!</div>
+        <div class="nmeta"><span class="ntag" style="background:#DCFCE7;color:#16A34A;">Tips</span><span class="ntime">06:00</span></div>
+      </div>
+    </div>
+    <div class="div-label">Kemarin</div>
+    <!-- read challenge -->
+    <div class="nitem">
+      <div class="nic" style="background:#FEF3C7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle">Tantangan Baru: Eco Hero</div>
+        <div class="ndesc">Tantangan baru tersedia! Hemat air 30% selama 30 hari dan raih badge eksklusif.</div>
+        <div class="nmeta"><span class="ntag" style="background:#FEF3C7;color:#D97706;">Tantangan</span><span class="ntime">19:00</span></div>
+      </div>
+    </div>
+    <!-- read target progress -->
+    <div class="nitem">
+      <div class="nic" style="background:#DBEAFE;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle">Progres Target 50% Tercapai</div>
+        <div class="ndesc">Kamu sudah di pertengahan jalan! Pertahankan ritme harian ini.</div>
+        <div class="nmeta"><span class="ntag" style="background:#DBEAFE;color:#0288D1;">Target</span><span class="ntime">12:00</span></div>
+      </div>
+    </div>
+    <!-- read system -->
+    <div class="nitem">
+      <div class="nic" style="background:#F1F5F9;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle">Pembaruan Aplikasi Tersedia</div>
+        <div class="ndesc">AquaTrack v2.1 kini hadir dengan fitur grafik baru dan performa lebih cepat.</div>
+        <div class="nmeta"><span class="ntag" style="background:#F1F5F9;color:#64748B;">Sistem</span><span class="ntime">09:00</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div>Tantangan</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>Badge</div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 02 — Notifikasi Belum Dibaca                        -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">02 — Notifikasi Belum Dibaca</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Notifikasi</div>
+    <div class="hdr-a"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+  </div>
+  <div class="ftabs">
+    <div class="ftab">Semua</div>
+    <div class="ftab on">Belum Dibaca</div>
+    <div class="ftab">Dibaca</div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px 6px;flex-shrink:0;">
+    <div style="font-size:12px;color:#64748B;font-weight:500;"><span style="font-weight:700;color:#0F172A;">3</span> belum dibaca</div>
+    <div style="font-size:12px;font-weight:600;color:#0288D1;">Tandai semua dibaca</div>
+  </div>
+  <div class="scroll" style="padding-top:2px;">
+    <div class="nitem unread">
+      <div class="nic" style="background:#FEE2E2;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle">Potensi Kebocoran Terdeteksi</div>
+        <div class="ndesc">Pemakaian air melonjak 42% melebihi batas normal. Segera cek instalasi kamu.</div>
+        <div class="nmeta"><span class="ntag" style="background:#FEE2E2;color:#DC2626;">Kebocoran</span><span class="ntime">08:30</span></div>
+      </div>
+    </div>
+    <div class="nitem unread">
+      <div class="nic" style="background:#DBEAFE;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle">Target Mingguan Tercapai!</div>
+        <div class="ndesc">Selamat! Kamu berhasil hemat 18% air minggu ini. +200 poin didapat.</div>
+        <div class="nmeta"><span class="ntag" style="background:#DBEAFE;color:#0288D1;">Target</span><span class="ntime">07:15</span></div>
+      </div>
+    </div>
+    <div class="nitem unread">
+      <div class="nic" style="background:#FEF3C7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle">Tantangan Eco Hero Dimulai!</div>
+        <div class="ndesc">Tantangan barumu resmi berjalan. Yuk mulai hari pertama hari ini!</div>
+        <div class="nmeta"><span class="ntag" style="background:#FEF3C7;color:#D97706;">Tantangan</span><span class="ntime">Kemarin</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div>Tantangan</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>Badge</div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 03 — Notifikasi Sudah Dibaca                        -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">03 — Notifikasi Sudah Dibaca</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Notifikasi</div>
+    <div class="hdr-a" style="background:#FEE2E2;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
+  </div>
+  <div class="ftabs">
+    <div class="ftab">Semua</div>
+    <div class="ftab">Belum Dibaca</div>
+    <div class="ftab on">Dibaca</div>
+  </div>
+  <div class="scroll" style="padding-top:4px;">
+    <div class="div-label">Hari Ini</div>
+    <div class="nitem">
+      <div class="nic" style="background:#DCFCE7;opacity:.8;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle" style="color:#64748B;">Tips Hemat Air: Shower Timer</div>
+        <div class="ndesc">Mandi lebih cepat dengan timer 5 menit. Hemat hingga 40 liter per hari!</div>
+        <div class="nmeta"><span class="ntag" style="background:#F1F5F9;color:#94A3B8;">Tips</span><span class="ntime">06:00</span></div>
+      </div>
+    </div>
+    <div class="div-label">Kemarin</div>
+    <div class="nitem">
+      <div class="nic" style="background:#FEF3C7;opacity:.8;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle" style="color:#64748B;">Tantangan Baru: Eco Hero</div>
+        <div class="ndesc">Tantangan baru tersedia! Hemat air 30% selama 30 hari dan raih badge eksklusif.</div>
+        <div class="nmeta"><span class="ntag" style="background:#F1F5F9;color:#94A3B8;">Tantangan</span><span class="ntime">19:00</span></div>
+      </div>
+    </div>
+    <div class="nitem">
+      <div class="nic" style="background:#DBEAFE;opacity:.8;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle" style="color:#64748B;">Progres Target 50% Tercapai</div>
+        <div class="ndesc">Kamu sudah di pertengahan jalan! Pertahankan ritme harian ini.</div>
+        <div class="nmeta"><span class="ntag" style="background:#F1F5F9;color:#94A3B8;">Target</span><span class="ntime">12:00</span></div>
+      </div>
+    </div>
+    <div class="nitem">
+      <div class="nic" style="background:#F1F5F9;opacity:.8;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+      <div class="ninfo">
+        <div class="ntitle" style="color:#64748B;">Pembaruan Aplikasi Tersedia</div>
+        <div class="ndesc">AquaTrack v2.1 kini hadir dengan fitur grafik baru dan performa lebih cepat.</div>
+        <div class="nmeta"><span class="ntag" style="background:#F1F5F9;color:#94A3B8;">Sistem</span><span class="ntime">09:00</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div>Tantangan</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>Badge</div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 04 — Filter Notifikasi                              -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">04 — Filter Notifikasi</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Notifikasi</div>
+    <div class="hdr-a" style="background:#DBEAFE;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg></div>
+  </div>
+  <div class="ftabs"><div class="ftab on">Semua</div><div class="ftab">Belum Dibaca</div><div class="ftab">Dibaca</div></div>
+  <div class="scroll" style="padding-top:4px;opacity:.4;pointer-events:none;">
+    <div class="nitem unread"><div class="nic" style="background:#FEE2E2;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="ninfo"><div class="ntitle">Potensi Kebocoran Terdeteksi</div><div class="ndesc">Pemakaian air melonjak 42%...</div><div class="nmeta"><span class="ntag" style="background:#FEE2E2;color:#DC2626;">Kebocoran</span><span class="ntime">08:30</span></div></div></div>
+    <div class="nitem"><div class="nic" style="background:#DBEAFE;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="ninfo"><div class="ntitle">Target Mingguan Tercapai!</div><div class="ndesc">Selamat! Kamu berhasil hemat 18%...</div><div class="nmeta"><span class="ntag" style="background:#DBEAFE;color:#0288D1;">Target</span><span class="ntime">07:15</span></div></div></div>
+  </div>
+  <!-- bottom sheet overlay -->
+  <div class="bsheet-bg"></div>
+  <div class="bsheet">
+    <div class="bsheet-handle"></div>
+    <div style="font-size:16px;font-weight:800;color:#0F172A;margin-bottom:16px;">Filter Notifikasi</div>
+    <div style="font-size:12px;font-weight:700;color:#64748B;letter-spacing:.4px;text-transform:uppercase;margin-bottom:10px;">Jenis</div>
+    <div class="chip-row">
+      <div class="chip on" style="display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Kebocoran</div>
+      <div class="chip on" style="display:flex;align-items:center;gap:6px;background:#DBEAFE;color:#0288D1;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Target</div>
+      <div class="chip" style="display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>Tips</div>
+      <div class="chip" style="display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tantangan</div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:#64748B;letter-spacing:.4px;text-transform:uppercase;margin-bottom:10px;margin-top:14px;">Waktu</div>
+    <div class="chip-row">
+      <div class="chip on">Hari ini</div>
+      <div class="chip">Minggu ini</div>
+      <div class="chip">Bulan ini</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn-outline" style="padding:14px;font-size:14px;">Reset</button>
+      <button class="btn-primary" style="padding:14px;font-size:14px;">Terapkan Filter</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 05 — Detail Notifikasi Kebocoran                    -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">05 — Detail Notifikasi Kebocoran</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Detail Notifikasi</div>
+    <div class="hdr-a"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+  </div>
+  <div class="scroll" style="padding-top:0;padding-left:0;padding-right:0;">
+    <!-- hero banner -->
+    <div style="background:linear-gradient(135deg,#FEF2F2,#FEE2E2);padding:28px 20px 22px;text-align:center;">
+      <div style="width:80px;height:80px;background:#FEE2E2;border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:2px solid #FECACA;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#DC2626;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Peringatan Kebocoran</div>
+      <div style="font-size:20px;font-weight:800;color:#0F172A;margin-bottom:6px;">Potensi Kebocoran Terdeteksi</div>
+      <div style="font-size:12px;color:#64748B;">Hari ini, 08:30 WIB</div>
+    </div>
+    <div style="padding:16px;">
+      <!-- alert card -->
+      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:16px;padding:16px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;color:#DC2626;margin-bottom:6px;">Apa yang terjadi?</div>
+        <div style="font-size:13px;color:#374151;line-height:1.6;">Sistem mendeteksi pemakaian air yang tidak normal. Konsumsi air kamu melonjak <strong>42%</strong> di atas rata-rata harian dalam kurun waktu 2 jam terakhir.</div>
+      </div>
+      <!-- stats -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:22px;font-weight:800;color:#EF4444;">42%</div>
+          <div style="font-size:11px;color:#64748B;margin-top:2px;">Di atas normal</div>
+        </div>
+        <div style="background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:22px;font-weight:800;color:#0F172A;">38L</div>
+          <div style="font-size:11px;color:#64748B;margin-top:2px;">Potensi terbuang</div>
+        </div>
+      </div>
+      <!-- steps -->
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:16px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:12px;">Langkah yang disarankan</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">
+          <div style="width:24px;height:24px;background:#DBEAFE;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div style="font-size:12px;color:#374151;line-height:1.5;">Periksa keran dan pipa di seluruh rumah</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">
+          <div style="width:24px;height:24px;background:#DBEAFE;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div style="font-size:12px;color:#374151;line-height:1.5;">Cek meteran air untuk perubahan mendadak</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="width:24px;height:24px;background:#DBEAFE;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div style="font-size:12px;color:#374151;line-height:1.5;">Hubungi PDAM jika kebocoran pada instalasi publik</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:14px;font-size:13px;">Abaikan</button>
+        <button class="btn-red" style="padding:14px;font-size:13px;">Cek Detail Kebocoran</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 06 — Detail Notifikasi Target                       -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">06 — Detail Notifikasi Target</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Detail Notifikasi</div>
+    <div class="hdr-a"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+  </div>
+  <div class="scroll" style="padding:0;">
+    <div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);padding:28px 20px 22px;text-align:center;">
+      <div style="width:80px;height:80px;background:#DBEAFE;border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:2px solid #BFDBFE;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#0288D1;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Target Tercapai</div>
+      <div style="font-size:20px;font-weight:800;color:#0F172A;margin-bottom:6px;">Target Mingguan Tercapai!</div>
+      <div style="font-size:12px;color:#64748B;">Hari ini, 07:15 WIB</div>
+    </div>
+    <div style="padding:16px;">
+      <!-- ring + stats -->
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:20px;padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:16px;">
+        <div style="position:relative;display:inline-flex;">
+          <svg viewBox="0 0 100 100" width="90" height="90">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#E2E8F0" stroke-width="9"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#0288D1" stroke-width="9" stroke-dasharray="263.9" stroke-dashoffset="52.8" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <div style="font-size:18px;font-weight:800;color:#0288D1;">80%</div>
+            <div style="font-size:9px;color:#64748B;">hemat</div>
+          </div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:10px;">Ringkasan Minggu Ini</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;color:#64748B;">Target</span><span style="font-size:12px;font-weight:700;color:#0F172A;">980 L</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;color:#64748B;">Realisasi</span><span style="font-size:12px;font-weight:700;color:#16A34A;">784 L</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="font-size:12px;color:#64748B;">Penghematan</span><span style="font-size:12px;font-weight:700;color:#0288D1;">196 L</span></div>
+        </div>
+      </div>
+      <!-- reward -->
+      <div style="background:linear-gradient(135deg,#0288D1,#01579B);border-radius:16px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;color:#fff;">
+        <div style="width:48px;height:48px;background:rgba(255,255,255,.2);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;opacity:.8;margin-bottom:2px;">Reward diperoleh</div>
+          <div style="font-size:18px;font-weight:800;">+200 Poin</div>
+          <div style="font-size:11px;opacity:.7;margin-top:2px;">Badge "Weekly Saver" terbuka</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:14px;font-size:13px;">Lihat Riwayat</button>
+        <button class="btn-primary" style="padding:14px;font-size:13px;">Tetapkan Target Baru</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 07 — Detail Notifikasi Tips Baru                    -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">07 — Detail Notifikasi Tips Baru</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Detail Notifikasi</div>
+    <div class="hdr-a"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+  </div>
+  <div class="scroll" style="padding:0;">
+    <div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);padding:28px 20px 22px;text-align:center;">
+      <div style="width:80px;height:80px;background:#DCFCE7;border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:2px solid #86EFAC;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#16A34A;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Tips Harian</div>
+      <div style="font-size:20px;font-weight:800;color:#0F172A;margin-bottom:6px;">Tips Hemat Air: Shower Timer</div>
+      <div style="font-size:12px;color:#64748B;">Hari ini, 06:00 WIB</div>
+    </div>
+    <div style="padding:16px;">
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:16px;margin-bottom:14px;">
+        <div style="font-size:14px;font-weight:800;color:#0F172A;margin-bottom:10px;line-height:1.4;">Mandi Lebih Singkat, Hemat Lebih Banyak</div>
+        <div style="font-size:13px;color:#374151;line-height:1.7;margin-bottom:12px;">Rata-rata orang mandi selama 8 menit dan menghabiskan 65 liter air. Dengan membatasi durasi mandi menjadi 5 menit, kamu bisa menghemat hingga <strong>40 liter per hari</strong> atau <strong>1.200 liter per bulan</strong>.</div>
+        <div style="background:#F0FDF4;border-radius:12px;padding:12px;">
+          <div style="font-size:12px;font-weight:700;color:#16A34A;margin-bottom:8px;display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Cara menerapkan</div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">Gunakan timer HP atau beli shower timer khusus. Mulai dengan target 7 menit, kemudian kurangi 1 menit setiap minggu.</div>
+        </div>
+      </div>
+      <!-- savings projection -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div style="background:#F0FDF4;border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:16px;font-weight:800;color:#16A34A;">40L</div>
+          <div style="font-size:10px;color:#64748B;margin-top:2px;">Per hari</div>
+        </div>
+        <div style="background:#F0FDF4;border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:16px;font-weight:800;color:#16A34A;">1.2K</div>
+          <div style="font-size:10px;color:#64748B;margin-top:2px;">Per bulan</div>
+        </div>
+        <div style="background:#F0FDF4;border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:16px;font-weight:800;color:#16A34A;">14K</div>
+          <div style="font-size:10px;color:#64748B;margin-top:2px;">Per tahun</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:14px;font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Simpan</button>
+        <button class="btn-primary" style="padding:14px;font-size:13px;">Lihat Tips Lainnya</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 08 — Detail Notifikasi Tantangan                    -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">08 — Detail Notifikasi Tantangan</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Detail Notifikasi</div>
+    <div class="hdr-a"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+  </div>
+  <div class="scroll" style="padding:0;">
+    <div style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);padding:28px 20px 22px;text-align:center;">
+      <div style="width:80px;height:80px;background:#FEF3C7;border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:2px solid #FCD34D;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#D97706;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Tantangan Baru</div>
+      <div style="font-size:20px;font-weight:800;color:#0F172A;margin-bottom:6px;">Eco Hero — 30 Hari Hemat Air</div>
+      <div style="font-size:12px;color:#64748B;">Kemarin, 19:00 WIB</div>
+    </div>
+    <div style="padding:16px;">
+      <!-- challenge card -->
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:16px;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:50px;height:50px;background:#FEF3C7;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:#0F172A;">Eco Hero</div>
+            <div style="font-size:12px;color:#64748B;margin-top:2px;">Hemat 30% air selama 30 hari berturut-turut</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div style="background:#FFFBEB;border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:15px;font-weight:800;color:#D97706;">30</div>
+            <div style="font-size:10px;color:#64748B;margin-top:1px;">Hari</div>
+          </div>
+          <div style="background:#FFFBEB;border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:15px;font-weight:800;color:#D97706;">30%</div>
+            <div style="font-size:10px;color:#64748B;margin-top:1px;">Hemat</div>
+          </div>
+          <div style="background:#FFFBEB;border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:15px;font-weight:800;color:#D97706;">500</div>
+            <div style="font-size:10px;color:#64748B;margin-top:1px;">Poin</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#64748B;line-height:1.5;">Selesaikan tantangan ini dan dapatkan badge eksklusif <strong>"Eco Hero"</strong> beserta 500 poin reward!</div>
+      </div>
+      <!-- deadline -->
+      <div style="background:#FEF3C7;border-radius:14px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div style="font-size:12px;color:#92400E;"><span style="font-weight:700;">Berakhir dalam 14 hari</span> — Tantangan dimulai 1 Juli 2026</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:14px;font-size:13px;">Nanti Saja</button>
+        <button style="flex:1;background:linear-gradient(135deg,#F59E0B,#D97706);border:none;border-radius:16px;padding:14px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;">Ikut Tantangan</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 09 — Pop-up Alert Kebocoran Urgent                  -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">09 — Pop-up Alert Kebocoran Urgent</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <!-- blurred bg content -->
+  <div style="flex:1;background:#F8FAFC;opacity:.3;padding:16px;">
+    <div style="height:60px;background:#E2E8F0;border-radius:14px;margin-bottom:10px;"></div>
+    <div style="height:100px;background:#E2E8F0;border-radius:14px;margin-bottom:10px;"></div>
+    <div style="height:80px;background:#E2E8F0;border-radius:14px;"></div>
+  </div>
+  <!-- urgent overlay -->
+  <div style="position:absolute;inset:0;background:rgba(127,29,29,.7);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;">
+    <div style="background:#fff;border-radius:28px;width:100%;padding:28px 22px;text-align:center;">
+      <!-- pulsing icon -->
+      <div style="position:relative;width:88px;height:88px;margin:0 auto 18px;">
+        <div style="position:absolute;inset:0;background:#FEE2E2;border-radius:50%;opacity:.5;transform:scale(1.2);"></div>
+        <div style="position:absolute;inset:6px;background:#FEE2E2;border-radius:50%;opacity:.7;"></div>
+        <div style="position:absolute;inset:12px;background:#EF4444;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+      </div>
+      <div style="display:inline-block;background:#FEE2E2;color:#DC2626;font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:10px;">PERINGATAN DARURAT</div>
+      <div style="font-size:20px;font-weight:800;color:#0F172A;margin-bottom:8px;line-height:1.3;">Kebocoran Besar Terdeteksi!</div>
+      <div style="font-size:13px;color:#64748B;line-height:1.6;margin-bottom:6px;">Pemakaian air kamu melonjak drastis <span style="color:#EF4444;font-weight:700;">+87%</span> dalam 30 menit terakhir.</div>
+      <div style="background:#FEF2F2;border-radius:12px;padding:12px;margin-bottom:20px;">
+        <div style="font-size:13px;font-weight:700;color:#DC2626;">Estimasi air terbuang: 62 liter</div>
+        <div style="font-size:11px;color:#94A3B8;margin-top:2px;">Sejak 09:11 WIB hari ini</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:13px;font-size:13px;">Abaikan</button>
+        <button class="btn-red" style="padding:13px;font-size:13px;">Cek Sekarang</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 10 — Pop-up Target Tercapai                         -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">10 — Pop-up Target Tercapai</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div style="flex:1;background:#F8FAFC;opacity:.25;padding:16px;">
+    <div style="height:60px;background:#E2E8F0;border-radius:14px;margin-bottom:10px;"></div>
+    <div style="height:120px;background:#E2E8F0;border-radius:14px;"></div>
+  </div>
+  <div style="position:absolute;inset:0;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;">
+    <!-- decorative circles -->
+    <div style="position:absolute;top:80px;left:30px;width:40px;height:40px;border-radius:50%;background:rgba(2,136,209,.25);opacity:.7;"></div>
+    <div style="position:absolute;top:120px;right:40px;width:28px;height:28px;border-radius:50%;background:rgba(22,163,74,.3);opacity:.6;"></div>
+    <div style="position:absolute;top:60px;right:80px;width:20px;height:20px;border-radius:50%;background:rgba(2,136,209,.2);opacity:.5;"></div>
+    <div style="background:#fff;border-radius:28px;width:100%;padding:28px 22px;text-align:center;">
+      <div style="width:80px;height:80px;background:linear-gradient(135deg,#0288D1,#01579B);border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#0288D1;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;">Target Tercapai!</div>
+      <div style="font-size:22px;font-weight:800;color:#0F172A;margin-bottom:8px;line-height:1.3;">Selamat, Kamu Berhasil!</div>
+      <div style="font-size:13px;color:#64748B;margin-bottom:16px;line-height:1.5;">Target hemat air mingguan kamu tercapai dengan penghematan sebesar <span style="color:#16A34A;font-weight:700;">18%</span></div>
+      <!-- points badge -->
+      <div style="background:linear-gradient(135deg,#0288D1,#01579B);border-radius:16px;padding:14px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:12px;color:#fff;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+        <div>
+          <div style="font-size:22px;font-weight:800;">+200 Poin</div>
+          <div style="font-size:11px;opacity:.8;">Badge "Weekly Saver" terbuka</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:13px;font-size:13px;">Lihat Detail</button>
+        <button class="btn-primary" style="padding:13px;font-size:13px;">Oke, Sip!</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 11 — Pop-up Tips Harian Baru                        -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">11 — Pop-up Tips Harian Baru</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div style="flex:1;background:#F8FAFC;opacity:.25;padding:16px;">
+    <div style="height:80px;background:#E2E8F0;border-radius:14px;margin-bottom:10px;"></div>
+    <div style="height:100px;background:#E2E8F0;border-radius:14px;"></div>
+  </div>
+  <div style="position:absolute;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;">
+    <div style="background:#fff;border-radius:28px;width:100%;padding:28px 22px;text-align:center;">
+      <div style="width:72px;height:72px;background:#DCFCE7;border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#16A34A;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;">Tips Harian Baru</div>
+      <div style="font-size:19px;font-weight:800;color:#0F172A;margin-bottom:10px;line-height:1.3;">Shower Timer: Hemat 40L per Hari</div>
+      <div style="background:#F0FDF4;border-radius:14px;padding:14px;margin-bottom:18px;text-align:left;">
+        <div style="font-size:12px;color:#374151;line-height:1.6;">Batasi durasi mandi menjadi <strong>5 menit</strong> dan hemat hingga <span style="color:#16A34A;font-weight:700;">40 liter air per hari</span>. Coba gunakan timer di HP kamu mulai hari ini!</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:13px;font-size:13px;">Tutup</button>
+        <button style="flex:1;background:linear-gradient(135deg,#16A34A,#15803D);border:none;border-radius:16px;padding:13px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;">Baca Selengkapnya</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 12 — Pop-up Tantangan Baru Tersedia                 -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">12 — Pop-up Tantangan Baru Tersedia</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div style="flex:1;background:#F8FAFC;opacity:.25;padding:16px;">
+    <div style="height:80px;background:#E2E8F0;border-radius:14px;margin-bottom:10px;"></div>
+    <div style="height:100px;background:#E2E8F0;border-radius:14px;"></div>
+  </div>
+  <div style="position:absolute;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;">
+    <div style="background:#fff;border-radius:28px;width:100%;padding:28px 22px;text-align:center;">
+      <div style="width:72px;height:72px;background:#FEF3C7;border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#D97706;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;">Tantangan Baru</div>
+      <div style="font-size:19px;font-weight:800;color:#0F172A;margin-bottom:10px;line-height:1.3;">Eco Hero — 30 Hari Hemat Air</div>
+      <!-- reward pills -->
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:14px;">
+        <div style="background:#FEF3C7;color:#D97706;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>500 Poin</div>
+        <div style="background:#DCFCE7;color:#16A34A;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;">Badge Eksklusif</div>
+      </div>
+      <div style="background:#FFFBEB;border-radius:14px;padding:12px;margin-bottom:18px;text-align:left;">
+        <div style="font-size:12px;color:#374151;line-height:1.6;">Hemat <strong>30% air</strong> selama <strong>30 hari berturut-turut</strong>. Tantangan dimulai besok dan berakhir dalam 14 hari!</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:13px;font-size:13px;">Nanti Saja</button>
+        <button style="flex:1;background:linear-gradient(135deg,#F59E0B,#D97706);border:none;border-radius:16px;padding:13px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;">Ikut Sekarang</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 13 — Pop-up Konfirmasi Tindakan                     -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">13 — Pop-up Konfirmasi Tindakan</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div style="flex:1;background:#F8FAFC;opacity:.2;padding:16px;">
+    <div style="height:60px;background:#E2E8F0;border-radius:14px;margin-bottom:10px;"></div>
+    <div style="height:80px;background:#E2E8F0;border-radius:14px;margin-bottom:10px;"></div>
+    <div style="height:60px;background:#E2E8F0;border-radius:14px;"></div>
+  </div>
+  <div style="position:absolute;inset:0;background:rgba(15,23,42,.5);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;">
+    <div style="background:#fff;border-radius:28px;width:100%;padding:28px 22px;text-align:center;">
+      <div style="width:72px;height:72px;background:#FEF3C7;border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div style="font-size:19px;font-weight:800;color:#0F172A;margin-bottom:8px;">Tandai Semua Dibaca?</div>
+      <div style="font-size:13px;color:#64748B;line-height:1.6;margin-bottom:20px;">Semua <span style="font-weight:700;color:#0F172A;">3 notifikasi</span> belum dibaca akan ditandai sebagai sudah dibaca. Tindakan ini tidak dapat dibatalkan.</div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:14px;font-size:14px;">Batal</button>
+        <button class="btn-primary" style="padding:14px;font-size:14px;">Ya, Tandai Semua</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 14 — Pop-up Sukses                                  -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">14 — Pop-up Sukses</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div style="flex:1;background:#F8FAFC;opacity:.2;padding:16px;">
+    <div style="height:60px;background:#E2E8F0;border-radius:14px;margin-bottom:10px;"></div>
+    <div style="height:80px;background:#E2E8F0;border-radius:14px;"></div>
+  </div>
+  <div style="position:absolute;inset:0;background:rgba(15,23,42,.5);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;">
+    <div style="background:#fff;border-radius:28px;width:100%;padding:32px 22px;text-align:center;">
+      <!-- animated check -->
+      <div style="width:80px;height:80px;background:linear-gradient(135deg,#16A34A,#15803D);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div style="font-size:22px;font-weight:800;color:#0F172A;margin-bottom:8px;">Berhasil!</div>
+      <div style="font-size:13px;color:#64748B;line-height:1.6;margin-bottom:22px;">Semua notifikasi telah ditandai sebagai sudah dibaca.</div>
+      <button class="btn-primary" style="padding:15px;font-size:15px;">Oke, Mengerti</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 15 — Pop-up Error                                   -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">15 — Pop-up Error</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div style="flex:1;background:#F8FAFC;opacity:.2;padding:16px;">
+    <div style="height:60px;background:#E2E8F0;border-radius:14px;margin-bottom:10px;"></div>
+    <div style="height:80px;background:#E2E8F0;border-radius:14px;"></div>
+  </div>
+  <div style="position:absolute;inset:0;background:rgba(15,23,42,.5);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;">
+    <div style="background:#fff;border-radius:28px;width:100%;padding:32px 22px;text-align:center;">
+      <div style="width:80px;height:80px;background:linear-gradient(135deg,#EF4444,#DC2626);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+      <div style="font-size:22px;font-weight:800;color:#0F172A;margin-bottom:8px;">Koneksi Gagal</div>
+      <div style="font-size:13px;color:#64748B;line-height:1.6;margin-bottom:8px;">Tidak dapat memuat notifikasi. Periksa koneksi internet kamu dan coba lagi.</div>
+      <div style="background:#FEF2F2;border-radius:10px;padding:10px;margin-bottom:20px;">
+        <div style="font-size:11px;color:#DC2626;font-weight:600;">Error: Network timeout (408)</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:13px;font-size:13px;">Tutup</button>
+        <button class="btn-red" style="padding:13px;font-size:13px;">Coba Lagi</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 16 — Pengaturan Jenis Notifikasi                    -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">16 — Pengaturan Jenis Notifikasi</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Pengaturan Notifikasi</div>
+  </div>
+  <div class="scroll" style="padding-top:16px;">
+    <!-- master toggle -->
+    <div style="background:#0288D1;border-radius:18px;padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div>
+          <div style="font-size:14px;font-weight:700;">Notifikasi Push</div>
+          <div style="font-size:11px;opacity:.8;">Aktifkan semua notifikasi</div>
+        </div>
+      </div>
+      <div class="toggle on"><div class="toggle-knob"></div></div>
+    </div>
+    <!-- type list -->
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:4px 16px;margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#94A3B8;letter-spacing:.4px;text-transform:uppercase;padding:12px 0 6px;">Jenis Notifikasi</div>
+      <!-- leak - always on -->
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-ic" style="background:#FEE2E2;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div>
+            <div class="toggle-label">Peringatan Kebocoran</div>
+            <div class="toggle-sub">Wajib aktif — tidak bisa dimatikan</div>
+          </div>
+        </div>
+        <div class="toggle on" style="opacity:.5;"><div class="toggle-knob"></div></div>
+      </div>
+      <!-- target -->
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-ic" style="background:#DBEAFE;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+          <div>
+            <div class="toggle-label">Pencapaian Target</div>
+            <div class="toggle-sub">Notif saat target harian/mingguan tercapai</div>
+          </div>
+        </div>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <!-- tips -->
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-ic" style="background:#DCFCE7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
+          <div>
+            <div class="toggle-label">Tips Harian</div>
+            <div class="toggle-sub">Tips hemat air setiap pagi</div>
+          </div>
+        </div>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <!-- challenge -->
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-ic" style="background:#FEF3C7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div>
+            <div class="toggle-label">Tantangan Baru</div>
+            <div class="toggle-sub">Saat tantangan baru tersedia</div>
+          </div>
+        </div>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <!-- weekly report -->
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-ic" style="background:#F3E8FF;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9333EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
+          <div>
+            <div class="toggle-label">Laporan Mingguan</div>
+            <div class="toggle-sub">Ringkasan pemakaian tiap Senin</div>
+          </div>
+        </div>
+        <div class="toggle off"><div class="toggle-knob"></div></div>
+      </div>
+      <!-- system -->
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-ic" style="background:#F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div>
+            <div class="toggle-label">Informasi Sistem</div>
+            <div class="toggle-sub">Update dan pemeliharaan aplikasi</div>
+          </div>
+        </div>
+        <div class="toggle off"><div class="toggle-knob"></div></div>
+      </div>
+    </div>
+    <!-- nav to time settings -->
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:40px;height:40px;background:#F1F5F9;border-radius:12px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#0F172A;">Jadwal Notifikasi</div>
+          <div style="font-size:11px;color:#64748B;">07:00 – 21:00, Senin s/d Sabtu</div>
+        </div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 17 — Pengaturan Jam Notifikasi                      -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">17 — Pengaturan Jam Notifikasi</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Jadwal Notifikasi</div>
+  </div>
+  <div class="scroll" style="padding-top:16px;">
+    <!-- time range -->
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:16px;margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:14px;">Jam Aktif</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="flex:1;background:#F8FAFC;border:2px solid #0288D1;border-radius:14px;padding:12px;text-align:center;">
+          <div style="font-size:11px;color:#64748B;margin-bottom:2px;">Mulai</div>
+          <div style="font-size:22px;font-weight:800;color:#0288D1;">07:00</div>
+        </div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        <div style="flex:1;background:#F8FAFC;border:2px solid #E2E8F0;border-radius:14px;padding:12px;text-align:center;">
+          <div style="font-size:11px;color:#64748B;margin-bottom:2px;">Selesai</div>
+          <div style="font-size:22px;font-weight:800;color:#0F172A;">21:00</div>
+        </div>
+      </div>
+      <!-- visual timeline -->
+      <div style="position:relative;height:32px;background:#F1F5F9;border-radius:16px;overflow:hidden;">
+        <div style="position:absolute;left:29%;right:12.5%;height:100%;background:linear-gradient(90deg,#0288D1,#01579B);border-radius:16px;display:flex;align-items:center;justify-content:center;">
+          <div style="font-size:11px;font-weight:700;color:#fff;">07:00 – 21:00</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:#94A3B8;">
+        <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
+      </div>
+    </div>
+    <!-- days -->
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:16px;margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:12px;">Hari Aktif</div>
+      <div class="day-check-grid">
+        <div class="dc on">Sen</div>
+        <div class="dc on">Sel</div>
+        <div class="dc on">Rab</div>
+        <div class="dc on">Kam</div>
+        <div class="dc on">Jum</div>
+        <div class="dc on">Sab</div>
+        <div class="dc">Min</div>
+      </div>
+    </div>
+    <!-- dnd -->
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:16px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#0F172A;">Jangan Ganggu (DND)</div>
+          <div style="font-size:11px;color:#64748B;margin-top:2px;">Blokir semua notifikasi non-darurat</div>
+        </div>
+        <div class="toggle off"><div class="toggle-knob"></div></div>
+      </div>
+      <div style="display:flex;gap:10px;opacity:.4;">
+        <div style="flex:1;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:10px;text-align:center;">
+          <div style="font-size:10px;color:#64748B;">Mulai</div>
+          <div style="font-size:16px;font-weight:700;color:#0F172A;">22:00</div>
+        </div>
+        <div style="flex:1;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:10px;text-align:center;">
+          <div style="font-size:10px;color:#64748B;">Selesai</div>
+          <div style="font-size:16px;font-weight:700;color:#0F172A;">07:00</div>
+        </div>
+      </div>
+    </div>
+    <!-- tips for urgent -->
+    <div style="background:#FEF2F2;border-radius:14px;padding:12px 14px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div style="font-size:12px;color:#DC2626;line-height:1.5;">Peringatan kebocoran akan selalu dikirim <strong>kapan saja</strong>, termasuk saat DND aktif.</div>
+    </div>
+    <button class="btn-primary" style="padding:16px;">Simpan Pengaturan</button>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 18 — Notifikasi Kosong (Empty State)                -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">18 — Notifikasi Kosong (Empty State)</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Notifikasi</div>
+  </div>
+  <div class="ftabs"><div class="ftab on">Semua</div><div class="ftab">Belum Dibaca</div><div class="ftab">Dibaca</div></div>
+  <div class="content" style="align-items:center;justify-content:center;padding:24px;text-align:center;">
+    <!-- illustration -->
+    <div style="position:relative;width:140px;height:140px;margin:0 auto 28px;">
+      <!-- outer ring -->
+      <div style="position:absolute;inset:0;border-radius:50%;border:2px dashed #E2E8F0;"></div>
+      <!-- inner circle -->
+      <div style="position:absolute;inset:20px;background:#F1F5F9;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          <line x1="1" y1="1" x2="23" y2="23" stroke="#E2E8F0"/>
+        </svg>
+      </div>
+      <!-- small dots -->
+      <div style="position:absolute;top:12px;right:16px;width:10px;height:10px;border-radius:50%;background:#E2E8F0;"></div>
+      <div style="position:absolute;bottom:16px;left:14px;width:8px;height:8px;border-radius:50%;background:#E2E8F0;"></div>
+    </div>
+    <div style="font-size:20px;font-weight:800;color:#0F172A;margin-bottom:8px;">Tidak Ada Notifikasi</div>
+    <div style="font-size:13px;color:#64748B;line-height:1.6;margin-bottom:28px;max-width:260px;">Kamu sudah membaca semua notifikasi. Kami akan memberitahu kamu jika ada yang baru.</div>
+    <button class="btn-primary" style="padding:15px;max-width:240px;width:100%;font-size:14px;">Kembali ke Beranda</button>
+    <div style="margin-top:14px;font-size:13px;color:#0288D1;font-weight:600;cursor:pointer;">Pengaturan Notifikasi</div>
+  </div>
+  <div class="tabbar">
+    <div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div>Tantangan</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>Badge</div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 19 — Hapus Notifikasi (Konfirmasi)                  -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">19 — Hapus Notifikasi (Konfirmasi)</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Notifikasi</div>
+  </div>
+  <div class="ftabs"><div class="ftab on">Semua</div><div class="ftab">Belum Dibaca</div><div class="ftab">Dibaca</div></div>
+  <!-- list with one item faded/swiped -->
+  <div class="scroll" style="padding-top:4px;opacity:.35;pointer-events:none;">
+    <div class="div-label">Hari Ini</div>
+    <div style="position:relative;overflow:hidden;border-radius:16px;margin-bottom:8px;">
+      <!-- swipe delete bg -->
+      <div style="position:absolute;inset:0;background:#EF4444;border-radius:16px;display:flex;align-items:center;justify-content:flex-end;padding-right:16px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </div>
+      <!-- item shifted left -->
+      <div class="nitem" style="transform:translateX(-60px);border-radius:16px;border-color:#BFDBFE;background:#F0F9FF;margin:0;">
+        <div class="nic" style="background:#FEE2E2;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div class="ninfo"><div class="ntitle">Potensi Kebocoran Terdeteksi</div><div class="ndesc">Pemakaian air melonjak 42%...</div><div class="nmeta"><span class="ntag" style="background:#FEE2E2;color:#DC2626;">Kebocoran</span><span class="ntime">08:30</span></div></div>
+      </div>
+    </div>
+    <div class="nitem"><div class="nic" style="background:#DBEAFE;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="ninfo"><div class="ntitle">Target Mingguan Tercapai!</div><div class="ndesc">+200 poin didapat.</div><div class="nmeta"><span class="ntag" style="background:#DBEAFE;color:#0288D1;">Target</span><span class="ntime">07:15</span></div></div></div>
+  </div>
+  <!-- bottom sheet -->
+  <div class="bsheet-bg"></div>
+  <div class="bsheet">
+    <div class="bsheet-handle"></div>
+    <div style="text-align:center;margin-bottom:18px;">
+      <div style="width:56px;height:56px;background:#FEE2E2;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </div>
+      <div style="font-size:17px;font-weight:800;color:#0F172A;margin-bottom:6px;">Hapus Notifikasi Ini?</div>
+      <div style="font-size:13px;color:#64748B;line-height:1.5;">Notifikasi <strong>"Potensi Kebocoran Terdeteksi"</strong> akan dihapus permanen.</div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-outline" style="padding:14px;font-size:14px;">Batal</button>
+      <button class="btn-red" style="padding:14px;font-size:14px;">Hapus</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 20 — Hapus Semua Notifikasi                         -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">20 — Hapus Semua Notifikasi</div>
+<div class="phone" style="position:relative;">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="hdr">
+    <div class="hdr-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-t">Notifikasi</div>
+    <div class="hdr-a" style="background:#FEE2E2;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
+  </div>
+  <!-- list blurred -->
+  <div style="flex:1;overflow:hidden;padding:16px;opacity:.2;pointer-events:none;">
+    <div style="height:70px;background:#E2E8F0;border-radius:14px;margin-bottom:8px;"></div>
+    <div style="height:70px;background:#E2E8F0;border-radius:14px;margin-bottom:8px;"></div>
+    <div style="height:70px;background:#E2E8F0;border-radius:14px;margin-bottom:8px;"></div>
+    <div style="height:70px;background:#E2E8F0;border-radius:14px;"></div>
+  </div>
+  <!-- modal -->
+  <div style="position:absolute;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10;">
+    <div style="background:#fff;border-radius:28px;width:100%;padding:30px 22px;text-align:center;">
+      <div style="width:72px;height:72px;background:#FEE2E2;border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </div>
+      <div style="font-size:20px;font-weight:800;color:#0F172A;margin-bottom:8px;">Hapus Semua Notifikasi?</div>
+      <div style="font-size:13px;color:#64748B;line-height:1.6;margin-bottom:10px;">Semua <span style="font-weight:700;color:#0F172A;">6 notifikasi</span> akan dihapus secara permanen.</div>
+      <div style="background:#FEF2F2;border-radius:12px;padding:10px 14px;margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div style="font-size:12px;color:#DC2626;font-weight:600;text-align:left;">Tindakan ini tidak dapat dibatalkan</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline" style="padding:14px;font-size:14px;">Batal</button>
+        <button class="btn-red" style="padding:14px;font-size:14px;">Hapus Semua</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- end canvas -->
+</body>
+</html>

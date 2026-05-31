@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AquaTrack — Tips & Edukasi</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d1117;font-family:'Plus Jakarta Sans',sans-serif;padding:24px;}
+.canvas{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;}
+.frame-wrapper{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.screen-label{color:#8B92A9;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.phone{width:402px;height:874px;background:#F8FAFC;border-radius:32px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.sb{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 8px;background:#fff;flex-shrink:0;}
+.sb-t{font-size:14px;font-weight:700;color:#0F172A;}
+.sb-i{display:flex;gap:5px;font-size:12px;color:#0F172A;}
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.tabbar{display:flex;background:#fff;border-top:1px solid #E2E8F0;flex-shrink:0;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px 12px;gap:3px;font-size:10px;font-weight:600;color:#94A3B8;}
+.tab.on{color:#0288D1;}
+.tab-ic{font-size:20px;}
+.hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border-bottom:1px solid #E2E8F0;flex-shrink:0;}
+.hdr-back{width:34px;height:34px;border-radius:10px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.hdr-t{font-size:16px;font-weight:700;color:#0F172A;flex:1;}
+.hdr-a{width:34px;height:34px;border-radius:10px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.srch{margin:12px 16px 8px;background:#F1F5F9;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;color:#94A3B8;font-size:13px;flex-shrink:0;}
+.cat-row{display:flex;gap:8px;padding:0 16px 10px;overflow-x:hidden;flex-shrink:0;}
+.chip{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;background:#F1F5F9;color:#64748B;white-space:nowrap;}
+.chip.on{background:#0288D1;color:#fff;}
+.scroll{flex:1;overflow-y:auto;padding:0 16px 12px;}
+.feat{background:linear-gradient(135deg,#0288D1,#01579B);border-radius:18px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;color:#fff;}
+.feat-badge{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;margin-bottom:8px;}
+.feat-title{font-size:16px;font-weight:800;line-height:1.3;margin-bottom:6px;}
+.feat-sub{font-size:12px;opacity:.8;margin-bottom:10px;}
+.feat-btn{display:inline-block;background:#fff;color:#0288D1;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;}
+.feat-deco{position:absolute;right:-8px;top:50%;transform:translateY(-50%);font-size:72px;opacity:.15;}
+.sec{margin-bottom:16px;}
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.sec-t{font-size:14px;font-weight:700;color:#0F172A;}
+.sec-a{font-size:12px;font-weight:600;color:#0288D1;}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tcard{background:#fff;border-radius:14px;padding:13px;border:1px solid #E2E8F0;}
+.tcat{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:7px;}
+.ttitle{font-size:13px;font-weight:700;color:#0F172A;margin-bottom:7px;line-height:1.4;}
+.tmeta{display:flex;justify-content:space-between;align-items:center;}
+.ttime{font-size:11px;color:#94A3B8;}
+.titem{display:flex;gap:12px;align-items:center;background:#fff;border-radius:14px;padding:13px;border:1px solid #E2E8F0;margin-bottom:8px;}
+.tic-box{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.tinfo{flex:1;}
+.ti-title{font-size:13px;font-weight:700;color:#0F172A;margin-bottom:3px;line-height:1.3;}
+.ti-sub{font-size:12px;color:#64748B;margin-bottom:4px;}
+.ti-meta{display:flex;gap:8px;align-items:center;}
+.ti-badge{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;}
+.ti-time{font-size:11px;color:#94A3B8;}
+.sort-bar{display:flex;justify-content:space-between;align-items:center;padding:9px 16px;background:#fff;border-bottom:1px solid #E2E8F0;flex-shrink:0;}
+.sort-l{font-size:12px;color:#64748B;}
+.sort-r{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#0288D1;}
+.cat-hero{padding:18px 16px 14px;background:#fff;flex-shrink:0;border-bottom:1px solid #E2E8F0;}
+.ch-icon{font-size:34px;margin-bottom:6px;}
+.ch-title{font-size:19px;font-weight:800;color:#0F172A;margin-bottom:3px;}
+.ch-sub{font-size:12px;color:#64748B;margin-bottom:10px;}
+.ch-stats{display:flex;gap:20px;}
+.ch-stat{font-size:12px;color:#64748B;}
+.ch-stat b{color:#0288D1;}
+.det-cover{height:140px;display:flex;align-items:center;justify-content:center;font-size:60px;flex-shrink:0;}
+.det-body{padding:16px;flex:1;overflow-y:auto;}
+.det-tags{display:flex;gap:8px;margin-bottom:9px;flex-wrap:wrap;}
+.det-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;}
+.det-title{font-size:18px;font-weight:800;color:#0F172A;margin-bottom:7px;line-height:1.3;}
+.det-meta{display:flex;gap:14px;padding-bottom:12px;border-bottom:1px solid #E2E8F0;margin-bottom:14px;}
+.dm-item{display:flex;align-items:center;gap:4px;font-size:12px;color:#64748B;}
+.step{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px;}
+.step-n{width:26px;height:26px;border-radius:50%;background:#0288D1;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.step-t{font-size:13px;color:#334155;line-height:1.6;flex:1;}
+.step-t b{color:#0F172A;}
+.hilite{background:#E0F7FA;border-left:4px solid #0288D1;border-radius:0 10px 10px 0;padding:11px 13px;margin:10px 0;}
+.hilite p{font-size:13px;color:#0369A1;font-weight:600;line-height:1.5;}
+.rel-sec{margin-top:16px;padding-top:14px;border-top:1px solid #E2E8F0;}
+.illu-box{background:#F0F9FF;border-radius:14px;padding:14px;margin:12px 0;display:flex;align-items:center;gap:12px;}
+.illu-txt{flex:1;font-size:12px;color:#0369A1;font-weight:500;line-height:1.5;}
+.vid-embed{background:linear-gradient(135deg,#0F172A,#1E3A5F);border-radius:13px;height:135px;display:flex;align-items:center;justify-content:center;margin:12px 0;position:relative;overflow:hidden;flex-shrink:0;}
+.vid-play{width:46px;height:46px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.vid-dur{position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,.75);color:#fff;font-size:10px;padding:2px 7px;border-radius:5px;font-weight:600;}
+.vid-cap{font-size:11px;color:#64748B;text-align:center;margin:-6px 0 12px;}
+.vcard{background:#fff;border-radius:14px;border:1px solid #E2E8F0;overflow:hidden;margin-bottom:10px;}
+.vthumb{height:125px;position:relative;display:flex;align-items:center;justify-content:center;}
+.vthumb-play{width:42px;height:42px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.vthumb-dur{position:absolute;bottom:7px;right:9px;background:rgba(0,0,0,.75);color:#fff;font-size:10px;padding:2px 6px;border-radius:5px;font-weight:600;}
+.vinfo{padding:11px;}
+.v-cat{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:5px;}
+.v-title{font-size:13px;font-weight:700;color:#0F172A;margin-bottom:3px;line-height:1.4;}
+.v-meta{font-size:11px;color:#94A3B8;}
+.vfeat{background:#fff;border-radius:16px;border:1px solid #E2E8F0;overflow:hidden;margin-bottom:14px;}
+.vfeat-thumb{height:165px;position:relative;display:flex;align-items:center;justify-content:center;}
+.vfeat-play{width:54px;height:54px;background:#0288D1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;}
+.vfeat-dur{position:absolute;bottom:9px;right:11px;background:rgba(0,0,0,.75);color:#fff;font-size:11px;padding:3px 8px;border-radius:5px;font-weight:600;}
+.vfeat-info{padding:13px;}
+.vf-title{font-size:14px;font-weight:700;color:#0F172A;margin-bottom:5px;}
+.vf-meta{font-size:12px;color:#94A3B8;}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 01 — Halaman Utama Tips                           -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">01 — Halaman Utama Tips</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;background:#fff;border-bottom:1px solid #E2E8F0;flex-shrink:0;">
+      <div>
+        <div style="font-size:12px;color:#64748B;font-weight:500;">Selamat belajar, Budi!</div>
+        <div style="font-size:18px;font-weight:800;color:#0F172A;">Tips Hemat Air 💡</div>
+      </div>
+      <div style="width:38px;height:38px;border-radius:12px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:18px;">🔍</div>
+    </div>
+    <div class="srch">🔍 Cari tips hemat air...</div>
+    <div class="cat-row">
+      <div class="chip on">Semua</div>
+      <div class="chip">🚿 Mandi</div>
+      <div class="chip">👕 Cuci</div>
+      <div class="chip">🍽️ Piring</div>
+      <div class="chip">🌿 Taman</div>
+    </div>
+    <div class="scroll">
+      <div class="feat">
+        <div class="feat-badge">⭐ Tips Unggulan</div>
+        <div class="feat-title">5 Cara Hemat Air Mandi yang Mudah Dilakukan</div>
+        <div class="feat-sub">Hemat hingga 30 liter per hari dengan langkah simpel</div>
+        <div class="feat-btn">Baca Sekarang →</div>
+        <div class="feat-deco">🚿</div>
+      </div>
+      <div class="sec">
+        <div class="sec-hdr"><span class="sec-t">🔥 Tips Populer</span><span class="sec-a">Lihat Semua</span></div>
+        <div class="tgrid">
+          <div class="tcard">
+            <div class="tcat" style="background:#E0F2FE;color:#0288D1;">Mandi</div>
+            <div class="ttitle">Shower 5 menit lebih hemat dari bathtub</div>
+            <div class="tmeta"><span class="ttime">3 min</span><span>🔖</span></div>
+          </div>
+          <div class="tcard">
+            <div class="tcat" style="background:#DCFCE7;color:#16A34A;">Taman</div>
+            <div class="ttitle">Waktu terbaik menyiram tanaman</div>
+            <div class="tmeta"><span class="ttime">4 min</span><span>🔖</span></div>
+          </div>
+          <div class="tcard">
+            <div class="tcat" style="background:#FEF3C7;color:#D97706;">Umum</div>
+            <div class="ttitle">Deteksi kebocoran kran di rumah</div>
+            <div class="tmeta"><span class="ttime">5 min</span><span>🔖</span></div>
+          </div>
+          <div class="tcard">
+            <div class="tcat" style="background:#F3E8FF;color:#7C3AED;">Cuci</div>
+            <div class="ttitle">Full load = hemat 40% air mesin cuci</div>
+            <div class="tmeta"><span class="ttime">2 min</span><span>🔖</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-hdr"><span class="sec-t">🆕 Tips Terbaru</span><span class="sec-a">Lihat Semua</span></div>
+        <div class="titem">
+          <div class="tic-box" style="background:#CCFBF1;">🍽️</div>
+          <div class="tinfo">
+            <div class="ti-title">Cuci piring tanpa air mengalir</div>
+            <div class="ti-sub">Hemat hingga 50% air cucian</div>
+            <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Baru</div><span class="ti-time">2 jam lalu</span></div>
+          </div>
+        </div>
+        <div class="titem">
+          <div class="tic-box" style="background:#FFF7ED;">🚽</div>
+          <div class="tinfo">
+            <div class="ti-title">Periksa tanki toilet bocor</div>
+            <div class="ti-sub">Bocor kecil = 200L terbuang/hari</div>
+            <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Baru</div><span class="ti-time">5 jam lalu</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 02 — Tips Populer                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">02 — Tips Populer</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Tips Populer</div><div class="hdr-a">⚙️</div></div>
+    <div class="cat-row" style="padding-top:10px;">
+      <div class="chip on">Semua</div><div class="chip">🚿 Mandi</div><div class="chip">👕 Cuci</div><div class="chip">🍽️ Piring</div><div class="chip">🌿 Taman</div>
+    </div>
+    <div class="sort-bar"><span class="sort-l">24 tips ditemukan</span><span class="sort-r">↕️ Urutkan</span></div>
+    <div class="scroll" style="padding-top:12px;">
+      <div class="titem">
+        <div class="tic-box" style="background:#E0F2FE;">🚿</div>
+        <div class="tinfo"><div class="ti-title">5 Cara Hemat Air Mandi</div><div class="ti-sub">Hemat hingga 30 liter per hari</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#E0F2FE;color:#0288D1;">Mandi</div><span class="ti-time">⭐ 4.9 · 1.2k dibaca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#DCFCE7;">🌿</div>
+        <div class="tinfo"><div class="ti-title">Waktu Terbaik Siram Tanaman</div><div class="ti-sub">Pagi atau sore? Ini jawabannya</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Taman</div><span class="ti-time">⭐ 4.8 · 987 dibaca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#F3E8FF;">👕</div>
+        <div class="tinfo"><div class="ti-title">Cuci Pakaian Full Load</div><div class="ti-sub">Hemat 40% air & listrik sekaligus</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#F3E8FF;color:#7C3AED;">Cuci</div><span class="ti-time">⭐ 4.7 · 876 dibaca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FEF3C7;">💡</div>
+        <div class="tinfo"><div class="ti-title">Deteksi Kebocoran Kran</div><div class="ti-sub">Tanda-tanda dan cara mengatasi</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Umum</div><span class="ti-time">⭐ 4.7 · 754 dibaca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FFF7ED;">🚽</div>
+        <div class="tinfo"><div class="ti-title">Tips Hemat Flush Toilet</div><div class="ti-sub">Gunakan tombol half-flush</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FFF7ED;color:#EA580C;">Toilet</div><span class="ti-time">⭐ 4.6 · 654 dibaca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#CCFBF1;">🍽️</div>
+        <div class="tinfo"><div class="ti-title">Cuci Piring Efisien</div><div class="ti-sub">Hemat 50% tanpa air mengalir</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#CCFBF1;color:#0D9488;">Piring</div><span class="ti-time">⭐ 4.6 · 598 dibaca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 03 — Tips Terbaru                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">03 — Tips Terbaru</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Tips Terbaru</div><div class="hdr-a">🔔</div></div>
+    <div class="cat-row" style="padding-top:10px;">
+      <div class="chip on">Semua</div><div class="chip">🚿 Mandi</div><div class="chip">👕 Cuci</div><div class="chip">🍽️ Piring</div><div class="chip">🚽 Toilet</div>
+    </div>
+    <div class="sort-bar"><span class="sort-l">18 tips minggu ini</span><span class="sort-r">🕐 Terbaru dulu</span></div>
+    <div class="scroll" style="padding-top:12px;">
+      <div class="titem">
+        <div class="tic-box" style="background:#CCFBF1;">🍽️</div>
+        <div class="tinfo"><div class="ti-title">Cuci piring tanpa air mengalir</div><div class="ti-sub">Teknik dua baskom lebih efisien</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">🆕 Baru</div><span class="ti-time">2 jam lalu</span></div></div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FFF7ED;">🚽</div>
+        <div class="tinfo"><div class="ti-title">Periksa tanki toilet bocor</div><div class="ti-sub">Tes pewarna makanan sederhana</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">🆕 Baru</div><span class="ti-time">5 jam lalu</span></div></div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#E0F2FE;">🚿</div>
+        <div class="tinfo"><div class="ti-title">Shower head hemat air pilihan terbaik</div><div class="ti-sub">Review 5 produk terlaris di Indonesia</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Kemarin</div><span class="ti-time">30 Mei 2026</span></div></div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#DCFCE7;">🌿</div>
+        <div class="tinfo"><div class="ti-title">Drip irrigation untuk taman kecil</div><div class="ti-sub">Sistem tetes hemat 60% vs selang biasa</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Kemarin</div><span class="ti-time">30 Mei 2026</span></div></div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#F3E8FF;">👕</div>
+        <div class="tinfo"><div class="ti-title">Mode eco mesin cuci front load</div><div class="ti-sub">Panduan fitur tersembunyi yang jarang dipakai</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#E2E8F0;color:#64748B;">2 hari lalu</div><span class="ti-time">29 Mei 2026</span></div></div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FEF3C7;">💡</div>
+        <div class="tinfo"><div class="ti-title">Air limbah cucian untuk siram tanaman</div><div class="ti-sub">Aman atau tidak? Ini faktanya</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#E2E8F0;color:#64748B;">3 hari lalu</div><span class="ti-time">28 Mei 2026</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 04 — Tips Kategori Mandi                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">04 — Kategori: Mandi</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Kategori Tips</div><div class="hdr-a">🔍</div></div>
+    <div class="cat-hero" style="background:linear-gradient(135deg,#E0F2FE,#fff);">
+      <div class="ch-icon">🚿</div>
+      <div class="ch-title">Mandi & Bersih Diri</div>
+      <div class="ch-sub">Tips hemat air saat mandi, keramas, dan merawat diri</div>
+      <div class="ch-stats">
+        <div class="ch-stat"><b>12</b> tips tersedia</div>
+        <div class="ch-stat"><b>4</b> artikel terkait</div>
+        <div class="ch-stat"><b>847</b> disimpan</div>
+      </div>
+    </div>
+    <div class="sort-bar"><span class="sort-l">12 tips</span><span class="sort-r">↕️ Urutkan</span></div>
+    <div class="scroll" style="padding-top:12px;">
+      <div class="titem">
+        <div class="tic-box" style="background:#E0F2FE;">⏱️</div>
+        <div class="tinfo"><div class="ti-title">Batasi waktu mandi 5 menit</div><div class="ti-sub">Shower 5 menit = 50L, bathtub = 150L</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#E0F2FE;color:#0288D1;">Mudah</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#E0F2FE;">🪣</div>
+        <div class="tinfo"><div class="ti-title">Tampung air saat nunggu panas</div><div class="ti-sub">Gunakan untuk siram tanaman atau pel</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#E0F2FE;color:#0288D1;">Mudah</div><span class="ti-time">2 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#E0F2FE;">🚿</div>
+        <div class="tinfo"><div class="ti-title">Pilih shower head hemat air</div><div class="ti-sub">Aerator 6L/menit vs standar 12L/menit</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Persiapan</div><span class="ti-time">4 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#E0F2FE;">🧴</div>
+        <div class="tinfo"><div class="ti-title">Matikan air saat sabun-sabun</div><div class="ti-sub">Kebiasaan simpel hemat 10L/mandi</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#E0F2FE;color:#0288D1;">Mudah</div><span class="ti-time">2 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#E0F2FE;">🌡️</div>
+        <div class="tinfo"><div class="ti-title">Setel suhu water heater optimal</div><div class="ti-sub">60°C = antibakteri tanpa boros</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Persiapan</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 05 — Tips Kategori Cuci Pakaian                   -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">05 — Kategori: Cuci Pakaian</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Kategori Tips</div><div class="hdr-a">🔍</div></div>
+    <div class="cat-hero" style="background:linear-gradient(135deg,#F3E8FF,#fff);">
+      <div class="ch-icon">👕</div>
+      <div class="ch-title">Cuci Pakaian</div>
+      <div class="ch-sub">Hemat air dan energi saat mencuci pakaian</div>
+      <div class="ch-stats">
+        <div class="ch-stat"><b>9</b> tips tersedia</div>
+        <div class="ch-stat"><b>3</b> video terkait</div>
+        <div class="ch-stat" style="--c:#7C3AED;"><b style="color:#7C3AED;">612</b> disimpan</div>
+      </div>
+    </div>
+    <div class="sort-bar"><span class="sort-l">9 tips</span><span class="sort-r">↕️ Urutkan</span></div>
+    <div class="scroll" style="padding-top:12px;">
+      <div class="titem">
+        <div class="tic-box" style="background:#F3E8FF;">👕</div>
+        <div class="tinfo"><div class="ti-title">Cuci hanya saat cucian penuh</div><div class="ti-sub">Full load hemat 40% dibanding setengah</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#F3E8FF;color:#7C3AED;">Mudah</div><span class="ti-time">2 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#F3E8FF;">🌡️</div>
+        <div class="tinfo"><div class="ti-title">Cuci air dingin untuk pakaian biasa</div><div class="ti-sub">Air panas boros energi, dingin sudah cukup</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#F3E8FF;color:#7C3AED;">Mudah</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#F3E8FF;">♻️</div>
+        <div class="tinfo"><div class="ti-title">Daur ulang air bilasan cucian</div><div class="ti-sub">Gunakan untuk mengepel lantai</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Eco</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#F3E8FF;">⚙️</div>
+        <div class="tinfo"><div class="ti-title">Pakai mode eco pada mesin cuci</div><div class="ti-sub">Hemat 30% air vs mode normal</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Persiapan</div><span class="ti-time">4 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#F3E8FF;">🧼</div>
+        <div class="tinfo"><div class="ti-title">Dosis detergen yang tepat</div><div class="ti-sub">Terlalu banyak = perlu bilas lebih banyak</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#F3E8FF;color:#7C3AED;">Mudah</div><span class="ti-time">2 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 06 — Tips Kategori Cuci Piring                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">06 — Kategori: Cuci Piring</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Kategori Tips</div><div class="hdr-a">🔍</div></div>
+    <div class="cat-hero" style="background:linear-gradient(135deg,#CCFBF1,#fff);">
+      <div class="ch-icon">🍽️</div>
+      <div class="ch-title">Cuci Piring & Dapur</div>
+      <div class="ch-sub">Teknik mencuci piring yang hemat air dan waktu</div>
+      <div class="ch-stats">
+        <div class="ch-stat"><b>8</b> tips tersedia</div>
+        <div class="ch-stat"><b>2</b> video terkait</div>
+        <div class="ch-stat"><b style="color:#0D9488;">489</b> disimpan</div>
+      </div>
+    </div>
+    <div class="sort-bar"><span class="sort-l">8 tips</span><span class="sort-r">↕️ Urutkan</span></div>
+    <div class="scroll" style="padding-top:12px;">
+      <div class="titem">
+        <div class="tic-box" style="background:#CCFBF1;">🪣</div>
+        <div class="tinfo"><div class="ti-title">Teknik dua baskom</div><div class="ti-sub">Satu untuk sabun, satu untuk bilas</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#CCFBF1;color:#0D9488;">Populer</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#CCFBF1;">🍽️</div>
+        <div class="tinfo"><div class="ti-title">Kumpulkan piring sebelum cuci</div><div class="ti-sub">Cuci sekaligus lebih hemat vs satu per satu</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#CCFBF1;color:#0D9488;">Mudah</div><span class="ti-time">2 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#CCFBF1;">🫧</div>
+        <div class="tinfo"><div class="ti-title">Rendam piring kotor sebentar</div><div class="ti-sub">Sisa makanan lepas mudah, kurangi gosok</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#CCFBF1;color:#0D9488;">Mudah</div><span class="ti-time">2 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#CCFBF1;">💧</div>
+        <div class="tinfo"><div class="ti-title">Jangan biarkan kran mengalir terus</div><div class="ti-sub">Matikan saat menggosok sabun</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#CCFBF1;color:#0D9488;">Mudah</div><span class="ti-time">2 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#CCFBF1;">🤖</div>
+        <div class="tinfo"><div class="ti-title">Mesin cuci piring vs manual</div><div class="ti-sub">Mana yang lebih hemat? Data membantah mitos</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Fakta</div><span class="ti-time">5 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 07 — Tips Kategori Taman                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">07 — Kategori: Taman</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Kategori Tips</div><div class="hdr-a">🔍</div></div>
+    <div class="cat-hero" style="background:linear-gradient(135deg,#DCFCE7,#fff);">
+      <div class="ch-icon">🌿</div>
+      <div class="ch-title">Taman & Tanaman</div>
+      <div class="ch-sub">Jaga taman tetap hijau dengan air yang lebih sedikit</div>
+      <div class="ch-stats">
+        <div class="ch-stat"><b>11</b> tips tersedia</div>
+        <div class="ch-stat"><b>3</b> video terkait</div>
+        <div class="ch-stat"><b style="color:#16A34A;">723</b> disimpan</div>
+      </div>
+    </div>
+    <div class="sort-bar"><span class="sort-l">11 tips</span><span class="sort-r">↕️ Urutkan</span></div>
+    <div class="scroll" style="padding-top:12px;">
+      <div class="titem">
+        <div class="tic-box" style="background:#DCFCE7;">🌅</div>
+        <div class="tinfo"><div class="ti-title">Siram tanaman pagi atau sore</div><div class="ti-sub">Hindari siang hari — air cepat menguap</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Populer</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#DCFCE7;">💧</div>
+        <div class="tinfo"><div class="ti-title">Drip irrigation untuk pot</div><div class="ti-sub">Sistem tetes hemat 60% vs selang biasa</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Eco</div><span class="ti-time">5 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#DCFCE7;">🌱</div>
+        <div class="tinfo"><div class="ti-title">Mulsa untuk jaga kelembaban tanah</div><div class="ti-sub">Kurangi frekuensi penyiraman 2x</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Eco</div><span class="ti-time">4 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#DCFCE7;">🪣</div>
+        <div class="tinfo"><div class="ti-title">Tampung air hujan untuk taman</div><div class="ti-sub">Ember 200L cukup untuk seminggu</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Eco</div><span class="ti-time">4 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#DCFCE7;">🌿</div>
+        <div class="tinfo"><div class="ti-title">Pilih tanaman tahan kering</div><div class="ti-sub">Succulen & kaktus butuh air minimal</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Persiapan</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 08 — Tips Kategori Toilet                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">08 — Kategori: Toilet</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Kategori Tips</div><div class="hdr-a">🔍</div></div>
+    <div class="cat-hero" style="background:linear-gradient(135deg,#FFF7ED,#fff);">
+      <div class="ch-icon">🚽</div>
+      <div class="ch-title">Toilet & Kamar Mandi</div>
+      <div class="ch-sub">Efisiensi air di area yang paling banyak terpakai</div>
+      <div class="ch-stats">
+        <div class="ch-stat"><b>7</b> tips tersedia</div>
+        <div class="ch-stat"><b>2</b> video terkait</div>
+        <div class="ch-stat"><b style="color:#EA580C;">341</b> disimpan</div>
+      </div>
+    </div>
+    <div class="sort-bar"><span class="sort-l">7 tips</span><span class="sort-r">↕️ Urutkan</span></div>
+    <div class="scroll" style="padding-top:12px;">
+      <div class="titem">
+        <div class="tic-box" style="background:#FFF7ED;">🔘</div>
+        <div class="tinfo"><div class="ti-title">Gunakan tombol half-flush</div><div class="ti-sub">Hemat 3–4L per flush untuk buang air kecil</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FFF7ED;color:#EA580C;">Populer</div><span class="ti-time">2 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FFF7ED;">🧪</div>
+        <div class="tinfo"><div class="ti-title">Tes kebocoran tanki toilet</div><div class="ti-sub">Cara mudah dengan pewarna makanan</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FFF7ED;color:#EA580C;">Penting</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FFF7ED;">🔧</div>
+        <div class="tinfo"><div class="ti-title">Pasang toilet dual flush</div><div class="ti-sub">Upgrade hemat 40% vs toilet lama</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Upgrade</div><span class="ti-time">5 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FFF7ED;">🧱</div>
+        <div class="tinfo"><div class="ti-title">Botol batu bata dalam tanki</div><div class="ti-sub">Kurangi volume tanki tanpa beli toilet baru</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FFF7ED;color:#EA580C;">DIY</div><span class="ti-time">4 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FFF7ED;">🚿</div>
+        <div class="tinfo"><div class="ti-title">Bilas toilet setelah mandi</div><div class="ti-sub">Manfaatkan tekanan air saat shower aktif</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FFF7ED;color:#EA580C;">Trik</div><span class="ti-time">2 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 09 — Tips Kategori Umum                           -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">09 — Kategori: Umum</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Kategori Tips</div><div class="hdr-a">🔍</div></div>
+    <div class="cat-hero" style="background:linear-gradient(135deg,#FEF3C7,#fff);">
+      <div class="ch-icon">💡</div>
+      <div class="ch-title">Tips Umum & Lainnya</div>
+      <div class="ch-sub">Kebiasaan dan instalasi yang menghemat air rumah tangga</div>
+      <div class="ch-stats">
+        <div class="ch-stat"><b>15</b> tips tersedia</div>
+        <div class="ch-stat"><b>5</b> video terkait</div>
+        <div class="ch-stat"><b style="color:#D97706;">934</b> disimpan</div>
+      </div>
+    </div>
+    <div class="sort-bar"><span class="sort-l">15 tips</span><span class="sort-r">↕️ Urutkan</span></div>
+    <div class="scroll" style="padding-top:12px;">
+      <div class="titem">
+        <div class="tic-box" style="background:#FEF3C7;">🔍</div>
+        <div class="tinfo"><div class="ti-title">Audit penggunaan air rumah</div><div class="ti-sub">Temukan titik pemborosan setiap bulan</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Penting</div><span class="ti-time">5 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FEF3C7;">🔧</div>
+        <div class="tinfo"><div class="ti-title">Periksa kran dan pipa bocor</div><div class="ti-sub">Checklist bulanan 10 menit</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Rutin</div><span class="ti-time">4 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FEF3C7;">💧</div>
+        <div class="tinfo"><div class="ti-title">Pasang aerator di semua kran</div><div class="ti-sub">Hemat 30–50% tanpa kurangi tekanan</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Upgrade</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FEF3C7;">♻️</div>
+        <div class="tinfo"><div class="ti-title">Daur ulang greywater</div><div class="ti-sub">Air bekas cuci tangan untuk flush toilet</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Eco</div><span class="ti-time">5 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FEF3C7;">📊</div>
+        <div class="tinfo"><div class="ti-title">Baca meteran air sendiri</div><div class="ti-sub">Pantau konsumsi sebelum tagihan datang</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Umum</div><span class="ti-time">3 min baca</span></div></div>
+        <div style="font-size:20px;">🔖</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 10 — Detail Satu Tips                             -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">10 — Detail Satu Tips</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Detail Tips</div><div class="hdr-a">🔖</div></div>
+    <div class="det-cover" style="background:linear-gradient(135deg,#E0F2FE,#BAE6FD);">🚿</div>
+    <div class="det-body">
+      <div class="det-tags">
+        <div class="det-tag" style="background:#E0F2FE;color:#0288D1;">Mandi</div>
+        <div class="det-tag" style="background:#DCFCE7;color:#16A34A;">Mudah</div>
+        <div class="det-tag" style="background:#FEF3C7;color:#D97706;">⭐ Populer</div>
+      </div>
+      <div class="det-title">5 Cara Hemat Air Mandi yang Efektif</div>
+      <div class="det-meta">
+        <div class="dm-item">⏱️ 4 menit baca</div>
+        <div class="dm-item">👁️ 1.2k dibaca</div>
+        <div class="dm-item">📅 30 Mei 2026</div>
+      </div>
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-t"><b>Batasi durasi mandi maksimal 5 menit.</b> Shower 5 menit menggunakan ±50 liter air, jauh lebih hemat dari bathtub yang butuh 150–200 liter.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-t"><b>Matikan shower saat memakai sabun.</b> Kebiasaan ini bisa menghemat 10–15 liter per sesi mandi tanpa mengurangi kenyamanan.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-t"><b>Tampung air menunggu panas.</b> Siapkan ember kecil untuk menampung air saat menunggu air panas keluar — gunakan untuk menyiram tanaman.</div>
+      </div>
+      <div class="hilite">
+        <p>💡 Dengan 3 langkah ini saja, kamu bisa hemat hingga <strong>30 liter per hari</strong> atau ±900 liter per bulan!</p>
+      </div>
+      <div class="rel-sec">
+        <div class="sec-hdr"><span class="sec-t">Tips Terkait</span></div>
+        <div class="tgrid">
+          <div class="tcard">
+            <div class="tcat" style="background:#E0F2FE;color:#0288D1;">Mandi</div>
+            <div class="ttitle">Pilih shower head hemat air</div>
+            <div class="tmeta"><span class="ttime">3 min</span><span>🔖</span></div>
+          </div>
+          <div class="tcard">
+            <div class="tcat" style="background:#FFF7ED;color:#EA580C;">Toilet</div>
+            <div class="ttitle">Tips hemat flush toilet</div>
+            <div class="tmeta"><span class="ttime">2 min</span><span>🔖</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 11 — Detail Tips dengan Ilustrasi                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">11 — Detail Tips + Ilustrasi</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Detail Tips</div><div class="hdr-a">🔖</div></div>
+    <div class="det-cover" style="background:linear-gradient(135deg,#DCFCE7,#BBF7D0);">🌿</div>
+    <div class="det-body">
+      <div class="det-tags">
+        <div class="det-tag" style="background:#DCFCE7;color:#16A34A;">Taman</div>
+        <div class="det-tag" style="background:#DCFCE7;color:#16A34A;">Eco</div>
+      </div>
+      <div class="det-title">Sistem Drip Irrigation untuk Taman Rumah</div>
+      <div class="det-meta">
+        <div class="dm-item">⏱️ 5 menit baca</div>
+        <div class="dm-item">👁️ 987 dibaca</div>
+      </div>
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-t"><b>Pasang selang berlubang kecil</b> di sekitar pangkal tanaman. Air menetes langsung ke akar, tidak menguap seperti siram dari atas.</div>
+      </div>
+      <!-- Illustration block -->
+      <div class="illu-box">
+        <svg viewBox="0 0 110 90" width="100" height="82" xmlns="http://www.w3.org/2000/svg">
+          <!-- Pipe main -->
+          <rect x="5" y="30" width="100" height="8" rx="4" fill="#0288D1" opacity=".7"/>
+          <!-- Drip lines going down -->
+          <line x1="25" y1="38" x2="25" y2="60" stroke="#0288D1" stroke-width="2" opacity=".5"/>
+          <line x1="55" y1="38" x2="55" y2="60" stroke="#0288D1" stroke-width="2" opacity=".5"/>
+          <line x1="85" y1="38" x2="85" y2="60" stroke="#0288D1" stroke-width="2" opacity=".5"/>
+          <!-- Water drops -->
+          <ellipse cx="25" cy="64" rx="3" ry="4" fill="#0288D1" opacity=".8"/>
+          <ellipse cx="55" cy="66" rx="3" ry="4" fill="#0288D1" opacity=".8"/>
+          <ellipse cx="85" cy="63" rx="3" ry="4" fill="#0288D1" opacity=".8"/>
+          <!-- Ground -->
+          <rect x="5" y="70" width="100" height="15" rx="4" fill="#86EFAC" opacity=".5"/>
+          <!-- Plants -->
+          <text x="18" y="72" font-size="16">🌱</text>
+          <text x="48" y="72" font-size="16">🌱</text>
+          <text x="78" y="72" font-size="16">🌱</text>
+        </svg>
+        <div class="illu-txt">Sistem drip mengalirkan air langsung ke akar. <strong>Hemat 60%</strong> dibanding penyiraman selang biasa yang banyak airnya menguap.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-t"><b>Atur timer otomatis</b> pagi pukul 06.00 selama 20 menit. Cukup untuk kebutuhan harian tanaman tropis.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-t"><b>Gunakan mulsa (daun kering/sekam)</b> di permukaan tanah untuk menjaga kelembaban lebih lama setelah penyiraman.</div>
+      </div>
+      <div class="hilite">
+        <p>🌿 Kombinasi drip + mulsa bisa mengurangi kebutuhan air taman hingga <strong>70%</strong> saat musim kemarau.</p>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 12 — Detail Tips dengan Video                     -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">12 — Detail Tips + Video</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Detail Tips</div><div class="hdr-a">🔖</div></div>
+    <div class="det-cover" style="background:linear-gradient(135deg,#F3E8FF,#DDD6FE);">👕</div>
+    <div class="det-body">
+      <div class="det-tags">
+        <div class="det-tag" style="background:#F3E8FF;color:#7C3AED;">Cuci Pakaian</div>
+        <div class="det-tag" style="background:#DCFCE7;color:#16A34A;">Mudah</div>
+      </div>
+      <div class="det-title">Cara Tepat Cuci Pakaian Hemat Air & Listrik</div>
+      <div class="det-meta">
+        <div class="dm-item">⏱️ 3 menit baca</div>
+        <div class="dm-item">🎬 Video tersedia</div>
+      </div>
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-t"><b>Kumpulkan pakaian hingga mesin penuh</b> sebelum mulai mencuci. Mesin setengah penuh menggunakan air hampir sama banyaknya.</div>
+      </div>
+      <!-- Video embed -->
+      <div class="vid-embed">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1E1B4B,#312E81);opacity:.9;"></div>
+        <div style="position:relative;text-align:center;">
+          <div class="vid-play">▶</div>
+          <div style="color:#fff;font-size:12px;font-weight:600;margin-top:8px;">Tutorial: Cuci Pakaian Hemat</div>
+        </div>
+        <div class="vid-dur">4:30</div>
+      </div>
+      <div class="vid-cap">🎬 Tonton video tutorial lengkap</div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-t"><b>Aktifkan mode ECO</b> pada mesin cuci. Mode ini mengoptimalkan jumlah air dan suhu sehingga hemat 30% dibanding mode normal.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-t"><b>Gunakan detergen dosis tepat.</b> Terlalu banyak detergen membuat pakaian perlu dibilas lebih banyak — boros air.</div>
+      </div>
+      <div class="hilite">
+        <p>👕 Hemat rata-rata <strong>40 liter per cuci</strong> dengan menggabungkan ketiga tips ini!</p>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 13 — Daftar Video Tutorial                        -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">13 — Daftar Video Tutorial</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Tutorial Video</div><div class="hdr-a">🔍</div></div>
+    <div class="cat-row" style="padding-top:10px;">
+      <div class="chip on">Semua</div><div class="chip">🚿 Mandi</div><div class="chip">🌿 Taman</div><div class="chip">👕 Cuci</div><div class="chip">🏠 Rumah</div>
+    </div>
+    <div class="scroll" style="padding-top:4px;">
+      <!-- Featured video -->
+      <div class="vfeat">
+        <div class="vfeat-thumb" style="background:linear-gradient(135deg,#0F172A,#1E3A5F);">
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+            <div class="vfeat-play">▶</div>
+            <div style="color:rgba(255,255,255,.7);font-size:11px;font-weight:600;">Video Unggulan</div>
+          </div>
+          <div class="vfeat-dur">12:45</div>
+        </div>
+        <div class="vfeat-info">
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <div class="v-cat" style="background:#E0F2FE;color:#0288D1;">Lengkap</div>
+            <div class="v-cat" style="background:#DCFCE7;color:#16A34A;">⭐ Terpopuler</div>
+          </div>
+          <div class="vf-title">Panduan Lengkap Hemat Air Rumah Tangga — Dari Dapur sampai Taman</div>
+          <div class="vf-meta">🎬 AquaTrack · 45k ditonton · 28 Mei 2026</div>
+        </div>
+      </div>
+      <!-- Video list -->
+      <div class="sec-hdr" style="margin-bottom:10px;"><span class="sec-t">Video Lainnya</span><span class="sec-a">Lihat Semua</span></div>
+      <div class="vcard">
+        <div class="vthumb" style="background:linear-gradient(135deg,#0D1B2A,#1B4332);">
+          <div class="vthumb-play">▶</div>
+          <div class="vthumb-dur">5:20</div>
+        </div>
+        <div class="vinfo">
+          <div class="v-cat" style="background:#DCFCE7;color:#16A34A;">Taman</div>
+          <div class="v-title">Cara Buat Drip Irrigation Sederhana di Rumah</div>
+          <div class="v-meta">12k ditonton · 25 Mei 2026</div>
+        </div>
+      </div>
+      <div class="vcard">
+        <div class="vthumb" style="background:linear-gradient(135deg,#1C1917,#292524);">
+          <div class="vthumb-play">▶</div>
+          <div class="vthumb-dur">3:45</div>
+        </div>
+        <div class="vinfo">
+          <div class="v-cat" style="background:#E0F2FE;color:#0288D1;">Mandi</div>
+          <div class="v-title">5 Menit Shower Challenge — Trik & Timer</div>
+          <div class="v-meta">8.7k ditonton · 22 Mei 2026</div>
+        </div>
+      </div>
+      <div class="vcard">
+        <div class="vthumb" style="background:linear-gradient(135deg,#1A0533,#2D1B69);">
+          <div class="vthumb-play">▶</div>
+          <div class="vthumb-dur">7:10</div>
+        </div>
+        <div class="vinfo">
+          <div class="v-cat" style="background:#F3E8FF;color:#7C3AED;">Cuci Pakaian</div>
+          <div class="v-title">Mode ECO Mesin Cuci: Cara Pakai yang Benar</div>
+          <div class="v-meta">6.2k ditonton · 20 Mei 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab on"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 14 — Pemutar Video Sedang Play                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">14 — Pemutar Video: Play</div>
+<div class="phone">
+  <div class="sb" style="background:#0F172A;"><span class="sb-t" style="color:#fff;">9:41</span><span class="sb-i" style="color:#fff;">▶ ◀ 📶 🔋</span></div>
+  <div class="content" style="background:#0F172A;">
+    <!-- Video player area -->
+    <div style="background:#000;height:240px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;">
+      <div style="text-align:center;">
+        <div style="font-size:64px;opacity:.3;">🎬</div>
+      </div>
+      <!-- Pause overlay -->
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+        <div style="width:60px;height:60px;background:rgba(255,255,255,.15);border-radius:50%;border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;">⏸</div>
+      </div>
+      <!-- Back & fullscreen buttons -->
+      <div style="position:absolute;top:12px;left:12px;width:32px;height:32px;background:rgba(0,0,0,.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;">←</div>
+      <div style="position:absolute;top:12px;right:12px;width:32px;height:32px;background:rgba(0,0,0,.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;">⛶</div>
+      <!-- Duration overlay -->
+      <div style="position:absolute;bottom:10px;right:12px;color:rgba(255,255,255,.8);font-size:11px;font-weight:600;">4:12 / 12:45</div>
+    </div>
+    <!-- Progress bar -->
+    <div style="padding:14px 16px 10px;background:#1E293B;flex-shrink:0;">
+      <div style="height:4px;background:rgba(255,255,255,.2);border-radius:2px;position:relative;margin-bottom:8px;">
+        <div style="height:100%;width:33%;background:#0288D1;border-radius:2px;"></div>
+        <div style="width:14px;height:14px;background:#0288D1;border-radius:50%;position:absolute;top:-5px;left:33%;transform:translateX(-50%);border:2px solid #fff;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-bottom:12px;">
+        <span>4:12</span><span>12:45</span>
+      </div>
+      <!-- Controls -->
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="color:rgba(255,255,255,.6);font-size:22px;">↩</div>
+        <div style="color:rgba(255,255,255,.6);font-size:26px;">⏮</div>
+        <div style="width:56px;height:56px;background:#0288D1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;">▶</div>
+        <div style="color:rgba(255,255,255,.6);font-size:26px;">⏭</div>
+        <div style="color:rgba(255,255,255,.6);font-size:20px;">🔊</div>
+      </div>
+    </div>
+    <!-- Video info -->
+    <div style="flex:1;overflow-y:auto;padding:16px;">
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <div class="v-cat" style="background:rgba(2,136,209,.2);color:#0288D1;">Mandi</div>
+        <div class="v-cat" style="background:rgba(102,187,106,.2);color:#66BB6A;">⭐ Terpopuler</div>
+      </div>
+      <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.3;">Panduan Lengkap Hemat Air Rumah Tangga</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:14px;">🎬 AquaTrack · 45k ditonton · 28 Mei 2026</div>
+      <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:14px;">
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:8px;">Deskripsi</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;">Video panduan lengkap hemat air di rumah tangga. Mulai dari dapur, kamar mandi, hingga taman. Cocok untuk pemula yang ingin mulai hemat air sekarang.</div>
+      </div>
+      <!-- Related -->
+      <div style="margin-top:14px;">
+        <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.8);margin-bottom:10px;">Video Selanjutnya</div>
+        <div style="display:flex;gap:12px;background:rgba(255,255,255,.06);border-radius:12px;overflow:hidden;">
+          <div style="width:100px;height:70px;background:linear-gradient(135deg,#0D1B2A,#1B4332);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(255,255,255,.4);">▶</div>
+          <div style="padding:10px 10px 10px 0;flex:1;">
+            <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.3;">Drip Irrigation untuk Taman Kecil</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.4);">5:20 · 12k ditonton</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 15 — Pemutar Video Fullscreen                     -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">15 — Pemutar Video: Fullscreen</div>
+<div class="phone" style="background:#000;">
+  <div style="position:relative;flex:1;background:#000;display:flex;align-items:center;justify-content:center;">
+    <!-- Landscape video fill -->
+    <div style="font-size:80px;opacity:.15;">🎬</div>
+    <!-- Top gradient overlay -->
+    <div style="position:absolute;top:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent);display:flex;align-items:flex-start;padding:16px 20px;gap:16px;">
+      <div style="color:#fff;font-size:18px;margin-top:2px;">←</div>
+      <div style="flex:1;">
+        <div style="font-size:14px;font-weight:700;color:#fff;">Panduan Lengkap Hemat Air</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);">AquaTrack</div>
+      </div>
+      <div style="color:#fff;font-size:18px;margin-top:2px;">⋮</div>
+    </div>
+    <!-- Center play button -->
+    <div style="position:absolute;width:64px;height:64px;background:rgba(255,255,255,.15);border-radius:50%;border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;">▶</div>
+    <!-- Bottom gradient overlay -->
+    <div style="position:absolute;bottom:0;left:0;right:0;height:130px;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);padding:16px 20px;">
+      <!-- Progress -->
+      <div style="height:3px;background:rgba(255,255,255,.3);border-radius:2px;margin-bottom:10px;position:relative;">
+        <div style="height:100%;width:33%;background:#0288D1;border-radius:2px;"></div>
+        <div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:-4.5px;left:calc(33% - 6px);"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.6);margin-bottom:12px;">
+        <span>4:12</span><span>12:45</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;gap:20px;align-items:center;">
+          <div style="color:#fff;font-size:22px;">⏮</div>
+          <div style="color:#fff;font-size:22px;">⏸</div>
+          <div style="color:#fff;font-size:22px;">⏭</div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:center;">
+          <div style="color:rgba(255,255,255,.7);font-size:18px;">🔊</div>
+          <div style="color:rgba(255,255,255,.7);font-size:18px;">CC</div>
+          <div style="color:rgba(255,255,255,.7);font-size:16px;font-weight:700;">1x</div>
+          <div style="color:rgba(255,255,255,.7);font-size:18px;">⛶</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 16 — Daftar Artikel Edukasi                       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">16 — Daftar Artikel Edukasi</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Artikel Edukasi</div><div class="hdr-a">🔍</div></div>
+    <div class="cat-row" style="padding-top:10px;">
+      <div class="chip on">Semua</div><div class="chip">🌍 Lingkungan</div><div class="chip">🔬 Sains</div><div class="chip">📊 Data</div><div class="chip">🏠 Rumah</div>
+    </div>
+    <div class="sort-bar"><span class="sort-l">32 artikel</span><span class="sort-r">↕️ Terbaru</span></div>
+    <div class="scroll" style="padding-top:12px;">
+      <!-- Featured article -->
+      <div style="background:#fff;border-radius:16px;border:1px solid #E2E8F0;overflow:hidden;margin-bottom:12px;">
+        <div style="height:120px;background:linear-gradient(135deg,#E0F2FE,#BAE6FD);display:flex;align-items:center;justify-content:center;font-size:52px;">🌍</div>
+        <div style="padding:14px;">
+          <div style="display:flex;gap:6px;margin-bottom:8px;">
+            <div class="v-cat" style="background:#DCFCE7;color:#16A34A;">Lingkungan</div>
+            <div class="v-cat" style="background:#FEF3C7;color:#D97706;">⭐ Unggulan</div>
+          </div>
+          <div style="font-size:15px;font-weight:800;color:#0F172A;margin-bottom:6px;line-height:1.3;">Krisis Air 2025: Mengapa Kita Harus Berhemat Sekarang</div>
+          <div style="font-size:12px;color:#64748B;">12 menit baca · 2.1k dibaca · 28 Mei 2026</div>
+        </div>
+      </div>
+      <!-- Article list -->
+      <div class="titem" style="align-items:flex-start;">
+        <div style="width:70px;height:70px;border-radius:12px;background:linear-gradient(135deg,#E0E7FF,#C7D2FE);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🔬</div>
+        <div class="tinfo">
+          <div class="ti-title">Bagaimana Tubuh Memproses Air yang Kita Minum</div>
+          <div class="ti-sub" style="margin-bottom:5px;">Sains · 8 menit baca</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#E0E7FF;color:#6366F1;">Sains</div><span class="ti-time">876 dibaca</span></div>
+        </div>
+      </div>
+      <div class="titem" style="align-items:flex-start;">
+        <div style="width:70px;height:70px;border-radius:12px;background:linear-gradient(135deg,#FFF7ED,#FED7AA);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">📊</div>
+        <div class="tinfo">
+          <div class="ti-title">Perbandingan Konsumsi Air Indonesia vs Dunia</div>
+          <div class="ti-sub" style="margin-bottom:5px;">Data · 6 menit baca</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FEF3C7;color:#D97706;">Data</div><span class="ti-time">654 dibaca</span></div>
+        </div>
+      </div>
+      <div class="titem" style="align-items:flex-start;">
+        <div style="width:70px;height:70px;border-radius:12px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🌱</div>
+        <div class="tinfo">
+          <div class="ti-title">10 Inovasi Teknologi Hemat Air Terbaru 2026</div>
+          <div class="ti-sub" style="margin-bottom:5px;">Teknologi · 10 menit baca</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Eco</div><span class="ti-time">532 dibaca</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab on"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 17 — Detail Artikel Edukasi                       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">17 — Detail Artikel Edukasi</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Artikel</div>
+      <div style="display:flex;gap:6px;">
+        <div class="hdr-a">🔖</div><div class="hdr-a">⋮</div>
+      </div>
+    </div>
+    <div style="height:130px;background:linear-gradient(135deg,#E0F2FE,#0288D1);display:flex;align-items:center;justify-content:center;font-size:56px;flex-shrink:0;">🌍</div>
+    <div class="det-body">
+      <div class="det-tags">
+        <div class="det-tag" style="background:#DCFCE7;color:#16A34A;">Lingkungan</div>
+        <div class="det-tag" style="background:#E0E7FF;color:#6366F1;">Edukasi</div>
+      </div>
+      <div class="det-title">Krisis Air 2025: Mengapa Kita Harus Berhemat Sekarang</div>
+      <div class="det-meta">
+        <div class="dm-item">⏱️ 12 menit</div>
+        <div class="dm-item">👁️ 2.1k</div>
+        <div class="dm-item">📅 28 Mei 2026</div>
+      </div>
+      <div style="font-size:14px;color:#334155;line-height:1.7;margin-bottom:14px;">
+        Menurut laporan <strong>UN Water 2025</strong>, lebih dari 2 miliar orang di dunia kini hidup di negara yang kekurangan air bersih. Indonesia, meski dikenal kaya sumber daya air, mulai merasakan dampaknya.
+      </div>
+      <div style="background:#FEF3C7;border-left:4px solid #F59E0B;border-radius:0 10px 10px 0;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-size:12px;font-weight:700;color:#92400E;margin-bottom:4px;">📊 Data Penting</div>
+        <div style="font-size:13px;color:#78350F;line-height:1.5;">Rata-rata orang Indonesia menggunakan <strong>145 liter/hari</strong>, padahal WHO merekomendasikan cukup 50–100 liter/hari.</div>
+      </div>
+      <div style="font-size:14px;color:#334155;line-height:1.7;margin-bottom:14px;">
+        Konsumsi berlebih bukan hanya soal tagihan tinggi — ini soal ketersediaan air untuk generasi mendatang. Dengan menghemat air hari ini, kita berkontribusi nyata pada keberlanjutan planet.
+      </div>
+      <div class="hilite">
+        <p>💧 Hemat <strong>10 liter per hari</strong> per keluarga = penghematan <strong>3,6 juta liter per tahun</strong> untuk 1.000 rumah tangga.</p>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab on"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 18 — Bookmark Artikel (state: bookmarked)         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">18 — Bookmark Artikel</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Artikel</div>
+      <div style="display:flex;gap:6px;">
+        <div class="hdr-a" style="background:#FEF3C7;color:#D97706;font-size:18px;">🔖</div><div class="hdr-a">⋮</div>
+      </div>
+    </div>
+    <div style="height:130px;background:linear-gradient(135deg,#E0F2FE,#0288D1);display:flex;align-items:center;justify-content:center;font-size:56px;flex-shrink:0;">🌍</div>
+    <div class="det-body">
+      <div class="det-tags">
+        <div class="det-tag" style="background:#DCFCE7;color:#16A34A;">Lingkungan</div>
+        <div class="det-tag" style="background:#FEF3C7;color:#D97706;">🔖 Tersimpan</div>
+      </div>
+      <div class="det-title">Krisis Air 2025: Mengapa Kita Harus Berhemat Sekarang</div>
+      <!-- Bookmark confirmation toast -->
+      <div style="background:#0F172A;border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="font-size:20px;">🔖</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">Artikel tersimpan!</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.6);">Lihat di Bookmark → Daftar Tersimpan</div>
+        </div>
+      </div>
+      <div class="det-meta">
+        <div class="dm-item">⏱️ 12 menit</div>
+        <div class="dm-item">👁️ 2.1k</div>
+        <div class="dm-item">📅 28 Mei 2026</div>
+      </div>
+      <div style="font-size:14px;color:#334155;line-height:1.7;margin-bottom:14px;">
+        Menurut laporan <strong>UN Water 2025</strong>, lebih dari 2 miliar orang di dunia kini hidup di negara yang kekurangan air bersih. Indonesia, meski dikenal kaya sumber daya air, mulai merasakan dampaknya.
+      </div>
+      <div style="background:#FEF3C7;border-left:4px solid #F59E0B;border-radius:0 10px 10px 0;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-size:12px;font-weight:700;color:#92400E;margin-bottom:4px;">📊 Data Penting</div>
+        <div style="font-size:13px;color:#78350F;line-height:1.5;">Rata-rata orang Indonesia menggunakan <strong>145 liter/hari</strong>, padahal WHO merekomendasikan cukup 50–100 liter/hari.</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab on"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 19 — Daftar Bookmark                              -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">19 — Daftar Bookmark</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Tersimpan</div><div class="hdr-a">⋮</div></div>
+    <!-- Tabs: Tips / Artikel / Video -->
+    <div style="display:flex;background:#F1F5F9;border-radius:12px;padding:4px;margin:10px 16px;gap:2px;flex-shrink:0;">
+      <div style="flex:1;text-align:center;padding:8px 4px;font-size:13px;font-weight:700;border-radius:9px;background:#fff;color:#01579B;box-shadow:0 1px 4px rgba(0,0,0,.1);">Tips (4)</div>
+      <div style="flex:1;text-align:center;padding:8px 4px;font-size:13px;font-weight:600;border-radius:9px;color:#64748B;">Artikel (3)</div>
+      <div style="flex:1;text-align:center;padding:8px 4px;font-size:13px;font-weight:600;border-radius:9px;color:#64748B;">Video (2)</div>
+    </div>
+    <div class="scroll" style="padding-top:4px;">
+      <div style="font-size:12px;color:#64748B;margin-bottom:8px;">4 tips tersimpan</div>
+      <div class="titem">
+        <div class="tic-box" style="background:#E0F2FE;">🚿</div>
+        <div class="tinfo"><div class="ti-title">5 Cara Hemat Air Mandi</div><div class="ti-sub">Mandi · 4 menit baca</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#E0F2FE;color:#0288D1;">Mandi</div><span class="ti-time">Disimpan 30 Mei</span></div></div>
+        <div style="font-size:18px;color:#FCD34D;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#DCFCE7;">🌿</div>
+        <div class="tinfo"><div class="ti-title">Drip Irrigation untuk Taman</div><div class="ti-sub">Taman · 5 menit baca</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#DCFCE7;color:#16A34A;">Taman</div><span class="ti-time">Disimpan 29 Mei</span></div></div>
+        <div style="font-size:18px;color:#FCD34D;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#F3E8FF;">👕</div>
+        <div class="tinfo"><div class="ti-title">Cuci Pakaian Full Load</div><div class="ti-sub">Cuci Pakaian · 3 menit baca</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#F3E8FF;color:#7C3AED;">Cuci</div><span class="ti-time">Disimpan 28 Mei</span></div></div>
+        <div style="font-size:18px;color:#FCD34D;">🔖</div>
+      </div>
+      <div class="titem">
+        <div class="tic-box" style="background:#FFF7ED;">🚽</div>
+        <div class="tinfo"><div class="ti-title">Tes Kebocoran Tanki Toilet</div><div class="ti-sub">Toilet · 3 menit baca</div>
+          <div class="ti-meta"><div class="ti-badge" style="background:#FFF7ED;color:#EA580C;">Toilet</div><span class="ti-time">Disimpan 26 Mei</span></div></div>
+        <div style="font-size:18px;color:#FCD34D;">🔖</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 20 — Kuis Intro                                   -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">20 — Kuis Intro</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Kuis Hemat Air</div><div class="hdr-a">ℹ️</div></div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;text-align:center;">
+      <!-- Hero -->
+      <div style="width:100px;height:100px;background:linear-gradient(135deg,#E0F2FE,#BAE6FD);border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:20px;box-shadow:0 8px 24px rgba(2,136,209,.2);">🧠</div>
+      <div style="font-size:22px;font-weight:800;color:#0F172A;margin-bottom:8px;">Uji Pengetahuanmu!</div>
+      <div style="font-size:14px;color:#64748B;line-height:1.6;margin-bottom:24px;">Seberapa baik kamu tahu cara hemat air? Jawab 10 pertanyaan dan lihat skormu!</div>
+      <!-- Stats row -->
+      <div style="display:flex;gap:16px;margin-bottom:28px;width:100%;">
+        <div style="flex:1;background:#F0F9FF;border-radius:14px;padding:14px 10px;text-align:center;">
+          <div style="font-size:22px;font-weight:800;color:#0288D1;">10</div>
+          <div style="font-size:11px;color:#64748B;font-weight:500;">Pertanyaan</div>
+        </div>
+        <div style="flex:1;background:#F0FDF4;border-radius:14px;padding:14px 10px;text-align:center;">
+          <div style="font-size:22px;font-weight:800;color:#16A34A;">5</div>
+          <div style="font-size:11px;color:#64748B;font-weight:500;">Menit</div>
+        </div>
+        <div style="flex:1;background:#FEF9C3;border-radius:14px;padding:14px 10px;text-align:center;">
+          <div style="font-size:22px;font-weight:800;color:#D97706;">🏆</div>
+          <div style="font-size:11px;color:#64748B;font-weight:500;">Sertifikat</div>
+        </div>
+      </div>
+      <!-- Category badge -->
+      <div style="background:#E0F2FE;border-radius:12px;padding:12px 16px;margin-bottom:24px;width:100%;text-align:left;">
+        <div style="font-size:12px;font-weight:700;color:#0288D1;margin-bottom:4px;">📚 Topik yang diuji</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <div class="chip" style="font-size:11px;padding:4px 10px;">🚿 Mandi</div>
+          <div class="chip" style="font-size:11px;padding:4px 10px;">🌿 Taman</div>
+          <div class="chip" style="font-size:11px;padding:4px 10px;">👕 Cuci</div>
+          <div class="chip" style="font-size:11px;padding:4px 10px;">🚽 Toilet</div>
+          <div class="chip" style="font-size:11px;padding:4px 10px;">💡 Umum</div>
+        </div>
+      </div>
+      <button style="width:100%;background:linear-gradient(135deg,#0288D1,#01579B);border:none;border-radius:16px;padding:16px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;">Mulai Kuis →</button>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 21 — Kuis Pertanyaan                              -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">21 — Kuis Pertanyaan</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">✕</div><div class="hdr-t">Pertanyaan 3/10</div><div class="hdr-a" style="font-size:12px;color:#0288D1;font-weight:700;background:#E0F2FE;border-radius:10px;padding:4px 10px;">⏱ 3:42</div></div>
+    <!-- Progress bar -->
+    <div style="height:6px;background:#E2E8F0;flex-shrink:0;">
+      <div style="height:100%;width:30%;background:linear-gradient(to right,#0288D1,#66BB6A);border-radius:0 3px 3px 0;"></div>
+    </div>
+    <div style="flex:1;padding:20px 16px;display:flex;flex-direction:column;">
+      <!-- Question -->
+      <div style="background:linear-gradient(135deg,#E0F2FE,#F0F9FF);border-radius:18px;padding:20px;margin-bottom:20px;text-align:center;">
+        <div style="font-size:40px;margin-bottom:12px;">🚿</div>
+        <div style="font-size:15px;font-weight:700;color:#0F172A;line-height:1.5;">Berapa liter air yang digunakan saat mandi shower selama 5 menit dengan shower head standar?</div>
+      </div>
+      <!-- Category hint -->
+      <div style="font-size:12px;color:#64748B;text-align:center;margin-bottom:16px;">Kategori: 🚿 Mandi & Bersih Diri</div>
+      <!-- Answer options -->
+      <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
+        <button style="border:2px solid #E2E8F0;background:#fff;border-radius:14px;padding:14px 16px;font-size:14px;font-weight:600;color:#0F172A;text-align:left;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#64748B;flex-shrink:0;">A</div>
+          25–30 liter
+        </button>
+        <button style="border:2px solid #E2E8F0;background:#fff;border-radius:14px;padding:14px 16px;font-size:14px;font-weight:600;color:#0F172A;text-align:left;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#64748B;flex-shrink:0;">B</div>
+          50–60 liter
+        </button>
+        <button style="border:2px solid #E2E8F0;background:#fff;border-radius:14px;padding:14px 16px;font-size:14px;font-weight:600;color:#0F172A;text-align:left;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#64748B;flex-shrink:0;">C</div>
+          100–120 liter
+        </button>
+        <button style="border:2px solid #E2E8F0;background:#fff;border-radius:14px;padding:14px 16px;font-size:14px;font-weight:600;color:#0F172A;text-align:left;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#64748B;flex-shrink:0;">D</div>
+          150–200 liter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 22 — Kuis Pilihan Jawaban (jawaban terpilih)       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">22 — Kuis Pilihan Jawaban</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">✕</div><div class="hdr-t">Pertanyaan 3/10</div><div class="hdr-a" style="font-size:12px;color:#0288D1;font-weight:700;background:#E0F2FE;border-radius:10px;padding:4px 10px;">⏱ 3:22</div></div>
+    <div style="height:6px;background:#E2E8F0;flex-shrink:0;">
+      <div style="height:100%;width:30%;background:linear-gradient(to right,#0288D1,#66BB6A);"></div>
+    </div>
+    <div style="flex:1;padding:20px 16px;display:flex;flex-direction:column;">
+      <div style="background:linear-gradient(135deg,#E0F2FE,#F0F9FF);border-radius:18px;padding:20px;margin-bottom:16px;text-align:center;">
+        <div style="font-size:40px;margin-bottom:12px;">🚿</div>
+        <div style="font-size:15px;font-weight:700;color:#0F172A;line-height:1.5;">Berapa liter air yang digunakan saat mandi shower selama 5 menit dengan shower head standar?</div>
+      </div>
+      <!-- Answers with result -->
+      <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
+        <button style="border:2px solid #E2E8F0;background:#F8FAFC;border-radius:14px;padding:14px 16px;font-size:14px;font-weight:600;color:#94A3B8;text-align:left;font-family:inherit;display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#94A3B8;flex-shrink:0;">A</div>
+          25–30 liter
+        </button>
+        <!-- Selected answer — BENAR -->
+        <button style="border:2px solid #16A34A;background:#F0FDF4;border-radius:14px;padding:14px 16px;font-size:14px;font-weight:700;color:#15803D;text-align:left;font-family:inherit;display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#16A34A;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0;">✓</div>
+          50–60 liter
+          <span style="margin-left:auto;font-size:18px;">✅</span>
+        </button>
+        <button style="border:2px solid #E2E8F0;background:#F8FAFC;border-radius:14px;padding:14px 16px;font-size:14px;font-weight:600;color:#94A3B8;text-align:left;font-family:inherit;display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#94A3B8;flex-shrink:0;">C</div>
+          100–120 liter
+        </button>
+        <button style="border:2px solid #E2E8F0;background:#F8FAFC;border-radius:14px;padding:14px 16px;font-size:14px;font-weight:600;color:#94A3B8;text-align:left;font-family:inherit;display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#94A3B8;flex-shrink:0;">D</div>
+          150–200 liter
+        </button>
+      </div>
+      <!-- Explanation -->
+      <div style="background:#E0F2FE;border-radius:14px;padding:14px;margin-top:14px;">
+        <div style="font-size:12px;font-weight:700;color:#0288D1;margin-bottom:4px;">💡 Penjelasan</div>
+        <div style="font-size:13px;color:#0369A1;line-height:1.5;">Shower head standar mengalirkan ±10–12 liter/menit. Selama 5 menit = 50–60 liter. Shower head hemat air bisa memotong ini menjadi 30 liter!</div>
+      </div>
+      <button style="width:100%;background:#0288D1;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:700;color:#fff;margin-top:12px;cursor:pointer;font-family:inherit;">Pertanyaan Selanjutnya →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 23 — Kuis Hasil Skor Bagus                        -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">23 — Kuis Hasil Skor Bagus</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:28px 20px 20px;text-align:center;">
+      <!-- Confetti-like hero -->
+      <div style="position:relative;width:120px;height:120px;margin-bottom:20px;">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:56px;box-shadow:0 8px 32px rgba(217,119,6,.3);">🏆</div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#16A34A;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Luar Biasa!</div>
+      <div style="font-size:24px;font-weight:800;color:#0F172A;margin-bottom:4px;">Pakar Hemat Air</div>
+      <div style="font-size:14px;color:#64748B;margin-bottom:20px;">Kamu tahu banyak tentang cara hemat air!</div>
+      <!-- Score circle -->
+      <div style="position:relative;width:120px;height:120px;margin-bottom:20px;">
+        <svg viewBox="0 0 120 120" width="120" height="120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#E2E8F0" stroke-width="10"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#0288D1" stroke-width="10"
+            stroke-dasharray="282.7" stroke-dashoffset="56.5" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div style="font-size:28px;font-weight:800;color:#0F172A;">8/10</div>
+          <div style="font-size:11px;color:#64748B;">Benar</div>
+        </div>
+      </div>
+      <!-- Stats row -->
+      <div style="display:flex;gap:10px;width:100%;margin-bottom:20px;">
+        <div style="flex:1;background:#F0FDF4;border-radius:12px;padding:12px 8px;">
+          <div style="font-size:20px;font-weight:800;color:#16A34A;">8</div>
+          <div style="font-size:11px;color:#64748B;">Benar</div>
+        </div>
+        <div style="flex:1;background:#FEF2F2;border-radius:12px;padding:12px 8px;">
+          <div style="font-size:20px;font-weight:800;color:#EF4444;">2</div>
+          <div style="font-size:11px;color:#64748B;">Salah</div>
+        </div>
+        <div style="flex:1;background:#FEF3C7;border-radius:12px;padding:12px 8px;">
+          <div style="font-size:20px;font-weight:800;color:#D97706;">80%</div>
+          <div style="font-size:11px;color:#64748B;">Skor</div>
+        </div>
+      </div>
+      <!-- Badge earned -->
+      <div style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-radius:16px;padding:14px 16px;width:100%;margin-bottom:20px;display:flex;align-items:center;gap:12px;border:1px solid #FCD34D;">
+        <div style="font-size:32px;">🥇</div>
+        <div style="text-align:left;">
+          <div style="font-size:13px;font-weight:800;color:#92400E;">Badge Baru Diraih!</div>
+          <div style="font-size:12px;color:#78350F;">Water Expert — Jawab 8+ benar</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;width:100%;">
+        <button style="flex:1;border:2px solid #E2E8F0;background:#fff;border-radius:14px;padding:13px;font-size:13px;font-weight:700;color:#0F172A;cursor:pointer;font-family:inherit;">Coba Lagi</button>
+        <button style="flex:1;background:linear-gradient(135deg,#0288D1,#01579B);border:none;border-radius:14px;padding:13px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;">Bagikan 🔗</button>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 24 — Kuis Hasil Skor Kurang                       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">24 — Kuis Hasil Skor Kurang</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:28px 20px 20px;text-align:center;">
+      <div style="width:110px;height:110px;background:linear-gradient(135deg,#E0F2FE,#BAE6FD);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:20px;box-shadow:0 8px 24px rgba(2,136,209,.15);">💧</div>
+      <div style="font-size:11px;font-weight:700;color:#0288D1;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Terus Belajar!</div>
+      <div style="font-size:24px;font-weight:800;color:#0F172A;margin-bottom:4px;">Masih Perlu Berlatih</div>
+      <div style="font-size:14px;color:#64748B;margin-bottom:20px;">Jangan menyerah! Baca tips dulu lalu coba lagi.</div>
+      <!-- Score circle -->
+      <div style="position:relative;width:110px;height:110px;margin-bottom:20px;">
+        <svg viewBox="0 0 120 120" width="110" height="110">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#E2E8F0" stroke-width="10"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#FFA726" stroke-width="10"
+            stroke-dasharray="282.7" stroke-dashoffset="197.9" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div style="font-size:26px;font-weight:800;color:#0F172A;">4/10</div>
+          <div style="font-size:11px;color:#64748B;">Benar</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;width:100%;margin-bottom:20px;">
+        <div style="flex:1;background:#F0FDF4;border-radius:12px;padding:12px 8px;">
+          <div style="font-size:20px;font-weight:800;color:#16A34A;">4</div>
+          <div style="font-size:11px;color:#64748B;">Benar</div>
+        </div>
+        <div style="flex:1;background:#FEF2F2;border-radius:12px;padding:12px 8px;">
+          <div style="font-size:20px;font-weight:800;color:#EF4444;">6</div>
+          <div style="font-size:11px;color:#64748B;">Salah</div>
+        </div>
+        <div style="flex:1;background:#FFF7ED;border-radius:12px;padding:12px 8px;">
+          <div style="font-size:20px;font-weight:800;color:#EA580C;">40%</div>
+          <div style="font-size:11px;color:#64748B;">Skor</div>
+        </div>
+      </div>
+      <!-- Suggestion -->
+      <div style="background:#F0F9FF;border-radius:16px;padding:14px 16px;width:100%;margin-bottom:20px;text-align:left;">
+        <div style="font-size:12px;font-weight:700;color:#0288D1;margin-bottom:8px;">📚 Topik yang perlu dipelajari</div>
+        <div class="titem" style="margin-bottom:6px;padding:10px;">
+          <div class="tic-box" style="background:#E0F2FE;width:36px;height:36px;font-size:18px;">🚿</div>
+          <div class="tinfo"><div class="ti-title" style="font-size:13px;">Tips Mandi Hemat Air</div></div>
+          <div style="font-size:12px;color:#0288D1;font-weight:600;">Baca →</div>
+        </div>
+        <div class="titem" style="padding:10px;">
+          <div class="tic-box" style="background:#FFF7ED;width:36px;height:36px;font-size:18px;">🚽</div>
+          <div class="tinfo"><div class="ti-title" style="font-size:13px;">Tips Hemat Flush Toilet</div></div>
+          <div style="font-size:12px;color:#0288D1;font-weight:600;">Baca →</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;width:100%;">
+        <button style="flex:1;border:2px solid #E2E8F0;background:#fff;border-radius:14px;padding:13px;font-size:13px;font-weight:700;color:#0F172A;cursor:pointer;font-family:inherit;">Baca Tips</button>
+        <button style="flex:1;background:linear-gradient(135deg,#0288D1,#01579B);border:none;border-radius:14px;padding:13px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;">Coba Lagi 🔁</button>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 25 — Share Hasil Kuis                             -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">25 — Share Hasil Kuis</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i">▶ ◀ 📶 🔋</span></div>
+  <div class="content">
+    <div class="hdr"><div class="hdr-back">←</div><div class="hdr-t">Bagikan Hasil</div></div>
+    <div style="flex:1;padding:20px 16px;overflow-y:auto;">
+      <!-- Share card preview -->
+      <div style="background:linear-gradient(135deg,#0288D1,#01579B);border-radius:20px;padding:24px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-20px;right:-20px;font-size:80px;opacity:.1;">💧</div>
+        <div style="position:absolute;bottom:-20px;left:-20px;font-size:80px;opacity:.1;">🌊</div>
+        <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:4px;">AquaTrack — Kuis Hemat Air</div>
+        <div style="font-size:40px;margin:12px 0;">🏆</div>
+        <div style="font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;">Skor 80%</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.8);margin-bottom:12px;">8 dari 10 jawaban benar!</div>
+        <div style="display:inline-block;background:rgba(255,255,255,.2);border-radius:12px;padding:8px 16px;">
+          <div style="font-size:12px;color:rgba(255,255,255,.9);font-weight:600;">🥇 Pakar Hemat Air</div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:12px;">aquatrack.app/kuis</div>
+      </div>
+      <!-- Share to -->
+      <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:12px;">Bagikan ke</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+        <button style="background:#25D366;border:none;border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;font-family:inherit;">
+          <div style="font-size:22px;">💬</div>
+          <div style="text-align:left;"><div style="font-size:13px;font-weight:700;color:#fff;">WhatsApp</div></div>
+        </button>
+        <button style="background:#1877F2;border:none;border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;font-family:inherit;">
+          <div style="font-size:22px;">📘</div>
+          <div style="text-align:left;"><div style="font-size:13px;font-weight:700;color:#fff;">Facebook</div></div>
+        </button>
+        <button style="background:linear-gradient(135deg,#833AB4,#FD1D1D,#F77737);border:none;border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;font-family:inherit;">
+          <div style="font-size:22px;">📸</div>
+          <div style="text-align:left;"><div style="font-size:13px;font-weight:700;color:#fff;">Instagram</div></div>
+        </button>
+        <button style="background:#000;border:none;border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;font-family:inherit;">
+          <div style="font-size:22px;">✖</div>
+          <div style="text-align:left;"><div style="font-size:13px;font-weight:700;color:#fff;">X / Twitter</div></div>
+        </button>
+      </div>
+      <!-- Copy link -->
+      <div style="background:#F1F5F9;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="flex:1;font-size:13px;color:#64748B;">aquatrack.app/hasil/abc123</div>
+        <button style="border:none;background:#0288D1;color:#fff;border-radius:9px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Salin</button>
+      </div>
+      <!-- Save image -->
+      <button style="width:100%;background:#F1F5F9;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:700;color:#0F172A;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;">📥 Simpan sebagai Gambar</button>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="tab-ic">🏠</div>Beranda</div>
+    <div class="tab on"><div class="tab-ic">💡</div>Tips</div>
+    <div class="tab"><div class="tab-ic">🎬</div>Video</div>
+    <div class="tab"><div class="tab-ic">📚</div>Artikel</div>
+  </div>
+</div>
+</div>
+
+</div><!-- end .canvas -->
+</body>
+</html>
