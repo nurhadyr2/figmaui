@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AquaTrack — Home / Beranda States</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d1117;font-family:'Plus Jakarta Sans',sans-serif;padding:24px;}
+.canvas{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;}
+.frame-wrapper{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.screen-label{color:#8B92A9;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.phone{width:402px;height:874px;background:#F8FAFC;border-radius:32px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.sb{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 8px;background:#fff;flex-shrink:0;}
+.sb-t{font-size:14px;font-weight:700;color:#0F172A;}
+.sb-i{display:flex;gap:5px;font-size:12px;color:#0F172A;align-items:center;}
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+.tabbar{display:flex;background:#fff;border-top:1px solid #E2E8F0;flex-shrink:0;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px 12px;gap:3px;font-size:10px;font-weight:600;color:#94A3B8;}
+.tab.on{color:#0288D1;}
+.tab-ic{width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.tab-ic svg{display:block;}
+.scroll{flex:1;overflow-y:auto;padding:0 16px 12px;}
+/* Home header */
+.home-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;background:#fff;flex-shrink:0;}
+.greet-sm{font-size:12px;color:#64748B;font-weight:500;}
+.greet-lg{font-size:20px;font-weight:800;color:#0F172A;}
+.hdr-actions{display:flex;gap:8px;}
+.hdr-ic{width:40px;height:40px;border-radius:12px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;position:relative;}
+.ic-badge{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#EF4444;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
+.avatar{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#0288D1,#01579B);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;}
+/* Hero usage card */
+.hero{background:linear-gradient(135deg,#0288D1,#01579B);border-radius:24px;padding:20px;color:#fff;margin-bottom:14px;}
+.hero.morning{background:linear-gradient(135deg,#0288D1,#26C6DA);}
+.hero.noon{background:linear-gradient(135deg,#0277BD,#01579B);}
+.hero.night{background:linear-gradient(135deg,#1E293B,#0F172A);}
+.hero.weekend{background:linear-gradient(135deg,#7C3AED,#4F46E5);}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.hero-label{font-size:12px;opacity:.85;font-weight:600;}
+.hero-big{font-size:38px;font-weight:800;line-height:1;margin-top:6px;}
+.hero-unit{font-size:15px;font-weight:500;opacity:.8;}
+.hero-pill{padding:6px 12px;border-radius:20px;background:rgba(255,255,255,.18);font-size:11px;font-weight:700;display:flex;align-items:center;gap:5px;}
+.hero-bar{height:8px;background:rgba(255,255,255,.22);border-radius:4px;overflow:hidden;margin-top:14px;}
+.hero-bar > div{height:100%;background:#fff;border-radius:4px;}
+.hero-foot{display:flex;justify-content:space-between;font-size:12px;opacity:.85;margin-top:8px;}
+/* Quick stat grid */
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.qcard{background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:14px;}
+.qcard-ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.qcard-v{font-size:20px;font-weight:800;color:#0F172A;}
+.qcard-l{font-size:11px;color:#64748B;margin-top:2px;}
+/* Generic card */
+.card{background:#fff;border:1px solid #E2E8F0;border-radius:20px;padding:16px;margin-bottom:14px;}
+.card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.card-title{font-size:14px;font-weight:700;color:#0F172A;}
+.card-link{font-size:12px;font-weight:600;color:#0288D1;}
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px;}
+.sec-t{font-size:14px;font-weight:700;color:#0F172A;}
+.sec-a{font-size:12px;font-weight:600;color:#0288D1;}
+/* Alert banner */
+.alert{border-radius:16px;padding:14px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start;}
+.alert-soft{background:#FEF3C7;border:1px solid #FDE68A;}
+.alert-hard{background:#FEE2E2;border:1px solid #FECACA;}
+.alert-info{background:#E0F2FE;border:1px solid #BAE6FD;}
+.alert-ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.alert-title{font-size:13px;font-weight:800;margin-bottom:3px;}
+.alert-sub{font-size:12px;line-height:1.5;}
+.alert-btn{margin-top:8px;padding:7px 14px;border-radius:10px;border:none;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;}
+/* Sensor status */
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+.dot.on{background:#16A34A;box-shadow:0 0 0 3px rgba(22,163,74,.2);}
+.dot.off{background:#94A3B8;}
+.dot.warn{background:#F59E0B;box-shadow:0 0 0 3px rgba(245,158,11,.2);}
+/* Banner promo */
+.promo{border-radius:20px;padding:18px;margin-bottom:14px;color:#fff;display:flex;align-items:center;gap:14px;}
+/* Skeleton loading */
+.sk{background:linear-gradient(90deg,#E2E8F0 25%,#F1F5F9 50%,#E2E8F0 75%);background-size:200% 100%;border-radius:8px;}
+.sk-line{height:12px;border-radius:6px;margin-bottom:8px;}
+/* Buttons */
+.btn-primary{width:100%;background:linear-gradient(135deg,#0288D1,#01579B);border:none;border-radius:16px;padding:16px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;}
+.btn-outline{width:100%;background:#fff;border:2px solid #E2E8F0;border-radius:16px;padding:15px;font-size:15px;font-weight:700;color:#0F172A;cursor:pointer;font-family:inherit;}
+/* Search */
+.searchbar{display:flex;align-items:center;gap:10px;background:#F1F5F9;border-radius:14px;padding:12px 14px;}
+.searchbar input{border:none;background:none;outline:none;font-family:inherit;font-size:14px;flex:1;color:#0F172A;}
+.search-cancel{font-size:14px;font-weight:600;color:#0288D1;}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:20px;background:#F1F5F9;font-size:12px;font-weight:600;color:#475569;margin:0 6px 8px 0;}
+.res-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F1F5F9;}
+.res-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+/* Quick action sheet overlay */
+.overlay{position:absolute;inset:0;background:rgba(15,23,42,.45);display:flex;flex-direction:column;justify-content:flex-end;z-index:5;}
+.sheet{background:#fff;border-radius:24px 24px 0 0;padding:20px 18px 24px;}
+.sheet-grab{width:40px;height:5px;border-radius:3px;background:#CBD5E1;margin:0 auto 16px;}
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.qa-item{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:16px;padding:16px 12px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;}
+.qa-ic{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;}
+.qa-t{font-size:13px;font-weight:700;color:#0F172A;}
+.qa-s{font-size:11px;color:#64748B;}
+/* Pull to refresh */
+.ptr{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px 0 4px;color:#0288D1;}
+.spin{width:26px;height:26px;border-radius:50%;border:3px solid #BAE6FD;border-top-color:#0288D1;}
+/* Detail focus header */
+.detail-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border-bottom:1px solid #E2E8F0;flex-shrink:0;}
+.dh-back{width:34px;height:34px;border-radius:10px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;}
+.dh-t{font-size:16px;font-weight:700;color:#0F172A;flex:1;}
+/* Bars / chart */
+.barchart{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:8px;}
+.barchart .bar{flex:1;background:#E0F2FE;border-radius:6px 6px 0 0;position:relative;}
+.barchart .bar.hi{background:#0288D1;}
+.bar-lbl{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:10px;color:#94A3B8;}
+.kv{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F1F5F9;}
+.kv:last-child{border-bottom:none;}
+.kv-k{font-size:13px;color:#64748B;}
+.kv-v{font-size:13px;font-weight:700;color:#0F172A;}
+.weather-hero{background:linear-gradient(135deg,#38BDF8,#0284C7);border-radius:20px;padding:20px;color:#fff;margin-bottom:14px;}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<!-- ════════ 01 — Home Utama ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">01 — Home Utama</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr">
+      <div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div>
+      <div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+    </div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="hero">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian hari ini</div><div class="hero-big">31,4 <span class="hero-unit">L</span></div></div><div class="hero-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>Hemat</div></div>
+        <div class="hero-bar"><div style="width:48%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>48% terpakai</span></div>
+      </div>
+      <div class="qgrid">
+        <div class="qcard"><div class="qcard-ic" style="background:#DCFCE7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="qcard-v">470 L</div><div class="qcard-l">Bulan ini / 980</div></div>
+        <div class="qcard"><div class="qcard-ic" style="background:#FEF3C7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="qcard-v">12 hari</div><div class="qcard-l">Streak hemat</div></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">Status Sensor</span><span style="font-size:11px;font-weight:700;color:#16A34A;display:flex;align-items:center;gap:6px;"><span class="dot on"></span>Online</span></div>
+        <div style="display:flex;gap:10px;"><div style="flex:1;background:#F8FAFC;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:15px;font-weight:800;color:#0F172A;">2,1 L/m</div><div style="font-size:10px;color:#64748B;">Aliran</div></div><div style="flex:1;background:#F8FAFC;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:15px;font-weight:800;color:#0F172A;">3,2 bar</div><div style="font-size:10px;color:#64748B;">Tekanan</div></div><div style="flex:1;background:#F8FAFC;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:15px;font-weight:800;color:#16A34A;">Baik</div><div style="font-size:10px;color:#64748B;">Kualitas</div></div></div>
+      </div>
+      <div class="card" style="margin-bottom:4px;">
+        <div class="card-hdr"><span class="card-title">Pemakaian Mingguan</span><span class="card-link">Detail</span></div>
+        <div class="barchart"><div class="bar" style="height:50%"><div class="bar-lbl">Sen</div></div><div class="bar" style="height:70%"><div class="bar-lbl">Sel</div></div><div class="bar" style="height:40%"><div class="bar-lbl">Rab</div></div><div class="bar hi" style="height:85%"><div class="bar-lbl">Kam</div></div><div class="bar" style="height:60%"><div class="bar-lbl">Jum</div></div><div class="bar" style="height:35%"><div class="bar-lbl">Sab</div></div><div class="bar" style="height:48%"><div class="bar-lbl">Min</div></div></div>
+        <div style="height:18px;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div>
+    <div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div>
+  </div>
+</div>
+</div>
+
+<!-- ════════ 02 — Alert Kebocoran Ringan ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">02 — Alert Kebocoran Ringan</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="ic-badge">1</span></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="alert alert-soft">
+        <div class="alert-ic" style="background:#FDE68A;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div style="flex:1;"><div class="alert-title" style="color:#B45309;">Terdeteksi kebocoran ringan</div><div class="alert-sub" style="color:#92400E;">Aliran kecil 0,4 L/m terdeteksi terus-menerus selama 20 menit di jalur dapur. Kemungkinan keran menetes.</div><button class="alert-btn" style="background:#D97706;color:#fff;">Lihat Detail</button></div>
+      </div>
+      <div class="hero">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian hari ini</div><div class="hero-big">38,2 <span class="hero-unit">L</span></div></div><div class="hero-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>+12% biasa</div></div>
+        <div class="hero-bar"><div style="width:59%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>59% terpakai</span></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">Status Sensor</span><span style="font-size:11px;font-weight:700;color:#F59E0B;display:flex;align-items:center;gap:6px;"><span class="dot warn"></span>Memantau</span></div>
+        <div style="display:flex;gap:10px;"><div style="flex:1;background:#FFFBEB;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:15px;font-weight:800;color:#D97706;">0,4 L/m</div><div style="font-size:10px;color:#64748B;">Aliran diam</div></div><div style="flex:1;background:#F8FAFC;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:15px;font-weight:800;color:#0F172A;">3,1 bar</div><div style="font-size:10px;color:#64748B;">Tekanan</div></div><div style="flex:1;background:#F8FAFC;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:15px;font-weight:800;color:#0F172A;">20 mnt</div><div style="font-size:10px;color:#64748B;">Durasi</div></div></div>
+      </div>
+      <button class="btn-outline" style="border-color:#FDE68A;color:#B45309;">Tandai Sudah Diperiksa</button>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 03 — Alert Kebocoran Parah ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">03 — Alert Kebocoran Parah</div>
+<div class="phone">
+  <div class="sb" style="background:#FEF2F2;"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr" style="background:#FEF2F2;"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic" style="background:#FEE2E2;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="ic-badge">3</span></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="alert alert-hard" style="flex-direction:column;align-items:stretch;text-align:center;background:linear-gradient(135deg,#DC2626,#991B1B);border:none;color:#fff;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div style="font-size:18px;font-weight:800;">Kebocoran Parah Terdeteksi!</div>
+          <div style="font-size:13px;opacity:.9;line-height:1.5;">Aliran abnormal <b>14,8 L/menit</b> berlangsung 6 menit tanpa aktivitas. Segera tutup katup utama.</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <button class="alert-btn" style="flex:1;background:#fff;color:#DC2626;padding:13px;font-size:13px;">Tutup Katup Otomatis</button>
+          <button class="alert-btn" style="flex:1;background:rgba(255,255,255,.18);color:#fff;padding:13px;font-size:13px;">Hubungi Teknisi</button>
+        </div>
+      </div>
+      <div class="card" style="border-color:#FECACA;">
+        <div class="card-hdr"><span class="card-title">Lonjakan Pemakaian</span><span style="font-size:11px;font-weight:700;color:#DC2626;">Live</span></div>
+        <div class="barchart"><div class="bar" style="height:25%"><div class="bar-lbl">04</div></div><div class="bar" style="height:28%"><div class="bar-lbl">05</div></div><div class="bar" style="height:30%"><div class="bar-lbl">06</div></div><div class="bar" style="height:35%;background:#FCA5A5;"><div class="bar-lbl">07</div></div><div class="bar" style="height:95%;background:#DC2626;"><div class="bar-lbl">Now</div></div></div>
+        <div style="height:18px;"></div>
+      </div>
+      <div style="background:#FEE2E2;border-radius:14px;padding:12px 14px;font-size:12px;color:#991B1B;line-height:1.5;"><b>Estimasi kerugian:</b> ±88 L terbuang (≈ Rp 350) sejak alarm aktif 09:35.</div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 04 — Sensor Offline ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">04 — Sensor Offline</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="alert" style="background:#F1F5F9;border:1px solid #E2E8F0;">
+        <div class="alert-ic" style="background:#E2E8F0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
+        <div style="flex:1;"><div class="alert-title" style="color:#475569;">Sensor terputus</div><div class="alert-sub" style="color:#64748B;">AquaTrack tidak dapat terhubung dengan sensor sejak <b>08:12 pagi</b>. Data pemakaian tidak ter-update.</div><button class="alert-btn" style="background:#475569;color:#fff;">Coba Hubungkan Ulang</button></div>
+      </div>
+      <div class="hero" style="background:#E2E8F0;color:#64748B;">
+        <div class="hero-top"><div><div class="hero-label" style="opacity:1;">Pemakaian hari ini</div><div class="hero-big" style="color:#94A3B8;">— <span class="hero-unit">L</span></div></div><div class="hero-pill" style="background:#CBD5E1;color:#475569;">Tak ada data</div></div>
+        <div class="hero-bar" style="background:#CBD5E1;"><div style="width:0%;"></div></div>
+        <div class="hero-foot" style="opacity:1;"><span>Terakhir sinkron 08:12</span><span>—</span></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">Status Sensor</span><span style="font-size:11px;font-weight:700;color:#94A3B8;display:flex;align-items:center;gap:6px;"><span class="dot off"></span>Offline</span></div>
+        <div style="text-align:center;padding:8px 0;">
+          <div style="font-size:13px;color:#64748B;margin-bottom:14px;">Periksa hal berikut:</div>
+          <div style="text-align:left;font-size:12px;color:#475569;line-height:2;">• Pastikan sensor mendapat daya<br>• Periksa koneksi WiFi rumah<br>• Sensor dalam jangkauan router</div>
+        </div>
+      </div>
+      <button class="btn-outline">Panduan Pemasangan Ulang</button>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 05 — Loading Data ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">05 — Loading Data</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="sk" style="width:42px;height:42px;border-radius:14px;"></div><div><div class="sk sk-line" style="width:90px;"></div><div class="sk sk-line" style="width:130px;height:16px;"></div></div></div><div class="sk" style="width:40px;height:40px;border-radius:12px;"></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="sk" style="height:130px;border-radius:24px;margin-bottom:14px;"></div>
+      <div class="qgrid"><div class="sk" style="height:96px;border-radius:18px;"></div><div class="sk" style="height:96px;border-radius:18px;"></div></div>
+      <div class="card">
+        <div class="sk sk-line" style="width:120px;height:14px;margin-bottom:14px;"></div>
+        <div style="display:flex;gap:10px;"><div class="sk" style="flex:1;height:54px;border-radius:12px;"></div><div class="sk" style="flex:1;height:54px;border-radius:12px;"></div><div class="sk" style="flex:1;height:54px;border-radius:12px;"></div></div>
+      </div>
+      <div class="card"><div class="sk sk-line" style="width:140px;height:14px;margin-bottom:14px;"></div><div class="sk" style="height:120px;border-radius:12px;"></div></div>
+      <div class="ptr"><div class="spin"></div><span style="font-size:12px;font-weight:600;">Memuat data terbaru…</span></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 06 — Greeting Pagi ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">06 — Greeting Pagi</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">6:30</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm" style="color:#F59E0B;font-weight:700;">☀️ Selamat pagi</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="hero morning">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian hari ini</div><div class="hero-big">2,1 <span class="hero-unit">L</span></div></div><div class="hero-pill">🌅 Baru mulai</div></div>
+        <div class="hero-bar"><div style="width:3%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>3% terpakai</span></div>
+      </div>
+      <div class="card" style="background:#FFFBEB;border-color:#FDE68A;">
+        <div style="display:flex;gap:12px;align-items:center;"><div style="font-size:30px;">🪥</div><div><div style="font-size:13px;font-weight:800;color:#92400E;">Tips pagi</div><div style="font-size:12px;color:#B45309;line-height:1.5;">Matikan keran saat menyikat gigi — hemat hingga 6 L tiap pagi.</div></div></div>
+      </div>
+      <div class="qgrid"><div class="qcard"><div class="qcard-ic" style="background:#DCFCE7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="qcard-v">470 L</div><div class="qcard-l">Bulan ini</div></div><div class="qcard"><div class="qcard-ic" style="background:#FEF3C7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="qcard-v">12 hari</div><div class="qcard-l">Streak hemat</div></div></div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Status Sensor</span><span style="font-size:11px;font-weight:700;color:#16A34A;display:flex;align-items:center;gap:6px;"><span class="dot on"></span>Online</span></div><div style="font-size:12px;color:#64748B;">Semua jalur normal. Tekanan 3,2 bar.</div></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 07 — Greeting Siang ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">07 — Greeting Siang</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">12:30</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm" style="color:#0288D1;font-weight:700;">🌤️ Selamat siang</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="hero noon">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian hari ini</div><div class="hero-big">29,8 <span class="hero-unit">L</span></div></div><div class="hero-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>Sesuai</div></div>
+        <div class="hero-bar"><div style="width:46%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>46% terpakai</span></div>
+      </div>
+      <div class="qgrid"><div class="qcard"><div class="qcard-ic" style="background:#DCFCE7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="qcard-v">498 L</div><div class="qcard-l">Bulan ini / 980</div></div><div class="qcard"><div class="qcard-ic" style="background:#E0F2FE;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="qcard-v">13:20</div><div class="qcard-l">Puncak terakhir</div></div></div>
+      <div class="card" style="background:#F0F9FF;border-color:#BAE6FD;"><div style="display:flex;gap:12px;align-items:center;"><div style="font-size:30px;">🍽️</div><div><div style="font-size:13px;font-weight:800;color:#0369A1;">Jam makan siang</div><div style="font-size:12px;color:#0369A1;line-height:1.5;">Pemakaian dapur biasanya naik. Cuci piring sekaligus untuk hemat air.</div></div></div></div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Status Sensor</span><span style="font-size:11px;font-weight:700;color:#16A34A;display:flex;align-items:center;gap:6px;"><span class="dot on"></span>Online</span></div><div style="font-size:12px;color:#64748B;">Aliran 2,4 L/m · Tekanan 3,1 bar · Kualitas baik.</div></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 08 — Greeting Malam ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">08 — Greeting Malam</div>
+<div class="phone">
+  <div class="sb" style="background:#0F172A;color:#fff;"><span class="sb-t" style="color:#fff;">21:45</span><span class="sb-i" style="color:#fff;"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr" style="background:#0F172A;"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm" style="color:#818CF8;font-weight:700;">🌙 Selamat malam</div><div class="greet-lg" style="color:#fff;">Rumah Nurhady</div></div></div><div class="hdr-ic" style="background:#1E293B;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:14px;background:#0F172A;">
+      <div class="hero night">
+        <div class="hero-top"><div><div class="hero-label">Total pemakaian hari ini</div><div class="hero-big">58,6 <span class="hero-unit">L</span></div></div><div class="hero-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>Di bawah target</div></div>
+        <div class="hero-bar"><div style="width:90%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>Hemat 6,4 L 🎉</span></div>
+      </div>
+      <div style="background:#1E293B;border:1px solid #334155;border-radius:20px;padding:16px;margin-bottom:14px;"><div style="display:flex;gap:12px;align-items:center;"><div style="font-size:30px;">🌛</div><div><div style="font-size:13px;font-weight:800;color:#fff;">Rangkuman hari ini</div><div style="font-size:12px;color:#94A3B8;line-height:1.5;">Kamu hemat 6,4 L dari target. Streak hemat naik ke 13 hari!</div></div></div></div>
+      <div style="background:#1E293B;border:1px solid #334155;border-radius:20px;padding:16px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:14px;font-weight:700;color:#fff;">Status Sensor</span><span style="font-size:11px;font-weight:700;color:#22C55E;display:flex;align-items:center;gap:6px;"><span class="dot on"></span>Online</span></div><div style="font-size:12px;color:#94A3B8;">Mode malam aktif — alarm kebocoran lebih sensitif.</div></div>
+      <div style="background:#1E293B;border:1px solid #334155;border-radius:16px;padding:14px;color:#818CF8;font-size:12px;line-height:1.5;">💡 Tidak ada keran aktif terdeteksi. Selamat beristirahat.</div>
+    </div>
+  </div>
+  <div class="tabbar" style="background:#1E293B;border-top-color:#334155;"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab" style="color:#64748B;"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab" style="color:#64748B;"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab" style="color:#64748B;"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 09 — Setelah Target Tercapai ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">09 — Setelah Target Tercapai</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="hero" style="background:linear-gradient(135deg,#16A34A,#15803D);text-align:center;">
+        <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:30px;">🏆</div>
+        <div style="font-size:18px;font-weight:800;">Target Bulan Ini Tercapai!</div>
+        <div style="font-size:13px;opacity:.9;margin-top:4px;">Kamu pakai 905 L dari target 980 L — hemat 75 L 🎉</div>
+        <div style="display:flex;justify-content:center;gap:24px;margin-top:16px;"><div><div style="font-size:18px;font-weight:800;">92%</div><div style="font-size:11px;opacity:.8;">efisiensi</div></div><div><div style="font-size:18px;font-weight:800;">+200</div><div style="font-size:11px;opacity:.8;">poin</div></div><div><div style="font-size:18px;font-weight:800;">Rp 300</div><div style="font-size:11px;opacity:.8;">hemat</div></div></div>
+      </div>
+      <div class="card" style="background:#F0FDF4;border-color:#BBF7D0;"><div style="display:flex;gap:12px;align-items:center;"><div style="font-size:30px;">🎖️</div><div><div style="font-size:13px;font-weight:800;color:#15803D;">Badge baru terbuka!</div><div style="font-size:12px;color:#16A34A;line-height:1.5;">"Hemat Pro" telah kamu raih. Lihat di koleksi badge.</div></div></div></div>
+      <div class="sec-hdr"><span class="sec-t">Lanjutkan momentum</span></div>
+      <div class="qgrid"><div class="qcard"><div class="qcard-ic" style="background:#E0F2FE;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="qcard-v">Set baru</div><div class="qcard-l">Target Juli</div></div><div class="qcard"><div class="qcard-ic" style="background:#FEF3C7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="qcard-v">Ikut</div><div class="qcard-l">Tantangan baru</div></div></div>
+      <button class="btn-primary">Bagikan Pencapaian</button>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 10 — Awal Bulan (Reset Target) ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">10 — Awal Bulan (Reset Target)</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">1 Juli 2026 · Bulan baru</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="alert alert-info"><div class="alert-ic" style="background:#BAE6FD;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0369A1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div style="flex:1;"><div class="alert-title" style="color:#0369A1;">Periode baru dimulai</div><div class="alert-sub" style="color:#0369A1;">Hitungan pemakaian sudah direset untuk Juli. Yuk pasang target bulan ini!</div></div></div>
+      <div class="hero">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian bulan ini</div><div class="hero-big">0 <span class="hero-unit">L</span></div></div><div class="hero-pill">Hari ke-1</div></div>
+        <div class="hero-bar"><div style="width:0%;"></div></div>
+        <div class="hero-foot"><span>Belum ada target</span><span>0%</span></div>
+      </div>
+      <div class="card" style="border-style:dashed;border-color:#BAE6FD;text-align:center;background:#F0F9FF;">
+        <div style="font-size:34px;margin-bottom:8px;">🎯</div>
+        <div style="font-size:14px;font-weight:800;color:#0F172A;margin-bottom:4px;">Belum ada target bulan ini</div>
+        <div style="font-size:12px;color:#64748B;margin-bottom:14px;line-height:1.5;">Pasang target agar AquaTrack bisa memantau & memberi rekomendasi hemat.</div>
+        <button class="btn-primary">Pasang Target Juli</button>
+      </div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Ringkasan Juni lalu</span><span class="card-link">Riwayat</span></div><div class="kv"><span class="kv-k">Total pemakaian</span><span class="kv-v">905 L</span></div><div class="kv"><span class="kv-k">Hasil</span><span class="kv-v" style="color:#16A34A;">✓ Tercapai</span></div></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 11 — Banner Promo ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">11 — Banner Promo</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="promo" style="background:linear-gradient(135deg,#F59E0B,#EA580C);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-20px;right:-10px;font-size:90px;opacity:.18;">💧</div>
+        <div style="font-size:36px;">🎁</div>
+        <div style="flex:1;z-index:1;"><div style="font-size:15px;font-weight:800;">Diskon 30% Filter Air</div><div style="font-size:12px;opacity:.9;margin-top:2px;line-height:1.4;">Khusus pengguna AquaTrack. Berlaku s/d 20 Juni.</div></div>
+        <div style="position:absolute;top:10px;right:10px;font-size:16px;opacity:.7;">✕</div>
+      </div>
+      <div class="hero">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian hari ini</div><div class="hero-big">31,4 <span class="hero-unit">L</span></div></div><div class="hero-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>Hemat</div></div>
+        <div class="hero-bar"><div style="width:48%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>48% terpakai</span></div>
+      </div>
+      <div class="qgrid"><div class="qcard"><div class="qcard-ic" style="background:#DCFCE7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="qcard-v">470 L</div><div class="qcard-l">Bulan ini / 980</div></div><div class="qcard"><div class="qcard-ic" style="background:#FEF3C7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="qcard-v">12 hari</div><div class="qcard-l">Streak hemat</div></div></div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Status Sensor</span><span style="font-size:11px;font-weight:700;color:#16A34A;display:flex;align-items:center;gap:6px;"><span class="dot on"></span>Online</span></div><div style="font-size:12px;color:#64748B;">Semua jalur normal.</div></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 12 — Banner Update Aplikasi ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">12 — Banner Update Aplikasi</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div style="background:#fff;border:1px solid #BAE6FD;border-radius:18px;padding:16px;margin-bottom:14px;display:flex;gap:12px;align-items:center;">
+        <div style="width:46px;height:46px;border-radius:13px;background:#E0F2FE;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:#0F172A;">Versi 3.2 tersedia</div><div style="font-size:12px;color:#64748B;line-height:1.4;">Deteksi kebocoran lebih cepat & widget baru.</div></div>
+        <button style="background:#0288D1;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;font-family:inherit;">Update</button>
+      </div>
+      <div class="hero">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian hari ini</div><div class="hero-big">31,4 <span class="hero-unit">L</span></div></div><div class="hero-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>Hemat</div></div>
+        <div class="hero-bar"><div style="width:48%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>48% terpakai</span></div>
+      </div>
+      <div class="card"><div class="card-hdr"><span class="card-title">Apa yang baru di 3.2</span></div><div style="font-size:12px;color:#475569;line-height:2;">• Deteksi kebocoran 2× lebih cepat<br>• Widget layar utama ponsel<br>• Mode hemat baterai sensor<br>• Perbaikan bug minor</div></div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Status Sensor</span><span style="font-size:11px;font-weight:700;color:#16A34A;display:flex;align-items:center;gap:6px;"><span class="dot on"></span>Online</span></div><div style="font-size:12px;color:#64748B;">Semua jalur normal.</div></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 13 — Detail Kartu Pemakaian Hari Ini ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">13 — Detail: Pemakaian Hari Ini</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="detail-hdr"><div class="dh-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div><div class="dh-t">Pemakaian Hari Ini</div></div>
+    <div class="scroll" style="padding-top:16px;">
+      <div class="hero">
+        <div class="hero-top"><div><div class="hero-label">Total Senin, 14 Juni</div><div class="hero-big">31,4 <span class="hero-unit">L</span></div></div><div class="hero-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>-12% kemarin</div></div>
+        <div class="hero-bar"><div style="width:48%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>48% terpakai</span></div>
+      </div>
+      <div class="card"><div class="card-hdr"><span class="card-title">Per Jam</span></div><div class="barchart"><div class="bar" style="height:20%"><div class="bar-lbl">6</div></div><div class="bar hi" style="height:75%"><div class="bar-lbl">7</div></div><div class="bar" style="height:30%"><div class="bar-lbl">9</div></div><div class="bar" style="height:55%"><div class="bar-lbl">12</div></div><div class="bar" style="height:25%"><div class="bar-lbl">15</div></div><div class="bar hi" style="height:65%"><div class="bar-lbl">18</div></div><div class="bar" style="height:40%"><div class="bar-lbl">20</div></div></div><div style="height:18px;"></div></div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Rincian per Titik</span></div>
+        <div class="kv"><span class="kv-k">🚿 Kamar mandi</span><span class="kv-v">14,2 L</span></div>
+        <div class="kv"><span class="kv-k">🍽️ Dapur</span><span class="kv-v">9,8 L</span></div>
+        <div class="kv"><span class="kv-k">🧺 Cuci</span><span class="kv-v">5,1 L</span></div>
+        <div class="kv"><span class="kv-k">🌱 Taman</span><span class="kv-v">2,3 L</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 14 — Detail Kartu Progress Target ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">14 — Detail: Progress Target</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="detail-hdr"><div class="dh-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div><div class="dh-t">Progress Target</div></div>
+    <div class="scroll" style="padding-top:20px;">
+      <div class="card" style="text-align:center;">
+        <div style="position:relative;display:inline-flex;align-items:center;justify-content:center;margin-bottom:8px;">
+          <svg viewBox="0 0 120 120" width="150" height="150"><circle cx="60" cy="60" r="50" fill="none" stroke="#E2E8F0" stroke-width="11"/><circle cx="60" cy="60" r="50" fill="none" stroke="#0288D1" stroke-width="11" stroke-dasharray="314.16" stroke-dashoffset="163.36" stroke-linecap="round" transform="rotate(-90 60 60)"/></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;"><div style="font-size:32px;font-weight:800;color:#0288D1;">48%</div><div style="font-size:11px;color:#64748B;">tercapai</div></div>
+        </div>
+        <div style="font-size:20px;font-weight:800;color:#0F172A;">470 <span style="font-size:14px;font-weight:500;color:#64748B;">/ 980 L</span></div>
+        <span style="display:inline-block;margin-top:8px;padding:5px 14px;border-radius:20px;background:#DCFCE7;color:#16A34A;font-size:11px;font-weight:700;">On Track</span>
+      </div>
+      <div class="card"><div class="card-hdr"><span class="card-title">Proyeksi Akhir Bulan</span></div>
+        <div class="kv"><span class="kv-k">Estimasi total</span><span class="kv-v" style="color:#16A34A;">940 L</span></div>
+        <div class="kv"><span class="kv-k">Sisa kuota</span><span class="kv-v">510 L</span></div>
+        <div class="kv"><span class="kv-k">Rata-rata/hari</span><span class="kv-v">31,3 L</span></div>
+        <div class="kv"><span class="kv-k">Hari tersisa</span><span class="kv-v">15 hari</span></div>
+      </div>
+      <div class="card" style="background:#F0FDF4;border-color:#BBF7D0;margin-bottom:4px;"><div style="font-size:12px;color:#15803D;line-height:1.5;">✓ Dengan ritme saat ini, kamu akan <b>hemat 40 L</b> dari target di akhir bulan.</div></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 15 — Detail Kartu Status Sensor ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">15 — Detail: Status Sensor</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="detail-hdr"><div class="dh-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div><div class="dh-t">Status Sensor</div></div>
+    <div class="scroll" style="padding-top:16px;">
+      <div class="card" style="text-align:center;">
+        <div style="width:64px;height:64px;border-radius:20px;background:#DCFCE7;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div style="font-size:16px;font-weight:800;color:#0F172A;">AquaTrack Sensor #A1</div>
+        <div style="font-size:12px;color:#16A34A;font-weight:700;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:6px;"><span class="dot on"></span>Online · sinkron 12 detik lalu</div>
+      </div>
+      <div class="qgrid" style="margin-bottom:14px;">
+        <div class="qcard"><div class="qcard-l">Aliran</div><div class="qcard-v" style="color:#0288D1;">2,1 L/m</div></div>
+        <div class="qcard"><div class="qcard-l">Tekanan</div><div class="qcard-v">3,2 bar</div></div>
+        <div class="qcard"><div class="qcard-l">Suhu air</div><div class="qcard-v">26°C</div></div>
+        <div class="qcard"><div class="qcard-l">Baterai</div><div class="qcard-v" style="color:#16A34A;">84%</div></div>
+      </div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Info Perangkat</span></div>
+        <div class="kv"><span class="kv-k">Firmware</span><span class="kv-v">v2.4.1</span></div>
+        <div class="kv"><span class="kv-k">Sinyal WiFi</span><span class="kv-v" style="color:#16A34A;">Kuat</span></div>
+        <div class="kv"><span class="kv-k">Dipasang</span><span class="kv-v">12 Mar 2026</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 16 — Detail Kartu Perbandingan Kemarin ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">16 — Detail: Perbandingan Kemarin</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="detail-hdr"><div class="dh-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div><div class="dh-t">Perbandingan Kemarin</div></div>
+    <div class="scroll" style="padding-top:16px;">
+      <div class="card" style="text-align:center;background:linear-gradient(135deg,#F0FDF4,#fff);border-color:#BBF7D0;">
+        <div style="font-size:13px;color:#64748B;">Kamu lebih hemat</div>
+        <div style="font-size:40px;font-weight:800;color:#16A34A;margin:4px 0;">↓ 12%</div>
+        <div style="font-size:13px;color:#64748B;">dibanding kemarin (4,3 L lebih sedikit)</div>
+      </div>
+      <div class="card"><div class="card-hdr"><span class="card-title">Hari Ini vs Kemarin</span></div>
+        <div style="margin-bottom:14px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span style="color:#64748B;">Hari ini</span><span style="font-weight:700;color:#0288D1;">31,4 L</span></div><div style="height:10px;background:#E2E8F0;border-radius:5px;overflow:hidden;"><div style="height:100%;width:48%;background:#0288D1;border-radius:5px;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span style="color:#64748B;">Kemarin</span><span style="font-weight:700;color:#94A3B8;">35,7 L</span></div><div style="height:10px;background:#E2E8F0;border-radius:5px;overflow:hidden;"><div style="height:100%;width:55%;background:#94A3B8;border-radius:5px;"></div></div></div>
+      </div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Per Titik</span></div>
+        <div class="kv"><span class="kv-k">🚿 Kamar mandi</span><span class="kv-v" style="color:#16A34A;">↓ 3,1 L</span></div>
+        <div class="kv"><span class="kv-k">🍽️ Dapur</span><span class="kv-v" style="color:#EF4444;">↑ 0,8 L</span></div>
+        <div class="kv"><span class="kv-k">🧺 Cuci</span><span class="kv-v" style="color:#16A34A;">↓ 2,0 L</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 17 — Detail Kartu Tips Harian ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">17 — Detail: Tips Harian</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="detail-hdr"><div class="dh-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div><div class="dh-t">Tips Hemat Hari Ini</div></div>
+    <div class="scroll" style="padding-top:16px;">
+      <div style="background:linear-gradient(135deg,#16A34A,#15803D);border-radius:20px;padding:24px;color:#fff;margin-bottom:14px;text-align:center;">
+        <div style="font-size:44px;margin-bottom:8px;">🚿</div>
+        <div style="font-size:17px;font-weight:800;">Mandi 5 menit lebih singkat</div>
+        <div style="font-size:13px;opacity:.9;margin-top:6px;line-height:1.5;">Mengurangi durasi mandi 5 menit dapat menghemat hingga <b>45 liter</b> air per hari.</div>
+      </div>
+      <div class="card"><div class="card-hdr"><span class="card-title">Mengapa penting?</span></div><div style="font-size:13px;color:#475569;line-height:1.7;">Shower rata-rata mengalirkan 9 L/menit. Dengan memangkas 5 menit, kamu hemat ±45 L. Dalam sebulan setara <b>1.350 L</b> atau Rp 5.400.</div></div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Tips lainnya</span><span class="card-link">Semua</span></div>
+        <div class="res-row"><div class="res-ic" style="background:#E0F2FE;">🪥</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0F172A;">Tutup keran saat sikat gigi</div><div style="font-size:11px;color:#64748B;">Hemat ±6 L</div></div></div>
+        <div class="res-row" style="border:none;"><div class="res-ic" style="background:#FEF3C7;">🪣</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0F172A;">Tampung air AC untuk siram tanaman</div><div style="font-size:11px;color:#64748B;">Hemat ±8 L</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 18 — Detail Kartu Cuaca ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">18 — Detail: Cuaca</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="detail-hdr"><div class="dh-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div><div class="dh-t">Cuaca & Air</div></div>
+    <div class="scroll" style="padding-top:16px;">
+      <div class="weather-hero" style="text-align:center;">
+        <div style="font-size:13px;opacity:.9;">Jakarta · Senin, 14 Juni</div>
+        <div style="font-size:56px;margin:6px 0;">⛅</div>
+        <div style="font-size:34px;font-weight:800;">31°C</div>
+        <div style="font-size:13px;opacity:.9;">Berawan · Kelembapan 78%</div>
+      </div>
+      <div class="qgrid" style="margin-bottom:14px;">
+        <div class="qcard"><div class="qcard-l">Peluang hujan</div><div class="qcard-v" style="color:#0288D1;">60%</div></div>
+        <div class="qcard"><div class="qcard-l">UV Index</div><div class="qcard-v" style="color:#F59E0B;">Tinggi</div></div>
+      </div>
+      <div class="card" style="background:#F0F9FF;border-color:#BAE6FD;"><div style="display:flex;gap:12px;align-items:flex-start;"><div style="font-size:26px;">🌧️</div><div><div style="font-size:13px;font-weight:800;color:#0369A1;">Saran AquaTrack</div><div style="font-size:12px;color:#0369A1;line-height:1.5;">Hujan diprediksi sore ini — tunda menyiram tanaman & hemat ±10 L.</div></div></div></div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Prakiraan 3 Hari</span></div>
+        <div class="kv"><span class="kv-k">Selasa ⛈️</span><span class="kv-v">29° / 70% hujan</span></div>
+        <div class="kv"><span class="kv-k">Rabu ☀️</span><span class="kv-v">33° / 10% hujan</span></div>
+        <div class="kv"><span class="kv-k">Kamis ⛅</span><span class="kv-v">31° / 40% hujan</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 19 — Quick Action Menu ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">19 — Quick Action Menu</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr" style="filter:blur(1px);opacity:.6;"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div></div>
+    <div class="scroll" style="padding-top:14px;filter:blur(1px);opacity:.6;">
+      <div class="hero"><div class="hero-top"><div><div class="hero-label">Pemakaian hari ini</div><div class="hero-big">31,4 <span class="hero-unit">L</span></div></div></div><div class="hero-bar"><div style="width:48%;"></div></div></div>
+      <div class="qgrid"><div class="qcard"><div class="qcard-v">470 L</div><div class="qcard-l">Bulan ini</div></div><div class="qcard"><div class="qcard-v">12 hari</div><div class="qcard-l">Streak</div></div></div>
+    </div>
+    <!-- overlay sheet -->
+    <div class="overlay">
+      <div class="sheet">
+        <div class="sheet-grab"></div>
+        <div style="font-size:15px;font-weight:800;color:#0F172A;margin-bottom:14px;">Aksi Cepat</div>
+        <div class="qa-grid">
+          <div class="qa-item"><div class="qa-ic" style="background:#E0F2FE;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div><div class="qa-t">Set Target</div><div class="qa-s">Atur target bulan ini</div></div></div>
+          <div class="qa-item"><div class="qa-ic" style="background:#FEE2E2;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64A9 9 0 1 1 5.64 6.64"/><line x1="12" y1="2" x2="12" y2="12"/></svg></div><div><div class="qa-t">Tutup Katup</div><div class="qa-s">Hentikan aliran air</div></div></div>
+          <div class="qa-item"><div class="qa-ic" style="background:#DCFCE7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div><div><div class="qa-t">Lihat Statistik</div><div class="qa-s">Grafik pemakaian</div></div></div>
+          <div class="qa-item"><div class="qa-ic" style="background:#FEF3C7;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div><div class="qa-t">Tantangan</div><div class="qa-s">Ikut tantangan baru</div></div></div>
+        </div>
+        <button class="btn-outline" style="margin-top:14px;">Tutup</button>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 20 — Pull to Refresh Aktif ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">20 — Pull to Refresh Aktif</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:0;">
+      <div class="ptr" style="padding:18px 0;"><div class="spin"></div><span style="font-size:12px;font-weight:700;">Memperbarui…</span><span style="font-size:11px;color:#94A3B8;">Sinkron dengan sensor</span></div>
+      <div class="hero" style="margin-top:4px;">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian hari ini</div><div class="hero-big">31,4 <span class="hero-unit">L</span></div></div><div class="hero-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>Hemat</div></div>
+        <div class="hero-bar"><div style="width:48%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>48% terpakai</span></div>
+      </div>
+      <div class="qgrid"><div class="qcard"><div class="qcard-ic" style="background:#DCFCE7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="qcard-v">470 L</div><div class="qcard-l">Bulan ini / 980</div></div><div class="qcard"><div class="qcard-ic" style="background:#FEF3C7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="qcard-v">12 hari</div><div class="qcard-l">Streak hemat</div></div></div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Status Sensor</span><span style="font-size:11px;font-weight:700;color:#16A34A;display:flex;align-items:center;gap:6px;"><span class="dot on"></span>Online</span></div><div style="font-size:12px;color:#64748B;">Semua jalur normal.</div></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 21 — Search Bar Aktif ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">21 — Search Bar Aktif</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div style="padding:12px 16px;background:#fff;display:flex;gap:12px;align-items:center;border-bottom:1px solid #E2E8F0;">
+      <div class="searchbar" style="flex:1;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input placeholder="Cari ruangan, tips, riwayat…" autofocus/><span style="color:#94A3B8;font-size:16px;">✕</span></div>
+      <span class="search-cancel">Batal</span>
+    </div>
+    <div class="scroll" style="padding-top:16px;">
+      <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Pencarian Terakhir</div>
+      <div style="margin-bottom:18px;">
+        <span class="chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>kamar mandi</span>
+        <span class="chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>tips hemat</span>
+        <span class="chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>riwayat mei</span>
+        <span class="chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>kebocoran</span>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Saran Populer</div>
+      <div class="res-row"><div class="res-ic" style="background:#E0F2FE;">💧</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0F172A;">Cara menurunkan tagihan air</div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      <div class="res-row"><div class="res-ic" style="background:#FEF3C7;">🚿</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0F172A;">Pemakaian kamar mandi</div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      <div class="res-row" style="border:none;"><div class="res-ic" style="background:#DCFCE7;">📊</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0F172A;">Statistik bulanan</div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 22 — Hasil Pencarian ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">22 — Hasil Pencarian</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div style="padding:12px 16px;background:#fff;display:flex;gap:12px;align-items:center;border-bottom:1px solid #E2E8F0;">
+      <div class="searchbar" style="flex:1;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input value="kamar mandi"/><span style="color:#94A3B8;font-size:16px;">✕</span></div>
+      <span class="search-cancel">Batal</span>
+    </div>
+    <div class="scroll" style="padding-top:14px;">
+      <div style="font-size:12px;color:#64748B;margin-bottom:12px;"><b style="color:#0F172A;">8 hasil</b> untuk "kamar mandi"</div>
+      <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Ruangan</div>
+      <div class="card" style="padding:14px;margin-bottom:14px;"><div style="display:flex;align-items:center;gap:12px;"><div class="res-ic" style="background:#E0F2FE;">🚿</div><div style="flex:1;"><div style="font-size:14px;font-weight:700;color:#0F172A;">Kamar Mandi Utama</div><div style="font-size:12px;color:#64748B;">14,2 L hari ini · 45% pemakaian</div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+      <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Tips Terkait</div>
+      <div class="res-row"><div class="res-ic" style="background:#DCFCE7;">🚿</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0F172A;">Mandi 5 menit lebih singkat</div><div style="font-size:11px;color:#64748B;">Hemat ±45 L/hari</div></div></div>
+      <div class="res-row"><div class="res-ic" style="background:#FEF3C7;">🚽</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0F172A;">Cek kebocoran toilet</div><div style="font-size:11px;color:#64748B;">Hemat hingga 200 L/hari</div></div></div>
+      <div class="res-row" style="border:none;"><div class="res-ic" style="background:#E0F2FE;">🔧</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#0F172A;">Pasang shower hemat air</div><div style="font-size:11px;color:#64748B;">Kurangi debit 40%</div></div></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 23 — Home Weekend Mode ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">23 — Home Weekend Mode</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);">RN</div><div><div class="greet-sm" style="color:#7C3AED;font-weight:700;">🎉 Akhir pekan · Sabtu</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div class="hero weekend">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian akhir pekan</div><div class="hero-big">42,8 <span class="hero-unit">L</span></div></div><div class="hero-pill">🏠 Mode santai</div></div>
+        <div class="hero-bar"><div style="width:55%;"></div></div>
+        <div class="hero-foot"><span>Target weekend 78 L</span><span>55% terpakai</span></div>
+      </div>
+      <div class="card" style="background:#F5F3FF;border-color:#DDD6FE;"><div style="display:flex;gap:12px;align-items:center;"><div style="font-size:30px;">🧺</div><div><div style="font-size:13px;font-weight:800;color:#6D28D9;">Target weekend lebih longgar</div><div style="font-size:12px;color:#7C3AED;line-height:1.5;">Biasanya akhir pekan dipakai cuci & bersih-bersih. Target dinaikkan otomatis +20%.</div></div></div></div>
+      <div class="qgrid"><div class="qcard"><div class="qcard-ic" style="background:#EDE9FE;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="qcard-v">2 hari</div><div class="qcard-l">Streak weekend</div></div><div class="qcard"><div class="qcard-ic" style="background:#DCFCE7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="qcard-v">512 L</div><div class="qcard-l">Bulan ini</div></div></div>
+      <div class="card" style="margin-bottom:4px;"><div class="card-hdr"><span class="card-title">Aktivitas Akhir Pekan</span></div><div class="kv"><span class="kv-k">🧺 Cuci besar</span><span class="kv-v">18,4 L</span></div><div class="kv"><span class="kv-k">🚗 Cuci kendaraan</span><span class="kv-v">12,0 L</span></div><div class="kv"><span class="kv-k">🌱 Siram taman</span><span class="kv-v">6,2 L</span></div></div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+<!-- ════════ 24 — Home dengan Multiple Alert ════════ -->
+<div class="frame-wrapper">
+<div class="screen-label">24 — Multiple Alert</div>
+<div class="phone">
+  <div class="sb"><span class="sb-t">9:41</span><span class="sb-i"><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".35"/></svg><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="0.75" y="0.75" width="17.5" height="10.5" rx="2"/><line x1="19.5" y1="4" x2="19.5" y2="8" stroke-width="2" stroke-linecap="round"/><rect x="2" y="2" width="13" height="8" rx="1" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="content">
+    <div class="home-hdr"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar">RN</div><div><div class="greet-sm">Halo, selamat datang 👋</div><div class="greet-lg">Rumah Nurhady</div></div></div><div class="hdr-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="ic-badge">4</span></div></div>
+    <div class="scroll" style="padding-top:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><span style="font-size:14px;font-weight:800;color:#0F172A;">3 Pemberitahuan</span><span style="font-size:12px;font-weight:600;color:#0288D1;">Tutup semua</span></div>
+      <div class="alert alert-hard" style="padding:12px;"><div class="alert-ic" style="background:#FECACA;width:34px;height:34px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div style="flex:1;"><div class="alert-title" style="color:#B91C1C;font-size:13px;">Kebocoran terdeteksi</div><div class="alert-sub" style="color:#991B1B;">Aliran abnormal di jalur taman · 3 mnt lalu</div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      <div class="alert alert-soft" style="padding:12px;"><div class="alert-ic" style="background:#FDE68A;width:34px;height:34px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div style="flex:1;"><div class="alert-title" style="color:#B45309;font-size:13px;">Pemakaian mendekati target</div><div class="alert-sub" style="color:#92400E;">Sudah 88% dari kuota harian · 1 jam lalu</div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      <div class="alert alert-info" style="padding:12px;margin-bottom:16px;"><div class="alert-ic" style="background:#BAE6FD;width:34px;height:34px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0369A1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div><div style="flex:1;"><div class="alert-title" style="color:#0369A1;font-size:13px;">Baterai sensor 18%</div><div class="alert-sub" style="color:#075985;">Segera isi daya sensor · 2 jam lalu</div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      <div class="hero">
+        <div class="hero-top"><div><div class="hero-label">Pemakaian hari ini</div><div class="hero-big">57,2 <span class="hero-unit">L</span></div></div><div class="hero-pill" style="background:rgba(255,255,255,.25);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>88% target</div></div>
+        <div class="hero-bar"><div style="width:88%;"></div></div>
+        <div class="hero-foot"><span>Target harian 65 L</span><span>Sisa 7,8 L</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabbar"><div class="tab on"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Beranda</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Target</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg></div>Statistik</div><div class="tab"><div class="tab-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>Profil</div></div>
+</div>
+</div>
+
+</div>
+</body>
+</html>
